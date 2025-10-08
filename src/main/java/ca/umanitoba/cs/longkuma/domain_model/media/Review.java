@@ -3,7 +3,7 @@ package ca.umanitoba.cs.longkuma.domain_model.media;
 import com.google.common.base.Preconditions;
 
 public class Review {
-    private String review;
+    final private String review;
 
     public Review(String review) {
         this.review = review;

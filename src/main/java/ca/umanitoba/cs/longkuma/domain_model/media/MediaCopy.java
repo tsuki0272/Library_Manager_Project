@@ -2,7 +2,7 @@ package ca.umanitoba.cs.longkuma.domain_model.media;
 import com.google.common.base.Preconditions;
 
 public class MediaCopy {
-    private int copyNumber;
+    final private int copyNumber;
 
     public MediaCopy(int copyNumber) {
         this.copyNumber = copyNumber;

@@ -4,17 +4,17 @@ import ca.umanitoba.cs.longkuma.domain_model.member.Member;
 import com.google.common.base.Preconditions;
 
 public class Booking {
-    private Member member;
+    final private Member member;
 
-    private String startTime;
-    private int startDay;
-    private int startMonth;
-    private int startYear;
+    final private String startTime;
+    final private int startDay;
+    final private int startMonth;
+    final private int startYear;
 
-    private String endTime;
-    private int endDay;
-    private int endMonth;
-    private int endYear;
+    final private String endTime;
+    final private int endDay;
+    final private int endMonth;
+    final private int endYear;
 
     public Booking(Member member, String startTime, int startDay, int startMonth, int startYear,
                    String endTime, int endDay, int endMonth, int endYear) {

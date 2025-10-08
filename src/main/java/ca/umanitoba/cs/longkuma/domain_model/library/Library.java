@@ -7,10 +7,10 @@ import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 
 public class Library {
-    private String name;
-    private ArrayList<Media> media;
-    private ArrayList<Resource> resources;
-    private Map map;
+    final private String name;
+    final private ArrayList<Media> media;
+    final private ArrayList<Resource> resources;
+    final private Map map;
 
     public Library(String name) {
         this.name = name;

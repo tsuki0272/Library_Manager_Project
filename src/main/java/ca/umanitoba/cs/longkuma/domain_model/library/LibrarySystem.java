@@ -6,8 +6,8 @@ import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 
 public class LibrarySystem {
-    private ArrayList<Library> libraries;
-    private ArrayList<Member> members;
+    final private ArrayList<Library> libraries;
+    final private ArrayList<Member> members;
 
     public LibrarySystem() {
         this.libraries = new ArrayList<>();

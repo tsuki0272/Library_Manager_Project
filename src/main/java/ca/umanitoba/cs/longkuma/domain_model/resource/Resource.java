@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 
 public class Resource {
-    private ArrayList<Booking> bookings;
+    final private ArrayList<Booking> bookings;
 
     public Resource() {
         this.bookings = new ArrayList<>();

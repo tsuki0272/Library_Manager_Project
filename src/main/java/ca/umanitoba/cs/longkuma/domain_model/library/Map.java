@@ -5,8 +5,8 @@ import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 
 public class Map {
-    MapCell[][]  grid;
-    char[] legend = new char[]{
+    final MapCell[][]  grid;
+    final char[] legend = new char[]{
         'W',
         'E',
         'S',

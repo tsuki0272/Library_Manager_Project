@@ -3,7 +3,7 @@ package ca.umanitoba.cs.longkuma.domain_model.member;
 import com.google.common.base.Preconditions;
 
 public class Constraint {
-    private String constraint;
+    final private String constraint;
 
     public Constraint(String constraint) {
         this.constraint = constraint;

@@ -8,9 +8,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class Media {
-    private ArrayList<Review> reviews;
-    private ArrayList<MediaCopy> copies;
-    private Queue<Member> waitlist; //TODO
+    final private ArrayList<Review> reviews;
+    final private ArrayList<MediaCopy> copies;
+    final private Queue<Member> waitlist;
 
     public Media() {
         this.reviews = new ArrayList<>();

@@ -7,10 +7,10 @@ import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 
 public class Member {
-    private ArrayList<MediaCopy> borrowedMedia;
-    private ArrayList<Resource> resources;
-    private ArrayList<Constraint> constraints;
-    private String name;
+    final private ArrayList<MediaCopy> borrowedMedia;
+    final private ArrayList<Resource> resources;
+    final private ArrayList<Constraint> constraints;
+    final private String name;
 
     public Member(String name) {
         this.name = name;
