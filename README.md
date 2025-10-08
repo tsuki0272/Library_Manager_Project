@@ -23,47 +23,38 @@ classDiagram
         -Set~Member~ members
         
         +addLibrary(Library library) boolean
-        +showLibrary(Library library) boolean
+        +showLibrary(Library library) Library
         
-        +showMap(Library library) boolean
+        +showMap(Library library) Map
         
-        +addMember(Member member) boolean
-        +showMember(Member member) boolean
+        +addMember(Member member, Library library) boolean
+        +showMember(Member member) Member
     }
 
     class Library {
+        -String name
         -List~Media~ media
         -List~Resource~ resources
         -Map map
 
+        +getName() String
+
         +addMedia(Media media) boolean
-        +showMedia(Media media) boolean
+        +showMedia(Media media) Media
         +removeMedia(Media media) boolean
         
         +addResource(Resource resource) boolean
-        +showResource(Resource resource) boolean
+        +showResource(Resource resource) Resource
     }
 
     class Member {
         -List~MediaCopy~ borrowedMedia
         -List~Resource~ resources
         -List~Constraint~ constraints
-        -ContactInfo contactInfo
         
         +addMediaCopy(MediaCopy copy) boolean
         +addResource(Resource resource) boolean
         +addConstraint(Constraint constraint) boolean
-        +editContactInfo() boolean
-    }
-    
-    class ContactInfo {
-        -String name
-        -String phoneNumber
-        -String emailAddress
-        
-        +setName(String name) boolean
-        +setPhoneNumber(String number) boolean
-        +setEmailAddress(String email) boolean
     }
     
     class Constraint {
@@ -77,7 +68,7 @@ classDiagram
         
         +addReview(Review review) boolean
         +deleteReview(Review review) boolean
-        +showReview(Review review) boolean
+        +showReview(Review review) Review
         
         +addCopy(MediaCopy copy) boolean
         +addToWaitlist(Member member) boolean
@@ -134,13 +125,13 @@ classDiagram
     <ul>
         <li>libraries != null
         <li>loop: no Libraries are null in libraries.
+        
+        <li>members != null
+        <li>loop: no Members are null in members.
     </ul>"
 
     note for Library "Invariant properties:
     <ul>
-        <li>members != null
-        <li>loop: no Members are null in members.
-        
         <li>media != null
         <li>loop: no Media are null in media.
         
@@ -153,12 +144,10 @@ classDiagram
     note for Member "Invariant properties:
     <ul>
         <li>borrowedMedia != null
-        <li>loop: no Media are null in borrowMedia.
+        <li>loop: no Media are null in borrowedMedia.
         
         <li>constraints != null
         <li>loop: no Constraints are null in constraints.
-        
-        <li>contactInfo != null
     </ul>"
 
     note for Media "Invariant properties:
@@ -180,13 +169,6 @@ classDiagram
         
         <li>bookings != null
         <li>loop: no Bookings are null in bookings.
-    </ul>"
-    
-    note for ContactInfo "Invariant properties:
-    <ul>
-        <li>name != null && name.length() > 0
-        <li>phoneNumber != null && phoneNumber.length() > 0
-        <li>emailAddress != null && emailAddress.length() > 0
     </ul>"
 
     note for Booking "Invariant properties:
@@ -211,15 +193,14 @@ classDiagram
     Library --* Media
     Library --* Resource
     
-    Member ..> MediaCopy
-    Member --* ContactInfo
-    Member ..> Resource
     Member --* Constraint
     Member --* Booking
+    Member ..> MediaCopy
+    Member ..> Resource
     
     Media --* MediaCopy
-    Media ..> Member
     Media --* Review
+    Media ..> Member
     
     Resource --* Booking
     
