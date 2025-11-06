@@ -12,12 +12,29 @@ public class Member {
     final private ArrayList<Constraint> constraints;
     final private String name;
 
-    public Member(String name) {
+    private Member(String name) {
         this.name = name;
         this.borrowedMedia = new ArrayList<>();
         this.resources = new ArrayList<>();
         this.constraints = new ArrayList<>();
         checkMember();
+    }
+
+    public static class MemberBuilder {
+        private String name;
+        public MemberBuilder() {}
+
+        public MemberBuilder name(String name) throws Exception {
+            if(name == null || name.isEmpty()) {
+                throw new Exception("Invalid name.");
+            }
+            this.name = name;
+            return this;
+        }
+
+        public Member build() {
+            return new Member(name);
+        }
     }
 
     private void checkMember() {

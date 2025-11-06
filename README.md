@@ -11,7 +11,109 @@ date: Fall 2025
 * I got inspiration for some book categories here: <https://www.bookbeaver.co.uk/blog/different-types-of-books>
 * I got info on what info bookings require from here: <https://riverlanding.com/blog/what-does-a-hotel-require-from-you-to-book-a-room/>
 
-## Diagram
+## Diagrams
+
+### Sign In
+
+```mermaid
+flowchart
+    subgraph LOGIN
+        login[[LOGIN SCREEN]]
+        login ==New account==> registerAccount
+        login ==Existing account==> enterCredentials
+
+        enterCredentials[Enter username and password]
+        enterCredentials == username and password ==> processCredentials
+        
+        processCredentials{Valid credentials?}
+        processCredentials -. Valid .-> loggedIn
+        processCredentials -. Invalid .-> enterCredentials
+        
+        registerAccount[Register new account]
+        registerAccount == Back ==> login
+        registerAccount == New Username and Password ==> validNewAccount
+        
+        validNewAccount{Valid?}
+        validNewAccount -. Valid .-> createdSuccess
+        validNewAccount -. Invalid .-> registerAccount
+        
+        createdSuccess[Successfully created]
+        createdSuccess -. Back .-> login
+        
+        loggedIn[[LOGGED IN SUCCESSFULLY]]
+    end
+```
+
+### Borrow Media
+```mermaid
+flowchart
+    subgraph BORROWING MEDIA 
+        mainMenu[[MAIN MENU]]
+        mainMenu == Open Media Borrowing List ==> constraintStatus
+        
+        constraintStatus{Member has constraints?}
+        constraintStatus -. Yes .-> unableToBorrow
+        constraintStatus -. No .-> selectMedia
+        
+        unableToBorrow[[UNABLE TO BORROW]]
+        unableToBorrow -. Back to Main Menu .-> mainMenu
+        
+        selectMedia[Media List]
+        selectMedia -. Select Media .-> mediaOptions
+        
+        mediaOptions{Media Available?}
+        mediaOptions -. Yes .-> borrowMedia
+        mediaOptions -. No .-> waitlistMedia
+        
+        waitlistMedia[Waitlist]
+        
+        
+        borrowMedia[[BORROWED SUCCESSFULLY]]
+    end
+```
+
+### Return Media
+```mermaid
+flowchart
+    subgraph RETURNING MEDIA
+        selectMedia[[BORROWED MEDIA LIST]]
+        selectMedia == Select Media to Return ==> returnDecisions
+        
+        returnDecisions[Media Decisions]
+        returnDecisions == Read Review ==> reviewReader
+        returnDecisions == Return media ==> returnMedia
+        returnDecisions == Write Review ==> reviewWriter
+        
+        reviewReader[Read Reviews]
+        reviewReader == Back to Media Selection ==> selectMedia
+        reviewReader == Back to Media Decisions ==> returnDecisions
+        
+        reviewWriter{Is review text empty?}
+        reviewWriter -. Not Empty .-> successfulReviewWrite
+        reviewWriter -. Empty .-> returnDecisions
+
+        successfulReviewWrite[Written]
+        successfulReviewWrite == Back to Media Selection ==> selectMedia
+        successfulReviewWrite == Back to Media Decisions ==> returnDecisions
+        
+        returnMedia[[RETURNED SUCCESSFULLY]]
+    end
+```
+
+### Book Resource
+```mermaid
+flowchart
+    subgraph BOOK RESOURCE
+        bookResource[[BOOK RESOURCE]]
+        bookResource== Select Day ==>dayAvailability
+        
+        dayAvailability{Available for selected day?}
+        dayAvailability -. Available spots .-> successfulBooking
+        dayAvailability -. No available spots .-> bookResource
+        
+        successfulBooking[[BOOKING SUCCESS]]
+    end
+```
 
 Here is the diagram for my domain model
 

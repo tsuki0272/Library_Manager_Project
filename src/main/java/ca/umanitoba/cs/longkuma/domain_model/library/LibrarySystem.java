@@ -60,9 +60,8 @@ public class LibrarySystem {
         return foundLib; // return Member if found, null otherwise
     }
 
-    public boolean addMember(String memberName) {
+    public boolean addMember(Member newMember) {
         checkLibrarySystem();
-        Member newMember = new Member(memberName);
         boolean add = true;
 
         for(Member member : members) {

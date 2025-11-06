@@ -3,6 +3,7 @@ package ca.umanitoba.cs.longkuma;
 import ca.umanitoba.cs.longkuma.domain_model.library.LibrarySystem;
 import ca.umanitoba.cs.longkuma.domain_model.library.Library;
 import ca.umanitoba.cs.longkuma.domain_model.member.Member;
+import ca.umanitoba.cs.longkuma.ui.CreateMemberDisplay;
 
 import java.util.Scanner;
 
@@ -46,10 +47,9 @@ public class Main {
                     }
                     break;
                 case "3":
-                    System.out.println("Command chosen: addMember()");
-                    System.out.print("ENTER NEW MEMBER NAME: ");
-                    line = scnr.nextLine();
-                    boolean addedMember = librarySystem.addMember(line);
+                    CreateMemberDisplay cmd = new CreateMemberDisplay();
+                    Member newMember = cmd.createMember();
+                    boolean addedMember = librarySystem.addMember(newMember);
                     if(addedMember) {
                         System.out.println("Successfully added!");
                     } else {
