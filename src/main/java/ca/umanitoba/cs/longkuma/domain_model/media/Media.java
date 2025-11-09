@@ -99,6 +99,69 @@ public class Media {
         return added;
     }
 
+    public MediaCopy getAvailableCopy() {
+        checkMedia();
+        MediaCopy availableCopy = null;
+        boolean found = false;
+        int index = 0;
+
+        while (!found && index < copies.size()) {
+            MediaCopy currentCopy = copies.get(index);
+            if (currentCopy.isAvailable()) {
+                availableCopy = currentCopy;
+                found = true;
+            }
+            index++;
+        }
+
+        checkMedia();
+        return availableCopy;
+    }
+
+    public boolean isAvailable() {
+        checkMedia();
+        boolean available = false;
+        int index = 0;
+
+        while (!available && index < copies.size()) {
+            MediaCopy currentCopy = copies.get(index);
+            if (currentCopy.isAvailable()) {
+                available = true;
+            }
+            index++;
+        }
+
+        checkMedia();
+        return available;
+    }
+
+    public boolean borrowCopy(Member member) {
+        checkMedia();
+        Preconditions.checkNotNull(member, "Member cannot be null");
+
+        boolean borrowed = false;
+        MediaCopy availableCopy = getAvailableCopy();
+
+        if (availableCopy != null) {
+            String dueDate = calculateDueDate();
+            String dueTime = "23:59";
+
+            borrowed = availableCopy.borrowCopy(member, dueTime, dueDate);
+            if (borrowed) {
+                member.addMediaCopy(availableCopy);
+            }
+        } else {
+            borrowed = addToWaitlist(member);
+        }
+
+        checkMedia();
+        return borrowed;
+    }
+
+    private String calculateDueDate() {
+        return "25/12/25";
+    }
+
     public boolean addToWaitlist(Member member) {
         checkMedia();
         Preconditions.checkNotNull(member, "Member cannot be null");

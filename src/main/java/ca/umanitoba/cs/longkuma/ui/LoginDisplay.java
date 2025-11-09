@@ -2,20 +2,16 @@ package ca.umanitoba.cs.longkuma.ui;
 
 import ca.umanitoba.cs.longkuma.domain_model.library.LibrarySystem;
 import ca.umanitoba.cs.longkuma.domain_model.member.Member;
-import ca.umanitoba.cs.longkuma.logic.Login;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class LoginDisplay {
 
-    private final Login login;
     private final Scanner keyboard;
     private static final String[] loginOptions = {"EXISTING ACCOUNT", "NEW ACCOUNT"};
     private boolean downForMaintenance;
 
     public LoginDisplay() {
-        this.login = new Login();
         this.keyboard = new Scanner(System.in);
         this.downForMaintenance = false;
     }
