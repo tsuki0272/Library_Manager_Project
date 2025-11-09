@@ -8,11 +8,17 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class Media {
+    final private String title;
+    final private String author;
+    final private String type;
     final private ArrayList<Review> reviews;
     final private ArrayList<MediaCopy> copies;
     final private Queue<Member> waitlist;
 
-    public Media() {
+    public Media(String title, String author, String type) {
+        this.title = title;
+        this.author = author;
+        this.type = type;
         this.reviews = new ArrayList<>();
         this.copies = new ArrayList<>();
         this.waitlist = new LinkedList<>();
@@ -20,6 +26,12 @@ public class Media {
     }
 
     private void checkMedia() {
+        Preconditions.checkState(title != null, "Media title should not be null.");
+        Preconditions.checkState(title.length() >= 1, "Media title should have at least one symbol.");
+        Preconditions.checkState(author != null, "Media author should not be null.");
+        Preconditions.checkState(author.length() >= 1, "Media author should have at least one symbol.");
+        Preconditions.checkState(author != null, "Media type should not be null.");
+        Preconditions.checkState(author.length() >= 1, "Media type should have at least one symbol.");
         Preconditions.checkState(reviews != null, "Reviews list should not be null.");
         Preconditions.checkState(copies != null, "Copies list should not be null.");
         Preconditions.checkState(waitlist != null, "Waitlist should not be null.");
@@ -35,6 +47,18 @@ public class Media {
         for (Member member : waitlist) {
             Preconditions.checkState(member != null, "Individual members in waitlist should never be null.");
         }
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public boolean addReview(Review review) {

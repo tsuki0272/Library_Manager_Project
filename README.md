@@ -206,22 +206,9 @@ classDiagram
     }
     
     class Map {
-        -MapCell[][] grid
-        -Set~Character~ legend
+        -char[][] grid
+        -List~String~ legend
     }
-
-    class MapCell {
-        <<enumeration>>
-        WALL,
-        EMPTY,
-        SCIENCE,
-        ARTS,
-        BIOGRAPHY,
-        FANTASY,
-        CRIME,
-        HORROR
-    }
- 
 
     note for LibrarySystem "Invariant properties:
     <ul>
@@ -305,6 +292,4 @@ classDiagram
     Media ..> Member
     
     Resource --* Booking
-    
-    Map --* MapCell
 ```

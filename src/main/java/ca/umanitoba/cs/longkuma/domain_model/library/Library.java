@@ -1,6 +1,7 @@
 package ca.umanitoba.cs.longkuma.domain_model.library;
 
 import ca.umanitoba.cs.longkuma.domain_model.media.Media;
+import ca.umanitoba.cs.longkuma.domain_model.member.Member;
 import ca.umanitoba.cs.longkuma.domain_model.resource.Resource;
 import com.google.common.base.Preconditions;
 
@@ -12,11 +13,39 @@ public class Library {
     final private ArrayList<Resource> resources;
     final private Map map;
 
-    public Library(String name) {
+    private Library(String name, Map map) {
         this.name = name;
         this.media = new ArrayList<>();
         this.resources = new ArrayList<>();
-        this.map = new Map();
+        this.map = map;
+    }
+
+    public static class LibraryBuilder {
+        private String name;
+        private Map map;
+
+        public LibraryBuilder() {
+        }
+
+        public LibraryBuilder name(String name) throws Exception {
+            if(name == null || name.isEmpty()) {
+                throw new Exception("Name should not be null or empty.");
+            }
+            this.name = name;
+            return this;
+        }
+
+        public LibraryBuilder map(Map map) throws Exception {
+            if(map == null) {
+                throw new Exception("Map should not be null.");
+            }
+            this.map = map;
+            return this;
+        }
+
+        public Library build() {
+            return new Library(name, map);
+        }
     }
 
     private void checkLibrary() {
@@ -35,9 +64,12 @@ public class Library {
         }
     }
 
-
     public String getName() {
         return name;
+    }
+
+    public ArrayList<Media> getMedia() {
+        return media;
     }
 
     public boolean addMedia(Media media) {
@@ -65,7 +97,6 @@ public class Library {
         checkLibrary();
         return foundMedia;
     }
-
 
     public boolean removeMedia(Media media) {
         checkLibrary();

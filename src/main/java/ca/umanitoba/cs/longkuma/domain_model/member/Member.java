@@ -11,9 +11,11 @@ public class Member {
     final private ArrayList<Resource> resources;
     final private ArrayList<Constraint> constraints;
     final private String name;
+    final private String password;
 
-    private Member(String name) {
+    private Member(String name, String password) {
         this.name = name;
+        this.password = password;
         this.borrowedMedia = new ArrayList<>();
         this.resources = new ArrayList<>();
         this.constraints = new ArrayList<>();
@@ -22,18 +24,27 @@ public class Member {
 
     public static class MemberBuilder {
         private String name;
+        private String password;
         public MemberBuilder() {}
 
         public MemberBuilder name(String name) throws Exception {
             if(name == null || name.isEmpty()) {
-                throw new Exception("Invalid name.");
+                throw new Exception("Name should not be null or empty.");
             }
             this.name = name;
             return this;
         }
 
+        public MemberBuilder password(String password) throws Exception {
+            if(password == null || password.isEmpty()) {
+                throw new Exception("Name should not be null or empty.");
+            }
+            this.password = password;
+            return this;
+        }
+
         public Member build() {
-            return new Member(name);
+            return new Member(name, password);
         }
     }
 
@@ -61,6 +72,8 @@ public class Member {
         return name;
     }
 
+    public String getPassword() {return password;}
+
     public boolean addMediaCopy(MediaCopy copy) {
         checkMember();
         Preconditions.checkNotNull(copy, "Media copy cannot be null");
@@ -83,5 +96,9 @@ public class Member {
         boolean added = constraints.add(constraint);
         checkMember();
         return added;
+    }
+
+    public boolean hasConstraints() {
+        return constraints.size() > 0;
     }
 }

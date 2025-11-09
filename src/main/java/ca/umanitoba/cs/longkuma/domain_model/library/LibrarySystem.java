@@ -9,10 +9,18 @@ public class LibrarySystem {
     final private ArrayList<Library> libraries;
     final private ArrayList<Member> members;
 
-    public LibrarySystem() {
+    private LibrarySystem() {
         this.libraries = new ArrayList<>();
         this.members = new ArrayList<>();
         checkLibrarySystem();
+    }
+
+    public static class LibrarySystemBuilder {
+        public LibrarySystemBuilder() {}
+
+        public LibrarySystem build() {
+            return new LibrarySystem();
+        }
     }
 
     private void checkLibrarySystem() {
@@ -30,9 +38,12 @@ public class LibrarySystem {
         }
     }
 
-    public boolean addLibrary(String newLibName) {
+    public ArrayList<Library> getLibraries() {
+        return libraries;
+    }
+
+    public boolean addLibrary(Library newLib) {
         checkLibrarySystem();
-        Library newLib = new Library(newLibName);
         boolean add = true;
         for(Library lib : libraries) {
             if(lib.getName().equalsIgnoreCase(newLib.getName())) {

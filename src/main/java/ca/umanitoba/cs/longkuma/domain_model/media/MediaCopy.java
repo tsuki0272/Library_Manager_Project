@@ -1,20 +1,116 @@
 package ca.umanitoba.cs.longkuma.domain_model.media;
+import ca.umanitoba.cs.longkuma.domain_model.member.Member;
 import com.google.common.base.Preconditions;
+
+import java.util.Scanner;
 
 public class MediaCopy {
     final private int copyNumber;
+    final private Media media;
+    private boolean isAvailable;
+    private Member currentBorrower;
+    private String dueTime; // Format: "24:00"
+    private String dueDate; // Format: "dd/mm/yy"
 
-    public MediaCopy(int copyNumber) {
+    public MediaCopy(int copyNumber, Media media) {
         this.copyNumber = copyNumber;
+        this.media = media;
+        this.isAvailable = true;
+        this.currentBorrower = null;
+        this.dueTime = null;
+        this.dueDate = null;
         checkMediaCopy();
     }
 
     private void checkMediaCopy() {
         Preconditions.checkState(copyNumber >= 1, "Copy number should be at least 1.");
+        Preconditions.checkState(media != null, "Media should not be null.");
+
+        if(!isAvailable) {
+            Preconditions.checkState(currentBorrower != null, "Borrowed copy must have a current borrower.");
+            Preconditions.checkState(dueDate != null, "Borrowed copy must have a due date.");
+            Preconditions.checkState(isValidDueDate(dueDate), "Due date must be in format '24:00,dd/mm/yy'");
+        }
+    }
+
+    private boolean isValidDueDate(String date) {
+        boolean isValid = false;
+        if(date != null) {
+            Scanner scanner = new Scanner(date);
+            if(scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] tokens = line.split("/");
+                if (tokens.length == 3) {
+                    int day = -1;
+                    int month = -1;
+                    try {
+                        day = Integer.parseInt(tokens[0]);
+                        month = Integer.parseInt(tokens[1]);
+                    } catch (NumberFormatException nfe) {
+                        // Parsing failed, values remain -1
+                        System.err.println("Due date is not in valid format. it must be in dd/mm/yy format.");
+                    }
+                    if (day > 0 && day <= 31 && month > 0 && month <= 12) {
+                        isValid = true;
+                    }
+                }
+            }
+            scanner.close();
+        }
+        return isValid;
+    }
+
+    private boolean isValidDueTime(String time) {
+        boolean isValid = false;
+
+        if (time != null) {
+            Scanner scanner = new Scanner(time);
+
+            if (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(":");
+
+                if (parts.length == 2) {
+                    int hours = -1;
+                    int minutes = -1;
+
+                    try {
+                        hours = Integer.parseInt(parts[0]);
+                        minutes = Integer.parseInt(parts[1]);
+                    } catch (NumberFormatException e) {
+                        // Parsing failed, values remain -1
+                    }
+
+                    if (hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60) {
+                        isValid = true;
+                    }
+                }
+            }
+
+            scanner.close();
+        }
+
+        return isValid;
+    }
+
+    public boolean borrowCopy(Member member, String dueTime, String dueDate) {
+        boolean borrowed = false;
+        if(isAvailable && isValidDueTime(dueTime) && isValidDueDate(dueDate)) {
+            this.currentBorrower = member;
+            this.dueTime = dueTime;
+            this.dueDate = dueDate;
+            isAvailable = false;
+            borrowed = true;
+        }
+        return borrowed;
     }
 
     public int getCopyNumber() {
         checkMediaCopy();
         return copyNumber;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
     }
 }
