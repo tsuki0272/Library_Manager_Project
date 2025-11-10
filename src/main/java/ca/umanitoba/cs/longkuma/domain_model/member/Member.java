@@ -1,5 +1,6 @@
 package ca.umanitoba.cs.longkuma.domain_model.member;
 
+import ca.umanitoba.cs.longkuma.domain_model.media.Media;
 import ca.umanitoba.cs.longkuma.domain_model.media.MediaCopy;
 import ca.umanitoba.cs.longkuma.domain_model.resource.Resource;
 import com.google.common.base.Preconditions;
@@ -74,12 +75,15 @@ public class Member {
 
     public String getPassword() {return password;}
 
-    public boolean addMediaCopy(MediaCopy copy) {
-        checkMember();
-        Preconditions.checkNotNull(copy, "Media copy cannot be null");
-        boolean added = borrowedMedia.add(copy);
-        checkMember();
-        return added;
+    public boolean borrowMedia(Media media) {
+        if (!hasConstraints()) {
+            MediaCopy borrowedCopy = media.borrowCopy(this);
+            if (borrowedCopy != null) {
+                borrowedMedia.add(borrowedCopy);
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean addResource(Resource resource) {

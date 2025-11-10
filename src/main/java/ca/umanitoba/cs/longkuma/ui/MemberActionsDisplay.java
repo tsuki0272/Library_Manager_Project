@@ -54,7 +54,7 @@ public class MemberActionsDisplay {
         }
     }
 
-    private void borrowMedia() {
+    private void showMedia() {
         ArrayList<Library> libraries = this.libSystem.getLibraries();
         int libCounter = 1;
         for(Library library : libraries) {
@@ -66,6 +66,14 @@ public class MemberActionsDisplay {
             System.out.println();
             libCounter++;
         }
+    }
+
+    private void borrowMedia() {
+        showMedia();
+        System.out.println("SELECT LIBRARY TO BORROW FROM: ");
+        String library = keyboard.nextLine();
+        System.out.println("SELECT MEDIA TO BORROW: ");
+        String media = keyboard.nextLine();
     }
 
     private static void printOptions() {

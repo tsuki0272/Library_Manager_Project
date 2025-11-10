@@ -93,21 +93,26 @@ public class MediaCopy {
         return isValid;
     }
 
-    public boolean borrowCopy(Member member, String dueTime, String dueDate) {
-        boolean borrowed = false;
+    public void borrowCopy(Member member, String dueTime, String dueDate) {
         if(isAvailable && isValidDueTime(dueTime) && isValidDueDate(dueDate)) {
             this.currentBorrower = member;
             this.dueTime = dueTime;
             this.dueDate = dueDate;
             isAvailable = false;
-            borrowed = true;
         }
-        return borrowed;
     }
 
     public int getCopyNumber() {
         checkMediaCopy();
         return copyNumber;
+    }
+
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    public String getDueTime() {
+        return dueTime;
     }
 
     public boolean isAvailable() {

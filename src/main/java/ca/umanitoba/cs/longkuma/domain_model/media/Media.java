@@ -135,32 +135,16 @@ public class Media {
         return available;
     }
 
-    public boolean borrowCopy(Member member) {
-        checkMedia();
-        Preconditions.checkNotNull(member, "Member cannot be null");
-
-        boolean borrowed = false;
+    public MediaCopy borrowCopy(Member member) {
         MediaCopy availableCopy = getAvailableCopy();
-
         if (availableCopy != null) {
-            String dueDate = calculateDueDate();
+            String dueDate = "25/12/25"; // Christmas!
             String dueTime = "23:59";
-
-            borrowed = availableCopy.borrowCopy(member, dueTime, dueDate);
-            if (borrowed) {
-                member.addMediaCopy(availableCopy);
-            }
-        } else {
-            borrowed = addToWaitlist(member);
+            availableCopy.borrowCopy(member, dueTime, dueDate);
         }
-
-        checkMedia();
-        return borrowed;
+        return availableCopy;
     }
 
-    private String calculateDueDate() {
-        return "25/12/25";
-    }
 
     public boolean addToWaitlist(Member member) {
         checkMedia();
