@@ -1,8 +1,7 @@
-package ca.umanitoba.cs.longkuma.domain_model.library;
+package ca.umanitoba.cs.longkuma.logic.library;
 
 import com.google.common.base.Preconditions;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Map {

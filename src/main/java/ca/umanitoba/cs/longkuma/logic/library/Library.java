@@ -1,8 +1,7 @@
-package ca.umanitoba.cs.longkuma.domain_model.library;
+package ca.umanitoba.cs.longkuma.logic.library;
 
-import ca.umanitoba.cs.longkuma.domain_model.media.Media;
-import ca.umanitoba.cs.longkuma.domain_model.member.Member;
-import ca.umanitoba.cs.longkuma.domain_model.resource.Resource;
+import ca.umanitoba.cs.longkuma.logic.media.Media;
+import ca.umanitoba.cs.longkuma.logic.resource.Resource;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
@@ -106,6 +105,10 @@ public class Library {
 
         checkLibrary();
         return removed;
+    }
+
+    public ArrayList<Resource> getResources() {
+        return resources;
     }
 
     public boolean addResource(Resource resource) {

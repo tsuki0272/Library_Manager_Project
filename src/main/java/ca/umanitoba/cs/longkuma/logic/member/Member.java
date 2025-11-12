@@ -1,8 +1,9 @@
-package ca.umanitoba.cs.longkuma.domain_model.member;
+package ca.umanitoba.cs.longkuma.logic.member;
 
-import ca.umanitoba.cs.longkuma.domain_model.media.Media;
-import ca.umanitoba.cs.longkuma.domain_model.media.MediaCopy;
-import ca.umanitoba.cs.longkuma.domain_model.resource.Resource;
+import ca.umanitoba.cs.longkuma.logic.media.Media;
+import ca.umanitoba.cs.longkuma.logic.media.MediaCopy;
+import ca.umanitoba.cs.longkuma.logic.resource.Booking;
+import ca.umanitoba.cs.longkuma.logic.resource.Resource;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
@@ -76,19 +77,23 @@ public class Member {
     public String getPassword() {return password;}
 
     public boolean borrowMedia(Media media) {
+        checkMember();
+        Preconditions.checkNotNull(media, "Media cannot be null");
+        boolean borrowed = false;
         if (!hasConstraints()) {
             MediaCopy borrowedCopy = media.borrowCopy(this);
             if (borrowedCopy != null) {
                 borrowedMedia.add(borrowedCopy);
-                return true;
+                borrowed = true;
             }
         }
-        return false;
+        return borrowed;
     }
 
-    public boolean addResource(Resource resource) {
+    public boolean bookResource(Resource resource, Booking booking) {
         checkMember();
         Preconditions.checkNotNull(resource, "Resource cannot be null");
+        resource.addBooking(booking);
         boolean added = resources.add(resource);
         checkMember();
         return added;

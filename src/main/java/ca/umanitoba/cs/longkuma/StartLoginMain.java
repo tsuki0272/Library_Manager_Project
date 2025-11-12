@@ -1,11 +1,12 @@
 package ca.umanitoba.cs.longkuma;
 
-import ca.umanitoba.cs.longkuma.domain_model.library.Library;
-import ca.umanitoba.cs.longkuma.domain_model.library.LibrarySystem;
-import ca.umanitoba.cs.longkuma.domain_model.library.Map;
-import ca.umanitoba.cs.longkuma.domain_model.media.Media;
+import ca.umanitoba.cs.longkuma.logic.library.Library;
+import ca.umanitoba.cs.longkuma.logic.library.LibrarySystem;
+import ca.umanitoba.cs.longkuma.logic.library.Map;
+import ca.umanitoba.cs.longkuma.logic.media.Media;
+import ca.umanitoba.cs.longkuma.logic.media.MediaCopy;
+import ca.umanitoba.cs.longkuma.logic.resource.Resource;
 import ca.umanitoba.cs.longkuma.ui.LoginDisplay;
-import jdk.jshell.spi.ExecutionControlProvider;
 
 public class StartLoginMain {
 
@@ -49,10 +50,20 @@ public class StartLoginMain {
             char[][] mapGrid1 = Map.MapBuilder.gridFromString(mapString1);
             Map map1 = new Map.MapBuilder().grid(mapGrid1).legend(legend1).build();
             Library lib1 = new Library.LibraryBuilder().name("Elizabeth Dafoe Library").map(map1).build();
+
             Media media1 = new Media("The Hobbit", "J.R.R. Tolkien", "Book");
+            MediaCopy copy1 = new MediaCopy(1, media1);
+            media1.addCopy(copy1);
             Media media2 = new Media("Thriller", "Michael Jackson", "CD");
+            MediaCopy copy2 = new MediaCopy(1, media2);
+            media2.addCopy(copy2);
             lib1.addMedia(media1);
             lib1.addMedia(media2);
+
+            Resource resource1 = new Resource("Individual Study Room");
+            Resource resource2 = new Resource("Group Study Room");
+            lib1.addResource(resource1);
+            lib1.addResource(resource2);
 
             String mapString2 = """
             7 12
@@ -82,10 +93,20 @@ public class StartLoginMain {
             char[][] mapGrid2 = Map.MapBuilder.gridFromString(mapString2);
             Map map2 = new Map.MapBuilder().grid(mapGrid2).legend(legend2).build();
             Library lib2 = new Library.LibraryBuilder().name("E. K. Williams Law Library").map(map2).build();
+
             Media media3 = new Media("The Hunger Games", "Suzanne Collins", "Book");
+            MediaCopy copy3 = new MediaCopy(1, media3);
+            media3.addCopy(copy3);
             Media media4 = new Media("Twilight", "Stephenie Meyer", "Book");
+            MediaCopy copy4 = new MediaCopy(1, media4);
+            media4.addCopy(copy4);
             lib2.addMedia(media3);
             lib2.addMedia(media4);
+
+            Resource resource3 = new Resource("Quiet Pod 1");
+            Resource resource4 = new Resource("Quiet Pod 2");
+            lib2.addResource(resource3);
+            lib2.addResource(resource4);
 
             libSystem.addLibrary(lib1);
             libSystem.addLibrary(lib2);

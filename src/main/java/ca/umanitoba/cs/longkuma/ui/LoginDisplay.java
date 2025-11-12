@@ -1,7 +1,7 @@
 package ca.umanitoba.cs.longkuma.ui;
 
-import ca.umanitoba.cs.longkuma.domain_model.library.LibrarySystem;
-import ca.umanitoba.cs.longkuma.domain_model.member.Member;
+import ca.umanitoba.cs.longkuma.logic.library.LibrarySystem;
+import ca.umanitoba.cs.longkuma.logic.member.Member;
 
 import java.util.Scanner;
 
@@ -66,15 +66,20 @@ public class LoginDisplay {
                 System.out.println("Error: Password cannot be empty. Please try again.\n");
                 continue;
             } else if(password.equals(passwordValidator)) {
-                System.out.println("Account created successfully! Returning to login...");
-                System.out.println();
-                try {
-                    Member newMember = new Member.MemberBuilder().name(name).password(password).build();
-                    libSystem.addMember(newMember);
-                } catch (Exception e) {
-
+                if(libSystem.showMember(name) == null) {
+                    System.out.println("Account created successfully! Returning to login...");
+                    System.out.println();
+                    try {
+                        Member newMember = new Member.MemberBuilder().name(name).password(password).build();
+                        libSystem.addMember(newMember);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    validCredentials = true;
+                } else {
+                    System.out.println("You are already registered. Try signing in instead.");
                 }
-                validCredentials = true;
+
             } else {
                 System.out.println("Passwords do not match. Try again.");
             }
@@ -103,7 +108,6 @@ public class LoginDisplay {
         }
         return currMember;
     }
-
 
     private String getInput() {
         String loginInput;

@@ -1,5 +1,5 @@
-package ca.umanitoba.cs.longkuma.domain_model.media;
-import ca.umanitoba.cs.longkuma.domain_model.member.Member;
+package ca.umanitoba.cs.longkuma.logic.media;
+import ca.umanitoba.cs.longkuma.logic.member.Member;
 import com.google.common.base.Preconditions;
 
 import java.util.Scanner;
