@@ -84,6 +84,8 @@ public class StartLoginMain {
             lib1.addResource(resource1);
             lib1.addResource(resource2);
 
+            // ======== LIBRARY 2 =========
+
             String mapString2 = """
                     7 12
                     W W W W W W W W W W W W
