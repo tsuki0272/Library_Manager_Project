@@ -80,14 +80,34 @@ public class Member {
         checkMember();
         Preconditions.checkNotNull(media, "Media cannot be null");
         boolean borrowed = false;
+
         if (!hasConstraints()) {
             MediaCopy borrowedCopy = media.borrowCopy(this);
             if (borrowedCopy != null) {
                 borrowedMedia.add(borrowedCopy);
                 borrowed = true;
+            } else {
+                // No copy available - add to waitlist automatically
+                media.addToWaitlist(this);
             }
         }
+
         return borrowed;
+    }
+
+    public boolean returnMedia(MediaCopy copy) {
+        checkMember();
+        Preconditions.checkNotNull(copy, "Media copy cannot be null");
+
+        boolean removed = borrowedMedia.remove(copy);
+
+        if (removed) {
+            // Return the copy (makes it available again)
+            copy.returnCopy();
+            checkMember();
+        }
+
+        return removed;
     }
 
     public boolean bookResource(Resource resource, Booking booking) {

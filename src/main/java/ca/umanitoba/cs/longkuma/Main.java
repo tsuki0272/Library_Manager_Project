@@ -3,7 +3,7 @@
 //import ca.umanitoba.cs.longkuma.domain_model.library.LibrarySystem;
 //import ca.umanitoba.cs.longkuma.domain_model.library.Library;
 //import ca.umanitoba.cs.longkuma.domain_model.member.Member;
-//import ca.umanitoba.cs.longkuma.ui.CreateMemberDisplay;
+//import ca.umanitoba.cs.longkuma.ui.member.CreateMemberDisplay;
 //
 //import java.util.Scanner;
 //

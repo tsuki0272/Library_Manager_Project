@@ -2,6 +2,7 @@ package ca.umanitoba.cs.longkuma.ui;
 
 import ca.umanitoba.cs.longkuma.logic.library.LibrarySystem;
 import ca.umanitoba.cs.longkuma.logic.member.Member;
+import ca.umanitoba.cs.longkuma.ui.member.MemberActionsDisplay;
 
 import java.util.Scanner;
 
@@ -25,11 +26,13 @@ public class LoginDisplay {
             task = getInput();
 
             switch(task) {
+                case "1":
                 case "EXISTING ACCOUNT":
                     System.out.println("You chose: EXISTING ACCOUNT");
                     Member currMember = login(libSystem);
                     getMemberActions(libSystem, currMember);
                     break;
+                case "2":
                 case "NEW ACCOUNT":
                     System.out.println("You chose: NEW ACCOUNT");
                     createNewAccount(libSystem);

@@ -129,6 +129,19 @@ public class MediaCopy {
         }
     }
 
+    public void returnCopy() {
+        checkMediaCopy();
+        if (!isAvailable) {
+            this.isAvailable = true;
+            this.currentBorrower = null;
+            this.dueTime = null;
+            this.dueDate = null;
+            // Process waitlist - give to next person waiting
+            media.processWaitlist(this);
+        }
+        checkMediaCopy();
+    }
+
     public int getCopyNumber() {
         checkMediaCopy();
         return copyNumber;
@@ -144,5 +157,9 @@ public class MediaCopy {
 
     public boolean isAvailable() {
         return isAvailable;
+    }
+
+    public Media getMedia() {
+        return media;
     }
 }

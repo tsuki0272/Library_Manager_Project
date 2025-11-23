@@ -1,4 +1,4 @@
-package ca.umanitoba.cs.longkuma.ui;
+package ca.umanitoba.cs.longkuma.ui.member;
 
 import ca.umanitoba.cs.longkuma.logic.member.Member;
 import com.google.common.base.Preconditions;
