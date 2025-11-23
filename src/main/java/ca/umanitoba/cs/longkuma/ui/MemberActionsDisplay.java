@@ -7,9 +7,7 @@ import ca.umanitoba.cs.longkuma.logic.media.MediaCopy;
 import ca.umanitoba.cs.longkuma.logic.member.Member;
 import ca.umanitoba.cs.longkuma.logic.resource.Booking;
 import ca.umanitoba.cs.longkuma.logic.resource.Resource;
-import com.google.common.base.Preconditions;
 
-import javax.xml.stream.events.EndDocument;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -129,9 +127,8 @@ public class MemberActionsDisplay {
 
         ResourceDisplay resourceDisplay = new ResourceDisplay(selectedResource);
         while(!validBookingDate) {
-            System.out.printf("SELECT DATE TO BOOK (DD/MM/YY): "); // TODO: ensure proper preconditions
+            System.out.print("SELECT DATE TO BOOK (DD/MM/YY): ");
             bookingDate = keyboard.nextLine();
-
             try{
                 if(bookingDate.length() == 8 &&
                         bookingDate.charAt(2) == '/' && bookingDate.charAt(5) == '/') {
@@ -155,13 +152,15 @@ public class MemberActionsDisplay {
                     System.out.println("Invalid format. Try again");
                 }
             } catch(NumberFormatException nfe) {
-                nfe.printStackTrace();
+                System.out.println("Invalid date format. Please use DD/MM/YY");
             }
         }
 
-
         while(!validBookingTime) {
-            System.out.println("SELECT TIME TO BOOK FROM 12:00 - 20:00 (HH:00-HH:00): ");
+            System.out.println("SELECT TIME TO BOOK FROM " + selectedResource.getOpeningTime() +
+                    " - " + selectedResource.getClosingTime() +
+                    " (format: HH:MM-HH:MM, timeslots every " +
+                    selectedResource.getTimeslotLength() + " minutes): ");
             resourceDisplay.printBookings(bookingDate);
             String bookingTime = keyboard.nextLine(); // HH:MM-HH:MM
 
@@ -174,8 +173,16 @@ public class MemberActionsDisplay {
                     String startTime = bookingTime.substring(0, 5);
                     String endTime = bookingTime.substring(6, 11);
 
-                    selectedBooking = new Booking.BookingBuilder().member(this.member)
-                            .startTime(startTime).endTime(endTime).day(day).month(month).year(year).build();
+                    selectedBooking = new Booking.BookingBuilder()
+                            .member(this.member)
+                            .startTime(startTime)
+                            .endTime(endTime)
+                            .day(day)
+                            .month(month)
+                            .year(year)
+                            .build();
+
+                    // UI layer validates before passing to logic layer
                     if(selectedResource.validBookingFormat(selectedBooking)) {
                         if(selectedResource.validBookingTime(selectedBooking)) {
                             if(selectedResource.validBookingLimit(selectedBooking)) {
@@ -191,24 +198,27 @@ public class MemberActionsDisplay {
                             System.out.println("Your time slot must be 2 hours or less.");
                         }
                     } else {
-                        System.out.println("This time slot is not available.");
+                        System.out.println("Invalid booking time. Times must align with " +
+                                selectedResource.getTimeslotLength() +
+                                "-minute timeslots and be within operating hours (" +
+                                selectedResource.getOpeningTime() + " - " +
+                                selectedResource.getClosingTime() + ").");
                     }
                 } else {
                     System.out.println("Invalid format. Use HH:MM-HH:MM (e.g., 14:00-16:00)");
                 }
             } catch (Exception e) {
-                System.out.println(e.getLocalizedMessage());
+                System.out.println("Error: " + e.getMessage());
             }
         }
 
-        boolean borrowed = this.member.bookResource(selectedResource, selectedBooking);
-        if (borrowed) {
+        boolean booked = this.member.bookResource(selectedResource, selectedBooking);
+        if (booked) {
             System.out.println("Successfully booked: " + selectedResource.getResourceName() +
                     " at " + selectedResource.getBooking(member, bookingDate));
         } else {
-            System.out.println("Failed to book: " + selectedResource.getResourceName() + ". No times available.");
+            System.out.println("Failed to book: " + selectedResource.getResourceName() + ". Booking failed.");
         }
-
     }
 
     private void showMedia() {
@@ -288,8 +298,8 @@ public class MemberActionsDisplay {
     }
 
     private static void printOptions() {
-        for(int i = 0; i < memberOptions.length; i++) {
-            System.out.printf("%s \n", memberOptions[i]);
+        for (String memberOption : memberOptions) {
+            System.out.printf("%s \n", memberOption);
         }
     }
 

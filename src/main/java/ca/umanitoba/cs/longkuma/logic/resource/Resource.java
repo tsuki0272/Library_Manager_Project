@@ -6,17 +6,26 @@ import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 
 public class Resource {
-    final private ArrayList<Booking> bookings; // Can book from 12:00 - 20:00
+    final private ArrayList<Booking> bookings;
     final String resourceName;
+    final private String openingTime; // Format: "HH:MM"
+    final private String closingTime; // Format: "HH:MM"
+    final private int timeslotLength; // in minutes
 
-    private Resource(String resourceName) {
+    private Resource(String resourceName, String openingTime, String closingTime, int timeslotLength) {
         this.bookings = new ArrayList<>();
         this.resourceName = resourceName;
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
+        this.timeslotLength = timeslotLength;
         checkResource();
     }
 
     public static class ResourceBuilder {
         private String resourceName;
+        private String openingTime;
+        private String closingTime;
+        private int timeslotLength;
 
         public ResourceBuilder() {}
 
@@ -28,8 +37,32 @@ public class Resource {
             return this;
         }
 
+        public ResourceBuilder openingTime(String openingTime) throws Exception {
+            if (openingTime == null || openingTime.length() != 5) {
+                throw new Exception("Opening time should be in HH:MM format.");
+            }
+            this.openingTime = openingTime;
+            return this;
+        }
+
+        public ResourceBuilder closingTime(String closingTime) throws Exception {
+            if (closingTime == null || closingTime.length() != 5) {
+                throw new Exception("Closing time should be in HH:MM format.");
+            }
+            this.closingTime = closingTime;
+            return this;
+        }
+
+        public ResourceBuilder timeslotLength(int timeslotLength) throws Exception {
+            if (timeslotLength <= 0 || timeslotLength > 1440) {
+                throw new Exception("Timeslot length should be between 1 and 1440 minutes.");
+            }
+            this.timeslotLength = timeslotLength;
+            return this;
+        }
+
         public Resource build() {
-            return new Resource(resourceName);
+            return new Resource(resourceName, openingTime, closingTime, timeslotLength);
         }
     }
 
@@ -37,6 +70,11 @@ public class Resource {
         Preconditions.checkState(bookings != null, "Bookings list should not be null.");
         Preconditions.checkState(resourceName != null, "Resource name should not be null.");
         Preconditions.checkState(resourceName.length() >= 1, "Resource name should have at least one symbol.");
+        Preconditions.checkState(openingTime != null, "Opening time should not be null.");
+        Preconditions.checkState(openingTime.length() == 5, "Opening time should be in HH:MM format.");
+        Preconditions.checkState(closingTime != null, "Closing time should not be null.");
+        Preconditions.checkState(closingTime.length() == 5, "Closing time should be in HH:MM format.");
+        Preconditions.checkState(timeslotLength > 0, "Timeslot length should be positive.");
 
         for (Booking booking : bookings) {
             Preconditions.checkState(booking != null, "Individual bookings should never be null.");
@@ -45,6 +83,18 @@ public class Resource {
 
     public String getResourceName() {
         return resourceName;
+    }
+
+    public String getOpeningTime() {
+        return openingTime;
+    }
+
+    public String getClosingTime() {
+        return closingTime;
+    }
+
+    public int getTimeslotLength() {
+        return timeslotLength;
     }
 
     public ArrayList<Booking> getBookings() {
@@ -68,20 +118,16 @@ public class Resource {
 
         while (foundBooking == null && index < bookings.size()) {
             Booking currentBooking = bookings.get(index);
-
             boolean sameMember = currentBooking.getMember().equals(member);
             boolean sameDate = currentBooking.getDay() == day &&
                     currentBooking.getMonth() == month &&
                     currentBooking.getYear() == year;
-
             if (sameMember && sameDate) {
                 foundBooking = currentBooking;
                 bookingTime = foundBooking.getStartTime() + " - " + foundBooking.getEndTime();
             }
-
             index++;
         }
-
         checkResource();
         return bookingTime;
     }
@@ -89,13 +135,11 @@ public class Resource {
     public boolean addBooking(Booking booking) {
         checkResource();
         Preconditions.checkNotNull(booking, "Booking cannot be null");
-        Preconditions.checkState(validBookingFormat(booking), "Booking must be within 12:00 - 20:00");
+        Preconditions.checkState(validBookingFormat(booking), "Booking must be within operating hours and align with timeslots");
         Preconditions.checkState(validBookingTime(booking), "Booking must be 2 hours or less");
         Preconditions.checkState(validBookingLimit(booking), "Members can book 1 time a day");
         Preconditions.checkState(availableTimeSlot(booking), "Someone else has booked at this time");
-
         boolean added = bookings.add(booking);
-
         checkResource();
         return added;
     }
@@ -110,7 +154,21 @@ public class Resource {
         return removed;
     }
 
-    // check if a booking is within the opening hours of the library (12:00 - 20:00)
+    private boolean isValidTimeslotBoundary(String time) {
+        int hour = Integer.parseInt(time.substring(0, 2));
+        int minute = Integer.parseInt(time.substring(3, 5));
+
+        int openHour = Integer.parseInt(openingTime.substring(0, 2));
+        int openMinute = Integer.parseInt(openingTime.substring(3, 5));
+
+        int timeInMinutes = hour * 60 + minute;
+        int openingInMinutes = openHour * 60 + openMinute;
+
+        int minutesSinceOpening = timeInMinutes - openingInMinutes;
+
+        return minutesSinceOpening >= 0 && minutesSinceOpening % timeslotLength == 0;
+    }
+
     public boolean validBookingFormat(Booking booking) {
         boolean isValid = true;
         String startTime = booking.getStartTime();
@@ -126,18 +184,25 @@ public class Resource {
             int endHour = Integer.parseInt(endTime.substring(0, 2));
             int endMinute = Integer.parseInt(endTime.substring(3, 5));
 
-            // Check minutes are 00 (bookings by the hour)
-            if (startMinute != 0 || endMinute != 0) {
+            int openHour = Integer.parseInt(openingTime.substring(0, 2));
+            int openMinute = Integer.parseInt(openingTime.substring(3, 5));
+            int closeHour = Integer.parseInt(closingTime.substring(0, 2));
+            int closeMinute = Integer.parseInt(closingTime.substring(3, 5));
+
+            int startInMinutes = startHour * 60 + startMinute;
+            int endInMinutes = endHour * 60 + endMinute;
+            int openInMinutes = openHour * 60 + openMinute;
+            int closeInMinutes = closeHour * 60 + closeMinute;
+
+            if (!isValidTimeslotBoundary(startTime) || !isValidTimeslotBoundary(endTime)) {
                 isValid = false;
             }
 
-            // Check within operating hours (12:00 to 20:00)
-            if (startHour < 12 || endHour > 20) {
+            if (startInMinutes < openInMinutes || endInMinutes > closeInMinutes) {
                 isValid = false;
             }
 
-            // Check start time is before end time
-            if (startHour >= endHour) {
+            if (startInMinutes >= endInMinutes) {
                 isValid = false;
             }
         }
@@ -145,22 +210,23 @@ public class Resource {
         return isValid;
     }
 
-    // check if a booking is 2 hours or less
     public boolean validBookingTime(Booking booking) {
         String startTime = booking.getStartTime();
         String endTime = booking.getEndTime();
         int startHour = Integer.parseInt(startTime.substring(0, 2));
+        int startMinute = Integer.parseInt(startTime.substring(3, 5));
         int endHour = Integer.parseInt(endTime.substring(0, 2));
-        boolean isValid = true;
+        int endMinute = Integer.parseInt(endTime.substring(3, 5));
 
-        int duration = endHour - startHour;
-        if (duration > 2) {
-            isValid = false;
-        }
-        return isValid;
+        int startInMinutes = startHour * 60 + startMinute;
+        int endInMinutes = endHour * 60 + endMinute;
+
+        int durationInMinutes = endInMinutes - startInMinutes;
+
+        // Check if duration is 2 hours (120 minutes) or less
+        return durationInMinutes <= 120;
     }
 
-    // check if this member has already booked for this day
     public boolean validBookingLimit(Booking newBooking) {
         boolean validBookingLimit = true;
         int index = 0;
@@ -184,7 +250,6 @@ public class Resource {
         return validBookingLimit;
     }
 
-    // check if someone else has booked at this time
     public boolean availableTimeSlot(Booking newBooking) {
         boolean available = true;
         int index = 0;
@@ -198,10 +263,22 @@ public class Resource {
                     booking.getYear() == newBooking.getYear();
 
             if (sameDate) {
-                int newStart = Integer.parseInt(newBooking.getStartTime().substring(0, 2));
-                int newEnd = Integer.parseInt(newBooking.getEndTime().substring(0, 2));
-                int existingStart = Integer.parseInt(booking.getStartTime().substring(0, 2));
-                int existingEnd = Integer.parseInt(booking.getEndTime().substring(0, 2));
+                // Parse times including minutes
+                int newStartHour = Integer.parseInt(newBooking.getStartTime().substring(0, 2));
+                int newStartMinute = Integer.parseInt(newBooking.getStartTime().substring(3, 5));
+                int newEndHour = Integer.parseInt(newBooking.getEndTime().substring(0, 2));
+                int newEndMinute = Integer.parseInt(newBooking.getEndTime().substring(3, 5));
+
+                int existingStartHour = Integer.parseInt(booking.getStartTime().substring(0, 2));
+                int existingStartMinute = Integer.parseInt(booking.getStartTime().substring(3, 5));
+                int existingEndHour = Integer.parseInt(booking.getEndTime().substring(0, 2));
+                int existingEndMinute = Integer.parseInt(booking.getEndTime().substring(3, 5));
+
+                // Convert to minutes since midnight
+                int newStart = newStartHour * 60 + newStartMinute;
+                int newEnd = newEndHour * 60 + newEndMinute;
+                int existingStart = existingStartHour * 60 + existingStartMinute;
+                int existingEnd = existingEndHour * 60 + existingEndMinute;
 
                 // Check for time overlap
                 boolean timeOverlap = (newStart < existingEnd && newEnd > existingStart);
@@ -210,11 +287,8 @@ public class Resource {
                     available = false;
                 }
             }
-
             index++;
         }
-
         return available;
     }
-
 }

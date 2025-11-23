@@ -60,8 +60,14 @@ public class StartLoginMain {
             lib1.addMedia(media1);
             lib1.addMedia(media2);
 
-            Resource resource1 = new Resource.ResourceBuilder().resourceName("Individual Study Room").build();
-            Resource resource2 = new Resource.ResourceBuilder().resourceName("Group Study Room").build();
+            final String OPENING_TIME = "12:00";
+            final String CLOSING_TIME = "20:00";
+            final int BOOKING_TIMESLOTS = 60;
+
+            Resource resource1 = new Resource.ResourceBuilder().resourceName("Individual Study Room").openingTime(OPENING_TIME)
+                    .closingTime(CLOSING_TIME).timeslotLength(BOOKING_TIMESLOTS).build();
+            Resource resource2 = new Resource.ResourceBuilder().resourceName("Group Study Room").openingTime(OPENING_TIME)
+                    .closingTime(CLOSING_TIME).timeslotLength(BOOKING_TIMESLOTS).build();
             lib1.addResource(resource1);
             lib1.addResource(resource2);
 
@@ -103,8 +109,10 @@ public class StartLoginMain {
             lib2.addMedia(media3);
             lib2.addMedia(media4);
 
-            Resource resource3 = new Resource.ResourceBuilder().resourceName("Quiet Pod 1").build();
-            Resource resource4 = new Resource.ResourceBuilder().resourceName("Quiet Pod 2").build();
+            Resource resource3 = new Resource.ResourceBuilder().resourceName("Quiet Pod 1").openingTime(OPENING_TIME)
+                    .closingTime(CLOSING_TIME).timeslotLength(BOOKING_TIMESLOTS).build();
+            Resource resource4 = new Resource.ResourceBuilder().resourceName("Quiet Pod 2").openingTime(OPENING_TIME)
+                    .closingTime(CLOSING_TIME).timeslotLength(BOOKING_TIMESLOTS).build();
             lib2.addResource(resource3);
             lib2.addResource(resource4);
 

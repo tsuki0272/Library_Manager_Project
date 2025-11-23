@@ -47,6 +47,8 @@ public class Booking {
             if (startTime.length() != 5) {
                 throw new Exception("Start time should have 5 characters (HH:MM).");
             }
+            // CHANGED: Removed validation for specific minute values
+            // Now accepts any valid HH:MM format (will be validated against Resource's timeslots)
             this.startTime = startTime;
             return this;
         }
@@ -58,6 +60,8 @@ public class Booking {
             if (endTime.length() != 5) {
                 throw new Exception("End time should have 5 characters (HH:MM).");
             }
+            // CHANGED: Removed validation for specific minute values
+            // Now accepts any valid HH:MM format (will be validated against Resource's timeslots)
             this.endTime = endTime;
             return this;
         }
@@ -100,6 +104,26 @@ public class Booking {
         Preconditions.checkState(day >= 1 && day <= 31, "Day should be between 1 and 31.");
         Preconditions.checkState(month >= 1 && month <= 12, "Month should be between 1 and 12.");
         Preconditions.checkState(year > 2024, "Year should be 2025 or later.");
+
+        Preconditions.checkState(isValidTimeFormat(startTime), "Start time must be valid HH:MM format.");
+        Preconditions.checkState(isValidTimeFormat(endTime), "End time must be valid HH:MM format.");
+    }
+
+    // NEW: Helper method to validate time format
+    private boolean isValidTimeFormat(String time) {
+        if (time == null || time.length() != 5) {
+            return false;
+        }
+
+        try {
+            int hour = Integer.parseInt(time.substring(0, 2));
+            int minute = Integer.parseInt(time.substring(3, 5));
+
+            // Check if hour is 0-23 and minute is 0-59
+            return hour >= 0 && hour < 24 && minute >= 0 && minute < 60;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     public String getStartTime() {
