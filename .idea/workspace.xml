@@ -5,14 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="89d68854-59d2-4151-a3b9-ad00d9b3e8f1" name="Changes" comment="created README.md file">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/ResourceDisplay.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/MediaPrinter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/StartLoginMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/StartLoginMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain_model/library/Library.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain_model/library/Library.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain_model/member/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain_model/member/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain_model/resource/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain_model/resource/Booking.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain_model/resource/Resource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain_model/resource/Resource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/LoginDisplay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/LoginDisplay.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/Media.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/Media.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/MediaCopy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/MediaCopy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/Review.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/Review.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/member/Constraint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/member/Constraint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/member/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/member/Member.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/Booking.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/Resource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/Resource.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/MemberActionsDisplay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/MemberActionsDisplay.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,6 +47,8 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.Main.executor": "Run",
+    "Application.Media.executor": "Run",
+    "Application.MediaCopy.executor": "Run",
     "Application.StartLoginMain.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",

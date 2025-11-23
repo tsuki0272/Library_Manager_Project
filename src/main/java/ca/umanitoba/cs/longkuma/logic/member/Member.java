@@ -99,6 +99,10 @@ public class Member {
         return added;
     }
 
+    public ArrayList<MediaCopy> getBorrowedMedia() {
+        return borrowedMedia;
+    }
+
     public boolean addConstraint(Constraint constraint) {
         checkMember();
         Preconditions.checkNotNull(constraint, "Constraint cannot be null");

@@ -12,7 +12,7 @@ public class MediaCopy {
     private String dueTime; // Format: "24:00"
     private String dueDate; // Format: "dd/mm/yy"
 
-    public MediaCopy(int copyNumber, Media media) {
+    private MediaCopy(int copyNumber, Media media) {
         this.copyNumber = copyNumber;
         this.media = media;
         this.isAvailable = true;
@@ -20,6 +20,33 @@ public class MediaCopy {
         this.dueTime = null;
         this.dueDate = null;
         checkMediaCopy();
+    }
+
+    public static class MediaCopyBuilder {
+        private int copyNumber;
+        private Media media;
+
+        public MediaCopyBuilder() {}
+
+        public MediaCopyBuilder copyNumber(int copyNumber) throws Exception {
+            if (copyNumber < 1) {
+                throw new Exception("Copy number should be at least 1.");
+            }
+            this.copyNumber = copyNumber;
+            return this;
+        }
+
+        public MediaCopyBuilder media(Media media) throws Exception {
+            if (media == null) {
+                throw new Exception("Media should not be null.");
+            }
+            this.media = media;
+            return this;
+        }
+
+        public MediaCopy build() {
+            return new MediaCopy(copyNumber, media);
+        }
     }
 
     private void checkMediaCopy() {

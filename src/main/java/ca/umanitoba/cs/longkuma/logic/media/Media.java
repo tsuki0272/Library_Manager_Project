@@ -15,7 +15,7 @@ public class Media {
     final private ArrayList<MediaCopy> copies;
     final private Queue<Member> waitlist;
 
-    public Media(String title, String author, String type) {
+    private Media(String title, String author, String type) {
         this.title = title;
         this.author = author;
         this.type = type;
@@ -25,13 +25,49 @@ public class Media {
         checkMedia();
     }
 
+    public static class MediaBuilder {
+        private String title;
+        private String author;
+        private String type;
+
+        public MediaBuilder() {}
+
+        public MediaBuilder title(String title) throws Exception {
+            if (title == null || title.isEmpty()) {
+                throw new Exception("Media title should not be null or empty.");
+            }
+            this.title = title;
+            return this;
+        }
+
+        public MediaBuilder author(String author) throws Exception {
+            if (author == null || author.isEmpty()) {
+                throw new Exception("Media author should not be null or empty.");
+            }
+            this.author = author;
+            return this;
+        }
+
+        public MediaBuilder type(String type) throws Exception {
+            if (type == null || type.isEmpty()) {
+                throw new Exception("Media type should not be null or empty.");
+            }
+            this.type = type;
+            return this;
+        }
+
+        public Media build() {
+            return new Media(title, author, type);
+        }
+    }
+
     private void checkMedia() {
         Preconditions.checkState(title != null, "Media title should not be null.");
         Preconditions.checkState(title.length() >= 1, "Media title should have at least one symbol.");
         Preconditions.checkState(author != null, "Media author should not be null.");
         Preconditions.checkState(author.length() >= 1, "Media author should have at least one symbol.");
-        Preconditions.checkState(author != null, "Media type should not be null.");
-        Preconditions.checkState(author.length() >= 1, "Media type should have at least one symbol.");
+        Preconditions.checkState(type != null, "Media type should not be null.");
+        Preconditions.checkState(type.length() >= 1, "Media type should have at least one symbol.");
         Preconditions.checkState(reviews != null, "Reviews list should not be null.");
         Preconditions.checkState(copies != null, "Copies list should not be null.");
         Preconditions.checkState(waitlist != null, "Waitlist should not be null.");

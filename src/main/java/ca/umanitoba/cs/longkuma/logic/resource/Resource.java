@@ -9,10 +9,28 @@ public class Resource {
     final private ArrayList<Booking> bookings; // Can book from 12:00 - 20:00
     final String resourceName;
 
-    public Resource(String resourceName) {
+    private Resource(String resourceName) {
         this.bookings = new ArrayList<>();
         this.resourceName = resourceName;
         checkResource();
+    }
+
+    public static class ResourceBuilder {
+        private String resourceName;
+
+        public ResourceBuilder() {}
+
+        public ResourceBuilder resourceName(String resourceName) throws Exception {
+            if (resourceName == null || resourceName.isEmpty()) {
+                throw new Exception("Resource name should not be null or empty.");
+            }
+            this.resourceName = resourceName;
+            return this;
+        }
+
+        public Resource build() {
+            return new Resource(resourceName);
+        }
     }
 
     private void checkResource() {

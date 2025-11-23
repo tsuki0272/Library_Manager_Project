@@ -12,7 +12,7 @@ public class Booking {
     final private int month;
     final private int year;
 
-    public Booking(Member member, String startTime, String endTime, int day, int month, int year) {
+    private Booking(Member member, String startTime, String endTime, int day, int month, int year) {
         this.member = member;
         this.startTime = startTime;
         this.day = day;
@@ -20,6 +20,75 @@ public class Booking {
         this.year = year;
         this.endTime = endTime;
         checkBooking();
+    }
+
+    public static class BookingBuilder {
+        private Member member;
+        private String startTime;
+        private String endTime;
+        private int day;
+        private int month;
+        private int year;
+
+        public BookingBuilder() {}
+
+        public BookingBuilder member(Member member) throws Exception {
+            if (member == null) {
+                throw new Exception("Member should not be null.");
+            }
+            this.member = member;
+            return this;
+        }
+
+        public BookingBuilder startTime(String startTime) throws Exception {
+            if (startTime == null) {
+                throw new Exception("Start time should not be null.");
+            }
+            if (startTime.length() != 5) {
+                throw new Exception("Start time should have 5 characters (HH:MM).");
+            }
+            this.startTime = startTime;
+            return this;
+        }
+
+        public BookingBuilder endTime(String endTime) throws Exception {
+            if (endTime == null) {
+                throw new Exception("End time should not be null.");
+            }
+            if (endTime.length() != 5) {
+                throw new Exception("End time should have 5 characters (HH:MM).");
+            }
+            this.endTime = endTime;
+            return this;
+        }
+
+        public BookingBuilder day(int day) throws Exception {
+            if (day < 1 || day > 31) {
+                throw new Exception("Day should be between 1 and 31.");
+            }
+            this.day = day;
+            return this;
+        }
+
+        public BookingBuilder month(int month) throws Exception {
+            if (month < 1 || month > 12) {
+                throw new Exception("Month should be between 1 and 12.");
+            }
+            this.month = month;
+            return this;
+        }
+
+        public BookingBuilder year(int year) throws Exception {
+            if (year <= 2024) {
+                throw new Exception("Year should be 2025 or later.");
+            }
+            this.year = year;
+            return this;
+        }
+
+        public Booking build() {
+            return new Booking(member, startTime, endTime, day, month, year);
+        }
     }
 
     private void checkBooking() {

@@ -3,11 +3,13 @@ package ca.umanitoba.cs.longkuma.ui;
 import ca.umanitoba.cs.longkuma.logic.library.Library;
 import ca.umanitoba.cs.longkuma.logic.library.LibrarySystem;
 import ca.umanitoba.cs.longkuma.logic.media.Media;
+import ca.umanitoba.cs.longkuma.logic.media.MediaCopy;
 import ca.umanitoba.cs.longkuma.logic.member.Member;
 import ca.umanitoba.cs.longkuma.logic.resource.Booking;
 import ca.umanitoba.cs.longkuma.logic.resource.Resource;
 import com.google.common.base.Preconditions;
 
+import javax.xml.stream.events.EndDocument;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -169,13 +171,11 @@ public class MemberActionsDisplay {
                         bookingTime.charAt(2) == ':' &&
                         bookingTime.charAt(5) == '-' &&
                         bookingTime.charAt(8) == ':') {
-                    System.out.println("YA");
                     String startTime = bookingTime.substring(0, 5);
                     String endTime = bookingTime.substring(6, 11);
-                    System.out.println("YE");
-                    System.out.println("YI");
 
-                    selectedBooking = new Booking(this.member, startTime, endTime, day, month, year);
+                    selectedBooking = new Booking.BookingBuilder().member(this.member)
+                            .startTime(startTime).endTime(endTime).day(day).month(month).year(year).build();
                     if(selectedResource.validBookingFormat(selectedBooking)) {
                         if(selectedResource.validBookingTime(selectedBooking)) {
                             if(selectedResource.validBookingLimit(selectedBooking)) {
@@ -193,7 +193,6 @@ public class MemberActionsDisplay {
                     } else {
                         System.out.println("This time slot is not available.");
                     }
-                    System.out.println("YO");
                 } else {
                     System.out.println("Invalid format. Use HH:MM-HH:MM (e.g., 14:00-16:00)");
                 }
@@ -277,7 +276,16 @@ public class MemberActionsDisplay {
         }
     }
 
-    private void returnMedia() {}
+    private void returnMedia() {
+        showBorrowedMedia(member);
+    }
+
+    private void showBorrowedMedia(Member member) {
+        ArrayList<MediaCopy> borrowed = member.getBorrowedMedia();
+        for(MediaCopy media : borrowed) {
+            System.out.println(media);
+        }
+    }
 
     private static void printOptions() {
         for(int i = 0; i < memberOptions.length; i++) {
