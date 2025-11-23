@@ -5,12 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="89d68854-59d2-4151-a3b9-ad00d9b3e8f1" name="Changes" comment="created README.md file">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/stack/LinkedListStack.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/stack/Stack.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/StartLoginMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/StartLoginMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/library/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/library/Map.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/Media.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/Media.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/Resource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/Resource.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

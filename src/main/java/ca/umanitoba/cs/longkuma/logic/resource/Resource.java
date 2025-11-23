@@ -318,4 +318,8 @@ public class Resource {
         }
         return available;
     }
+
+    public ArrayList<int[]> getCoordinates() {
+        return coordinates;
+    }
 }
