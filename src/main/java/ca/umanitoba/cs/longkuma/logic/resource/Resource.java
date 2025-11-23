@@ -3,6 +3,7 @@ package ca.umanitoba.cs.longkuma.logic.resource;
 import ca.umanitoba.cs.longkuma.logic.member.Member;
 import com.google.common.base.Preconditions;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Resource {
@@ -11,13 +12,15 @@ public class Resource {
     final private String openingTime; // Format: "HH:MM"
     final private String closingTime; // Format: "HH:MM"
     final private int timeslotLength; // in minutes
+    final private ArrayList<int[]> coordinates;
 
-    private Resource(String resourceName, String openingTime, String closingTime, int timeslotLength) {
+    private Resource(String resourceName, String openingTime, String closingTime, int timeslotLength, ArrayList<int[]> coordinates) {
         this.bookings = new ArrayList<>();
         this.resourceName = resourceName;
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.timeslotLength = timeslotLength;
+        this.coordinates = coordinates;
         checkResource();
     }
 
@@ -26,6 +29,7 @@ public class Resource {
         private String openingTime;
         private String closingTime;
         private int timeslotLength;
+        private ArrayList<int[]> coordinates;
 
         public ResourceBuilder() {}
 
@@ -61,8 +65,24 @@ public class Resource {
             return this;
         }
 
+        public ResourceBuilder coordinates(ArrayList<int[]> coordinates) throws Exception {
+            if (coordinates == null) {
+                throw new Exception("Coordinates should not be null.");
+            }
+            for(int[] coordinate : coordinates) {
+                if (coordinate == null) {
+                    throw new Exception("Individual coordinates should not be null.");
+                }
+                if (coordinate.length != 2) {
+                    throw new Exception("Each coordinate should have exactly 2 values (row, column).");
+                }
+            }
+            this.coordinates = coordinates;
+            return this;
+        }
+
         public Resource build() {
-            return new Resource(resourceName, openingTime, closingTime, timeslotLength);
+            return new Resource(resourceName, openingTime, closingTime, timeslotLength, coordinates);
         }
     }
 
@@ -75,9 +95,16 @@ public class Resource {
         Preconditions.checkState(closingTime != null, "Closing time should not be null.");
         Preconditions.checkState(closingTime.length() == 5, "Closing time should be in HH:MM format.");
         Preconditions.checkState(timeslotLength > 0, "Timeslot length should be positive.");
+        Preconditions.checkState(coordinates != null, "Coordinates should not be null.");
+        Preconditions.checkState(coordinates.size() >= 1, "Coordinates should have at least one coordinate.");
 
         for (Booking booking : bookings) {
             Preconditions.checkState(booking != null, "Individual bookings should never be null.");
+        }
+
+        for (int[] coordinate : coordinates) {
+            Preconditions.checkState(coordinate != null, "Individual coordinates should never be null.");
+            Preconditions.checkState(coordinate.length == 2, "Each coordinate should have exactly 2 values.");
         }
     }
 

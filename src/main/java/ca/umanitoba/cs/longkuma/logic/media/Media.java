@@ -14,14 +14,16 @@ public class Media {
     final private ArrayList<Review> reviews;
     final private ArrayList<MediaCopy> copies;
     final private Queue<Member> waitlist;
+    final private int[] coordinates;
 
-    private Media(String title, String author, String type) {
+    private Media(String title, String author, String type, int[] coordinates) {
         this.title = title;
         this.author = author;
         this.type = type;
         this.reviews = new ArrayList<>();
         this.copies = new ArrayList<>();
         this.waitlist = new LinkedList<>();
+        this.coordinates = coordinates;
         checkMedia();
     }
 
@@ -29,6 +31,7 @@ public class Media {
         private String title;
         private String author;
         private String type;
+        private int[] coordinates;
 
         public MediaBuilder() {}
 
@@ -56,8 +59,16 @@ public class Media {
             return this;
         }
 
+        public MediaBuilder coordinates(int[] coordinates) throws Exception {
+            if (coordinates == null) {
+                throw new Exception("Media coordinates should not be null.");
+            }
+            this.coordinates = coordinates;
+            return this;
+        }
+
         public Media build() {
-            return new Media(title, author, type);
+            return new Media(title, author, type, coordinates);
         }
     }
 
@@ -71,6 +82,8 @@ public class Media {
         Preconditions.checkState(reviews != null, "Reviews list should not be null.");
         Preconditions.checkState(copies != null, "Copies list should not be null.");
         Preconditions.checkState(waitlist != null, "Waitlist should not be null.");
+        Preconditions.checkState(coordinates != null, "Coordinates should not be null.");
+        Preconditions.checkState(coordinates.length == 2, "Each coordinate should have exactly 2 values (row, column).");
 
         for (Review review : reviews) {
             Preconditions.checkState(review != null, "Individual reviews should never be null.");

@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Map {
     private final char[][]  grid;
-    private String[] legend;
+    private final String[] legend;
 
     private Map(char[][] grid, String[] legend) {
         this.grid = grid;
@@ -87,8 +87,8 @@ public class Map {
         Preconditions.checkState(legend != null, "Legend should not be null.");
         Preconditions.checkState(legend.length >= 1, "Legend should have at least one symbol.");
 
-        for (int i = 0; i < grid.length; i++) {
-            Preconditions.checkState(grid[i] != null, "Grid row should not be null.");
+        for (char[] chars : grid) {
+            Preconditions.checkState(chars != null, "Grid row should not be null.");
         }
 
         for (String symbol : legend) {
