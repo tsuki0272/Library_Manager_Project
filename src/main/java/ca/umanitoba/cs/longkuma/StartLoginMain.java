@@ -47,7 +47,7 @@ public class StartLoginMain {
             };
             int[] kiosk1 = new int[]{5,5};
             char[][] mapGrid1 = Map.MapBuilder.gridFromString(mapString1);
-            Map map1 = new Map.MapBuilder().grid(mapGrid1).legend(legend1).build();
+            Map map1 = new Map.MapBuilder().grid(mapGrid1).legend(legend1).kioskCoordinates(kiosk1).build();
             Library lib1 = new Library.LibraryBuilder().name("Elizabeth Dafoe Library").map(map1).build();
 
             Media media1 = new Media.MediaBuilder().title("The Hobbit").author("J.R.R. Tolkien")
@@ -106,7 +106,7 @@ public class StartLoginMain {
             };
             int[] kiosk2 = new int[]{4,7};
             char[][] mapGrid2 = Map.MapBuilder.gridFromString(mapString2);
-            Map map2 = new Map.MapBuilder().grid(mapGrid2).legend(legend2).build();
+            Map map2 = new Map.MapBuilder().grid(mapGrid2).legend(legend2).kioskCoordinates(kiosk2).build();
             Library lib2 = new Library.LibraryBuilder().name("E. K. Williams Law Library").map(map2).build();
 
             Media media3 = new Media.MediaBuilder().title("Generative Adversarial Networks").author("Ian J. Goodfellow")

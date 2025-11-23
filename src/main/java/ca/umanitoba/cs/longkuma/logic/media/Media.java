@@ -184,6 +184,10 @@ public class Media {
         return available;
     }
 
+    public int[] getCoordinates() {
+        return coordinates;
+    }
+
     public MediaCopy borrowCopy(Member member) {
         Preconditions.checkNotNull(member, "Member cannot be null");
 
