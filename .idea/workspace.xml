@@ -5,9 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="89d68854-59d2-4151-a3b9-ad00d9b3e8f1" name="Changes" comment="created README.md file">
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/BookingLimitExceededException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidBookingDurationException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidBookingFormatException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidDateException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidMemberException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidTimeFormatException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/TimeSlotUnavailableException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/StartLoginMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/StartLoginMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/library/Library.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/library/Library.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/library/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/library/Map.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/Media.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/Media.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/member/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/member/Member.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/Booking.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/Resource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/Resource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/member/MemberActionsDisplay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/member/MemberActionsDisplay.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,8 +30,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>

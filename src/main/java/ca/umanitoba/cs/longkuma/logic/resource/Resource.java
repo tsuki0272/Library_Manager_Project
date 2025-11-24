@@ -1,5 +1,9 @@
 package ca.umanitoba.cs.longkuma.logic.resource;
 
+import ca.umanitoba.cs.longkuma.logic.exceptions.BookingLimitExceededException;
+import ca.umanitoba.cs.longkuma.logic.exceptions.InvalidBookingDurationException;
+import ca.umanitoba.cs.longkuma.logic.exceptions.InvalidBookingFormatException;
+import ca.umanitoba.cs.longkuma.logic.exceptions.TimeSlotUnavailableException;
 import ca.umanitoba.cs.longkuma.logic.member.Member;
 import com.google.common.base.Preconditions;
 
@@ -159,13 +163,27 @@ public class Resource {
         return bookingTime;
     }
 
-    public boolean addBooking(Booking booking) {
+    public boolean addBooking(Booking booking) throws InvalidBookingFormatException,
+            InvalidBookingDurationException,
+            BookingLimitExceededException,
+            TimeSlotUnavailableException {
         checkResource();
         Preconditions.checkNotNull(booking, "Booking cannot be null");
-        Preconditions.checkState(validBookingFormat(booking), "Booking must be within operating hours and align with timeslots");
-        Preconditions.checkState(validBookingTime(booking), "Booking must be 2 hours or less");
-        Preconditions.checkState(validBookingLimit(booking), "Members can book 1 time a day");
-        Preconditions.checkState(availableTimeSlot(booking), "Someone else has booked at this time");
+
+        if (!validBookingFormat(booking)) {
+            throw new InvalidBookingFormatException("Booking must align with " + timeslotLength +
+                    "-minute timeslots and be within operating hours (" + openingTime + " - " + closingTime + ")");
+        }
+        if (!validBookingTime(booking)) {
+            throw new InvalidBookingDurationException("Booking must be 2 hours or less");
+        }
+        if (!validBookingLimit(booking)) {
+            throw new BookingLimitExceededException("You have already booked a resource for this day");
+        }
+        if (!availableTimeSlot(booking)) {
+            throw new TimeSlotUnavailableException("This time slot has already been booked");
+        }
+
         boolean added = bookings.add(booking);
         checkResource();
         return added;

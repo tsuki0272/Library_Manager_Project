@@ -135,4 +135,8 @@ public class Library {
         checkLibrary();
         return foundResource;
     }
+
+    public Map getMap() {
+        return map;
+    }
 }

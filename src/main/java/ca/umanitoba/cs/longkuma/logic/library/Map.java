@@ -268,7 +268,7 @@ public class Map {
             if(isResource ? foundTarget(curr, (ArrayList<int[]>) targetCoordinates) :
                     foundTarget(curr, (int[]) targetCoordinates)) {
                 found = true;
-                System.out.println(gridPath(gridCopy));
+                System.out.println(gridPath(gridCopy, curr));
             } else {
                 updateGrid(curr, gridCopy);
                 if(directionIsAvailable("UP", curr, visited, pushed, gridCopy, targetCoordinates, isResource)) {
@@ -406,11 +406,17 @@ public class Map {
         return copy;
     }
 
-    private static String gridPath(char[][] grid) {
+    private String gridPath(char[][] grid, int[] curr) {
         String mazePath = "";
         for(int row = 0; row < grid.length; row++) {
             for(int clmn = 0; clmn < grid[0].length; clmn++) {
-                mazePath += grid[row][clmn] + " ";
+                if(row == kioskCoordinates[0] && clmn == kioskCoordinates[1]) {
+                    mazePath += "U ";
+                }else if (row == curr[0] && clmn == curr[1]) {
+                    mazePath += "X ";
+                } else {
+                    mazePath += grid[row][clmn] + " ";
+                }
             }
             mazePath += "\n";
         }

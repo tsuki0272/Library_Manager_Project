@@ -1,11 +1,12 @@
 package ca.umanitoba.cs.longkuma.ui.member;
 
+import ca.umanitoba.cs.longkuma.logic.exceptions.*;
 import ca.umanitoba.cs.longkuma.logic.library.Library;
 import ca.umanitoba.cs.longkuma.logic.library.LibrarySystem;
 import ca.umanitoba.cs.longkuma.logic.media.Media;
 import ca.umanitoba.cs.longkuma.logic.media.MediaCopy;
+import ca.umanitoba.cs.longkuma.logic.media.Review;
 import ca.umanitoba.cs.longkuma.logic.member.Member;
-import ca.umanitoba.cs.longkuma.logic.resource.Booking;
 import ca.umanitoba.cs.longkuma.logic.resource.Resource;
 import ca.umanitoba.cs.longkuma.ui.MediaCopyDisplay;
 import ca.umanitoba.cs.longkuma.ui.ResourceDisplay;
@@ -17,14 +18,14 @@ public class MemberActionsDisplay {
     private final LibrarySystem libSystem;
     private final Member member;
     private final Scanner keyboard;
-    private static final String[] memberOptions = {"BOOK RESOURCE", "BORROW MEDIA", "RETURN MEDIA", "SIGN OUT"};
-    
+    private static final String[] memberOptions = {"1. BOOK RESOURCE", "2. BORROW MEDIA", "3. RETURN MEDIA", "4. SIGN OUT"};
+
     public MemberActionsDisplay(LibrarySystem libSystem, Member member, Scanner keyboard) {
         this.libSystem = libSystem;
         this.member = member;
         this.keyboard = keyboard;
     }
-    
+
     public void showOptions() {
         String task;
         boolean signedOut = false;
@@ -66,44 +67,35 @@ public class MemberActionsDisplay {
         }
     }
 
-    private void showResources() {
-        ArrayList<Library> libraries = this.libSystem.getLibraries();
-        int libCounter = 1;
-        for(Library library : libraries) {
-            System.out.println(libCounter + ". " + library.getName());
-            ArrayList<Resource> resources = library.getResources();
-            for(int i = 0; i < resources.size(); i++) {
-                System.out.printf("\t%d. \"%s\"\n", i + 1, resources.get(i).getResourceName());
-            }
-            System.out.println();
-            libCounter++;
+    private void showResources(Library library) {
+        ArrayList<Resource> resources = library.getResources();
+        for(int i = 0; i < resources.size(); i++) {
+            System.out.printf("%d. \"%s\"\n", i + 1, resources.get(i).getResourceName());
         }
     }
 
-    private void bookResource() {
-        boolean validLibrary = false;
-        boolean validResource = false;
-        boolean validBookingDate = false;
-        boolean validBookingTime = false;
-        Library selectedLibrary = null;
-        Resource selectedResource = null;
-        Booking selectedBooking = null;
-        String bookingDate = null;
-        int day = 0;
-        int month = 0;
-        int year = 0;
+    private void showLibraries() {
+        ArrayList<Library> libraries = this.libSystem.getLibraries();
+        for(int i = 0; i < libraries.size(); i++) {
+            System.out.printf("%d. %s\n", i + 1, libraries.get(i).getName());
+        }
+    }
 
-        while(!validLibrary) {
-            showResources();
+    private Library selectLibrary() {
+        Library selectedLibrary = null;
+        boolean valid = false;
+
+        while (!valid) {
+            showLibraries();
             ArrayList<Library> libraries = this.libSystem.getLibraries();
-            System.out.printf("SELECT LIBRARY TO BORROW FROM (1 - %d): ", libraries.size());
-            String library = getInput();
+            System.out.printf("SELECT LIBRARY (1 - %d): ", libraries.size());
+            String input = getInput();
 
             try {
-                int libraryIndex = Integer.parseInt(library) - 1;
-                if (libraryIndex >= 0 && libraryIndex < libraries.size()) {
-                    selectedLibrary = libraries.get(libraryIndex);
-                    validLibrary = true;
+                int index = Integer.parseInt(input) - 1;
+                if (index >= 0 && index < libraries.size()) {
+                    selectedLibrary = libraries.get(index);
+                    valid = true;
                 } else {
                     System.out.println("Invalid library. Please enter a number between 1 and " + libraries.size());
                 }
@@ -111,198 +103,146 @@ public class MemberActionsDisplay {
                 System.out.println("Invalid input. Please enter a number.");
             }
         }
+        return selectedLibrary;
+    }
 
-        while (!validResource) {
-            ArrayList<Resource> resourceList = selectedLibrary.getResources();
-            System.out.printf("SELECT RESOURCE TO BOOK (1 - %d): ", resourceList.size());
-            String media = getInput();
+    private Resource selectResource(Library library) {
+        Resource selectedResource = null;
+        boolean valid = false;
+
+        while (!valid) {
+            showResources(library);
+            ArrayList<Resource> resources = library.getResources();
+            System.out.printf("SELECT RESOURCE TO BOOK (1 - %d): ", resources.size());
+            String input = getInput();
 
             try {
-                int resourceIndex = Integer.parseInt(media) - 1;
-
-                if (resourceIndex >= 0 && resourceIndex < resourceList.size()) {
-                    selectedResource = resourceList.get(resourceIndex);
-                    validResource = true;
+                int index = Integer.parseInt(input) - 1;
+                if (index >= 0 && index < resources.size()) {
+                    selectedResource = resources.get(index);
+                    valid = true;
                 } else {
-                    System.out.println("Invalid resource selection. Please enter a number between 1 and " + (resourceList.size()));
+                    System.out.println("Invalid resource. Please enter a number between 1 and " + resources.size());
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a number.");
             }
         }
+        return selectedResource;
+    }
 
-        ResourceDisplay resourceDisplay = new ResourceDisplay(selectedResource);
-        while(!validBookingDate) {
-            System.out.print("SELECT DATE TO BOOK (DD/MM/YY): ");
-            bookingDate = getInput();
-            try{
-                if(bookingDate.length() == 8 &&
-                        bookingDate.charAt(2) == '/' && bookingDate.charAt(5) == '/') {
-                    day = Integer.parseInt(bookingDate.substring(0,2));
-                    month = Integer.parseInt(bookingDate.substring(3,5));
-                    year = Integer.parseInt(bookingDate.substring(6,8)) + 2000;
-                    if(day >= 1 && day <= 31) {
-                        if(month >= 1 && month <= 12) {
-                            if(year > 2024) {
-                                validBookingDate = true;
-                            } else {
-                                System.out.println("Year should be 2025 or later.");
-                            }
-                        } else {
-                            System.out.println("Month should be between 1 and 12.");
-                        }
-                    } else {
-                        System.out.println("Day should be between 1 and 31.");
-                    }
-                } else {
-                    System.out.println("Invalid format. Try again");
-                }
-            } catch(NumberFormatException nfe) {
-                System.out.println("Invalid date format. Please use DD/MM/YY");
-            }
-        }
+    private Media selectMedia(Library library) {
+        Media selectedMedia = null;
+        boolean valid = false;
 
-        while(!validBookingTime) {
-            System.out.println("SELECT TIME TO BOOK FROM " + selectedResource.getOpeningTime() +
-                    " - " + selectedResource.getClosingTime() +
-                    " (format: HH:MM-HH:MM, timeslots every " +
-                    selectedResource.getTimeslotLength() + " minutes): ");
-            resourceDisplay.printBookings(bookingDate);
-            String bookingTime = getInput(); // HH:MM-HH:MM
+        while (!valid) {
+            showMedia(library);
+            ArrayList<Media> mediaList = library.getMedia();
+            System.out.printf("SELECT MEDIA TO BORROW (1 - %d): ", mediaList.size());
+            String input = getInput();
 
             try {
-                // Parse the booking time input
-                if (bookingTime.length() == 11 &&
-                        bookingTime.charAt(2) == ':' &&
-                        bookingTime.charAt(5) == '-' &&
-                        bookingTime.charAt(8) == ':') {
-                    String startTime = bookingTime.substring(0, 5);
-                    String endTime = bookingTime.substring(6, 11);
-
-                    selectedBooking = new Booking.BookingBuilder()
-                            .member(this.member)
-                            .startTime(startTime)
-                            .endTime(endTime)
-                            .day(day)
-                            .month(month)
-                            .year(year)
-                            .build();
-
-                    // UI layer validates before passing to logic layer
-                    if(selectedResource.validBookingFormat(selectedBooking)) {
-                        if(selectedResource.validBookingTime(selectedBooking)) {
-                            if(selectedResource.validBookingLimit(selectedBooking)) {
-                                if(selectedResource.availableTimeSlot(selectedBooking)) {
-                                    validBookingTime = true;
-                                } else { System.out.println("This time slot has already been booked."); }
-                            } else { System.out.println("You have already booked a resource for today."); }
-                        } else { System.out.println("Your time slot must be 2 hours or less."); }
-                    } else { System.out.println("Invalid booking time. Times must align with " +
-                                selectedResource.getTimeslotLength() +
-                                "-minute timeslots and be within operating hours (" +
-                                selectedResource.getOpeningTime() + " - " +
-                                selectedResource.getClosingTime() + ")."); }
-                } else { System.out.println("Invalid format. Use HH:MM-HH:MM (e.g., 14:00-16:00)"); }
-            } catch (Exception e) { System.out.println("Error: " + e.getMessage()); }
+                int index = Integer.parseInt(input) - 1;
+                if (index >= 0 && index < mediaList.size()) {
+                    selectedMedia = mediaList.get(index);
+                    valid = true;
+                } else {
+                    System.out.println("Invalid media. Please enter a number between 1 and " + mediaList.size());
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
+            }
         }
+        return selectedMedia;
+    }
 
-        boolean booked = this.member.bookResource(selectedResource, selectedBooking);
-        if (booked) {
-            System.out.println("Successfully booked: " + selectedResource.getResourceName() +
-                    " at " + selectedResource.getBooking(member, bookingDate));
-        } else {
-            System.out.println("Failed to book: " + selectedResource.getResourceName() + ". Booking failed.");
+    private void bookResource() {
+        Library selectedLibrary = selectLibrary();
+        Resource selectedResource = selectResource(selectedLibrary);
+
+        ResourceDisplay resourceDisplay = new ResourceDisplay(selectedResource);
+
+        // Get date
+        System.out.print("SELECT DATE TO BOOK (DD/MM/YY): ");
+        String bookingDate = keyboard.nextLine();
+
+        // Get time
+        System.out.println("SELECT TIME TO BOOK FROM " + selectedResource.getOpeningTime() +
+                " - " + selectedResource.getClosingTime() +
+                " (format: HH:MM-HH:MM, timeslots every " +
+                selectedResource.getTimeslotLength() + " minutes): ");
+        resourceDisplay.printBookings(bookingDate);
+        String bookingTime = keyboard.nextLine();
+
+        try {
+            boolean booked = member.bookResource(selectedResource, bookingDate, bookingTime);
+            if (booked) {
+                System.out.println("Successfully booked: " + selectedResource.getResourceName());
+                System.out.println("Path to resource:");
+                selectedLibrary.getMap().findResource(selectedResource);
+            } else {
+                System.out.println("Failed to book resource.");
+            }
+        } catch (InvalidDateException e) {
+            System.out.println("Invalid date: " + e.getMessage());
+        } catch (InvalidTimeFormatException e) {
+            System.out.println("Invalid time format: " + e.getMessage());
+        } catch (InvalidBookingFormatException e) {
+            System.out.println("Invalid booking: " + e.getMessage());
+        } catch (InvalidBookingDurationException e) {
+            System.out.println("Booking duration error: " + e.getMessage());
+        } catch (BookingLimitExceededException e) {
+            System.out.println("Booking limit exceeded: " + e.getMessage());
+        } catch (TimeSlotUnavailableException e) {
+            System.out.println("Time slot unavailable: " + e.getMessage());
+        } catch (InvalidMemberException e) {
+            System.out.println("Invalid Member: " + e.getMessage());
         }
     }
 
-    private void showMedia() {
-        ArrayList<Library> libraries = this.libSystem.getLibraries();
-        int libCounter = 1;
-        for(Library library : libraries) {
-            System.out.println(libCounter + ". " + library.getName());
-            ArrayList<Media> media = library.getMedia();
-            for(int i = 0; i < media.size(); i++) {
-                System.out.printf("\t%d. \"%s\" by %s\n", i + 1, media.get(i).getTitle(), media.get(i).getAuthor());
-            }
-            System.out.println();
-            libCounter++;
+    private void showMedia(Library library) {
+        ArrayList<Media> media = library.getMedia();
+        for(int i = 0; i < media.size(); i++) {
+            System.out.printf("%d. \"%s\" by %s\n", i + 1, media.get(i).getTitle(), media.get(i).getAuthor());
         }
     }
 
     private void borrowMedia() {
-        boolean validLibrary = false;
-        boolean validMedia = false;
-        Library selectedLibrary = null;
-        Media selectedMedia = null;
+        Library selectedLibrary = selectLibrary();
+        Media selectedMedia = selectMedia(selectedLibrary);
 
-        while (!validLibrary) {
-            showMedia();
-            ArrayList<Library> libraries = this.libSystem.getLibraries();
-            System.out.printf("SELECT LIBRARY TO BORROW FROM (1 - %d): ", libraries.size());
-            String library = getInput();
-
-            try {
-                int libraryIndex = Integer.parseInt(library) - 1;
-                if (libraryIndex >= 0 && libraryIndex < libraries.size()) {
-                    selectedLibrary = libraries.get(libraryIndex);
-                    validLibrary = true;
-                } else {
-                    System.out.println("Invalid library. Please enter a number between 1 and " + libraries.size());
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number.");
-            }
-        }
-
-        while (!validMedia) {
-            ArrayList<Media> mediaList = selectedLibrary.getMedia();
-            System.out.printf("SELECT MEDIA TO BORROW (1 - %d): ", mediaList.size());
-            String media = getInput();
-
-            try {
-                int mediaIndex = Integer.parseInt(media) - 1;
-
-                if (mediaIndex >= 0 && mediaIndex < mediaList.size()) {
-                    selectedMedia = mediaList.get(mediaIndex);
-                    validMedia = true;
-                } else {
-                    System.out.println("Invalid media selection. Please enter a number between 1 and " + (mediaList.size()));
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number.");
-            }
-        }
         boolean borrowed = this.member.borrowMedia(selectedMedia);
         if (borrowed) {
+            System.out.println("Path to selected media: ");
+            selectedLibrary.getMap().findMedia(selectedMedia);
             System.out.println("Successfully borrowed: " + selectedMedia.getTitle());
         } else {
-            System.out.println("Failed to borrow: " + selectedMedia.getTitle() + ". No copies available.");
+            System.out.println("Failed to borrow: " + selectedMedia.getTitle() + ". No copies available or you are on the waitlist.");
         }
     }
 
     private void returnMedia() {
         ArrayList<MediaCopy> borrowed = member.getBorrowedMedia();
-        // Check if member has any borrowed media
+
         if (borrowed.isEmpty()) {
             System.out.println("You have no media to return.");
             return;
         }
-        // Show borrowed media with numbers
+
         showBorrowedMedia(member);
-        // Get valid selection
-        boolean validSelection = false;
+
         MediaCopy selectedCopy = null;
         Media selectedMedia = null;
+        boolean validSelection = false;
 
         while (!validSelection) {
             System.out.printf("SELECT MEDIA TO RETURN (1 - %d): ", borrowed.size());
-            String chosenMedia = getInput();
+            String input = getInput();
 
             try {
-                int mediaIndex = Integer.parseInt(chosenMedia) - 1;
-
-                if (mediaIndex >= 0 && mediaIndex < borrowed.size()) {
-                    selectedCopy = borrowed.get(mediaIndex);
+                int index = Integer.parseInt(input) - 1;
+                if (index >= 0 && index < borrowed.size()) {
+                    selectedCopy = borrowed.get(index);
                     selectedMedia = selectedCopy.getMedia();
                     validSelection = true;
                 } else {
@@ -313,7 +253,6 @@ public class MemberActionsDisplay {
             }
         }
 
-        // Show options menu for this media
         boolean done = false;
         while (!done) {
             System.out.println("\nWhat would you like to do?");
@@ -330,7 +269,7 @@ public class MemberActionsDisplay {
                     readReviews(selectedMedia);
                     break;
                 case "2":
-                case "WRITE A REVIEW":
+                case "WRITE REVIEW":
                     writeReview(selectedMedia);
                     break;
                 case "3":
@@ -356,35 +295,52 @@ public class MemberActionsDisplay {
     }
 
     private void readReviews(Media media) {
-        // Display all reviews for this media
-        // Need to implement
+        ArrayList<Review> reviews = media.getReviews();
+        if (reviews.isEmpty()) {
+            System.out.println("No reviews yet for this media.");
+        } else {
+            System.out.println("=== Reviews for " + media.getTitle() + " ===");
+            for (int i = 0; i < reviews.size(); i++) {
+                System.out.println((i + 1) + ". " + reviews.get(i).getReview());
+                System.out.println("--------------------");
+            }
+        }
     }
 
     private void writeReview(Media media) {
-        // Get review text from user and add to media
-        // Need to implement
+        System.out.println("Write your review for \"" + media.getTitle() + "\":");
+        System.out.println("(Press Enter when done)");
+        String reviewText = keyboard.nextLine();
+
+        try {
+            Review review = new Review.ReviewBuilder().review(reviewText).build();
+            boolean added = media.addReview(review);
+            if (added) {
+                System.out.println("Review added successfully!");
+            } else {
+                System.out.println("Failed to add review.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error adding review: " + e.getMessage());
+        }
     }
 
     private void showBorrowedMedia(Member member) {
         ArrayList<MediaCopy> borrowed = member.getBorrowedMedia();
-        int count = 1;
-        for(MediaCopy copy : borrowed) {
-            MediaCopyDisplay copyDisplay = new MediaCopyDisplay(copy);
-            System.out.print(count + ". ");
+        for(int i = 0; i < borrowed.size(); i++) {
+            MediaCopyDisplay copyDisplay = new MediaCopyDisplay(borrowed.get(i));
+            System.out.print((i + 1) + ". ");
             copyDisplay.print();
-            count++;
         }
     }
 
     private static void printOptions() {
         for (String memberOption : memberOptions) {
-            System.out.printf("%s \n", memberOption);
+            System.out.println(memberOption);
         }
     }
 
     private String getInput() {
-        String loginInput;
-        loginInput = keyboard.nextLine().toUpperCase();
-        return loginInput;
+        return keyboard.nextLine().toUpperCase();
     }
 }

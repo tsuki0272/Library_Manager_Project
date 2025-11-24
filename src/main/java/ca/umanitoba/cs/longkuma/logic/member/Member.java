@@ -1,5 +1,6 @@
 package ca.umanitoba.cs.longkuma.logic.member;
 
+import ca.umanitoba.cs.longkuma.logic.exceptions.*;
 import ca.umanitoba.cs.longkuma.logic.media.Media;
 import ca.umanitoba.cs.longkuma.logic.media.MediaCopy;
 import ca.umanitoba.cs.longkuma.logic.resource.Booking;
@@ -29,17 +30,17 @@ public class Member {
         private String password;
         public MemberBuilder() {}
 
-        public MemberBuilder name(String name) throws Exception {
+        public MemberBuilder name(String name) throws InvalidMemberException {
             if(name == null || name.isEmpty()) {
-                throw new Exception("Name should not be null or empty.");
+                throw new InvalidMemberException("Name should not be null or empty.");
             }
             this.name = name;
             return this;
         }
 
-        public MemberBuilder password(String password) throws Exception {
+        public MemberBuilder password(String password) throws InvalidMemberException {
             if(password == null || password.isEmpty()) {
-                throw new Exception("Name should not be null or empty.");
+                throw new InvalidMemberException("Name should not be null or empty.");
             }
             this.password = password;
             return this;
@@ -110,10 +111,39 @@ public class Member {
         return removed;
     }
 
-    public boolean bookResource(Resource resource, Booking booking) {
+    public boolean bookResource(Resource resource, String dateString, String timeString)
+            throws InvalidDateException, InvalidTimeFormatException, InvalidBookingFormatException,
+            InvalidBookingDurationException, BookingLimitExceededException, TimeSlotUnavailableException, InvalidMemberException {
         checkMember();
         Preconditions.checkNotNull(resource, "Resource cannot be null");
+        Preconditions.checkNotNull(dateString, "Date string cannot be null");
+        Preconditions.checkNotNull(timeString, "Time string cannot be null");
+
+        // Parse and validate date
+        int[] dateParts = Booking.parseAndValidateDate(dateString);
+        int day = dateParts[0];
+        int month = dateParts[1];
+        int year = dateParts[2];
+
+        // Parse and validate time
+        String[] timeParts = Booking.parseAndValidateTime(timeString);
+        String startTime = timeParts[0];
+        String endTime = timeParts[1];
+
+        // Create booking
+        Booking booking = new Booking.BookingBuilder()
+                .member(this)
+                .startTime(startTime)
+                .endTime(endTime)
+                .day(day)
+                .month(month)
+                .year(year)
+                .build();
+
+        // Add booking to resource (will throw exceptions if invalid)
         resource.addBooking(booking);
+
+        // Add resource to member's list
         boolean added = resources.add(resource);
         checkMember();
         return added;

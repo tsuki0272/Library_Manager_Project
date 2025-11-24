@@ -84,6 +84,10 @@ public class StartLoginMain {
             lib1.addResource(resource1);
             lib1.addResource(resource2);
 
+            map1.addMediaCoordinates(media1.getCoordinates());
+            map1.addMediaCoordinates(media2.getCoordinates());
+            map1.addResourceCoordinates(individualStudyRoomCoords);
+            map1.addResourceCoordinates(groupStudyRoomCoords);
             // ======== LIBRARY 2 =========
 
             String mapString2 = """
@@ -122,21 +126,25 @@ public class StartLoginMain {
             lib2.addMedia(media4);
 
             ArrayList<int[]> quietPod1Coords = new ArrayList<>();
-            individualStudyRoomCoords.add(new int[]{4,2});
+            quietPod1Coords.add(new int[]{4,2});
             Resource resource3 = new Resource.ResourceBuilder().resourceName("Quiet Pod 1").openingTime(OPENING_TIME)
                     .closingTime(CLOSING_TIME).timeslotLength(BOOKING_TIMESLOTS).coordinates(quietPod1Coords).build();
-
             ArrayList<int[]> quietPod2Coords = new ArrayList<>();
-            individualStudyRoomCoords.add(new int[]{4,3});
+            quietPod2Coords.add(new int[]{4,3});
             Resource resource4 = new Resource.ResourceBuilder().resourceName("Quiet Pod 2").openingTime(OPENING_TIME)
                     .closingTime(CLOSING_TIME).timeslotLength(BOOKING_TIMESLOTS).coordinates(quietPod2Coords).build();
             lib2.addResource(resource3);
             lib2.addResource(resource4);
 
+            map2.addMediaCoordinates(media3.getCoordinates());
+            map2.addMediaCoordinates(media4.getCoordinates());
+            map2.addResourceCoordinates(quietPod1Coords);
+            map2.addResourceCoordinates(quietPod2Coords);
+
             libSystem.addLibrary(lib1);
             libSystem.addLibrary(lib2);
         } catch (Exception e) {
-
+            System.out.println(e.getMessage());
         }
     }
 }

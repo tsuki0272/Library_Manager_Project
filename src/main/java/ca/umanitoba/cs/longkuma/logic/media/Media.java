@@ -243,4 +243,8 @@ public class Media {
     public Queue<Member> getWaitlist() {
         return waitlist;
     }
+
+    public ArrayList<Review> getReviews() {
+        return reviews;
+    }
 }
