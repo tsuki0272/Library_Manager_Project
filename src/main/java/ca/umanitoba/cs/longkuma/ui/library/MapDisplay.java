@@ -18,16 +18,12 @@ public class MapDisplay {
 
         if (path == null) {
             System.out.println("This media is not in the map!");
-            return;
-        }
-
-        if (path.isEmpty()) {
+        } else if (path.isEmpty()) {
             System.out.println("There's no way to get to this media!");
-            return;
+        } else {
+            System.out.println("Path to media:");
+            displayPath(path);
         }
-
-        System.out.println("Path to media:");
-        displayPath(path);
     }
 
     public void displayPathToResource(Resource resource) {
@@ -35,43 +31,33 @@ public class MapDisplay {
 
         if (path == null) {
             System.out.println("This resource is not in the map!");
-            return;
-        }
-
-        if (path.isEmpty()) {
+        } else if (path.isEmpty()) {
             System.out.println("There's no way to get to this resource!");
-            return;
+        } else {
+            System.out.println("Path to resource:");
+            displayPath(path);
         }
-
-        // Display the path
-        System.out.println("Path to resource:");
-        displayPath(path);
     }
 
-    // MOVED FROM Map - Display the grid with path marked
     private void displayPath(ArrayList<int[]> path) {
-        if (path == null || path.isEmpty()) {
-            return;
+        if (path != null && !path.isEmpty()) {
+            char[][] grid = map.getGrid();
+            int[] kioskCoords = map.getKioskCoordinates();
+            int[] destination = path.get(path.size() - 1);
+
+            // Create copy to mark the path
+            char[][] gridCopy = deepCopy(grid);
+
+            // Mark the path (except start and end)
+            for (int i = 1; i < path.size() - 1; i++) {
+                int[] coord = path.get(i);
+                gridCopy[coord[0]][coord[1]] = '*';
+            }
+
+            System.out.println(formatGrid(gridCopy, kioskCoords, destination));
         }
-
-        char[][] grid = map.getGrid();
-        int[] kioskCoords = map.getKioskCoordinates();
-        int[] destination = path.get(path.size() - 1);
-
-        // Create a copy to mark the path
-        char[][] gridCopy = deepCopy(grid);
-
-        // Mark the path (except start and end)
-        for (int i = 1; i < path.size() - 1; i++) {
-            int[] coord = path.get(i);
-            gridCopy[coord[0]][coord[1]] = '*';
-        }
-
-        // Print the grid with path
-        System.out.println(formatGrid(gridCopy, kioskCoords, destination));
     }
 
-    // MOVED FROM Map - Format grid for display
     private String formatGrid(char[][] grid, int[] kioskCoords, int[] destination) {
         StringBuilder output = new StringBuilder();
 
@@ -91,7 +77,6 @@ public class MapDisplay {
         return output.toString();
     }
 
-    // MOVED FROM Map - Display legend
     public void displayLegend() {
         String[] legend = map.getLegend();
         System.out.println("=== Map Legend ===");
@@ -104,7 +89,6 @@ public class MapDisplay {
         System.out.println("==================");
     }
 
-    // MOVED FROM Map - Display full map
     public void displayMap() {
         char[][] grid = map.getGrid();
         int[] kioskCoords = map.getKioskCoordinates();
@@ -123,7 +107,6 @@ public class MapDisplay {
         System.out.println("===================");
     }
 
-    // Helper method
     private char[][] deepCopy(char[][] original) {
         char[][] copy = new char[original.length][];
         for (int i = 0; i < original.length; i++) {

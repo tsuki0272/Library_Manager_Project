@@ -190,17 +190,15 @@ public class Media {
 
     public MediaCopy borrowCopy(Member member) {
         Preconditions.checkNotNull(member, "Member cannot be null");
-
+        MediaCopy availableCopy = null;
         // Check if member has constraints - cannot borrow if constrained
-        if (member.hasConstraints()) {
-            return null;
-        }
-
-        MediaCopy availableCopy = getAvailableCopy();
-        if (availableCopy != null) {
-            String dueDate = "25/12/25"; // Christmas!
-            String dueTime = "23:59";
-            availableCopy.borrowCopy(member, dueTime, dueDate);
+        if (!member.hasConstraints()) {
+            availableCopy = getAvailableCopy();
+            if (availableCopy != null) {
+                String dueDate = "25/12/25"; // Christmas!
+                String dueTime = "23:59";
+                availableCopy.borrowCopy(member, dueTime, dueDate);
+            }
         }
         return availableCopy;
     }
@@ -212,7 +210,6 @@ public class Media {
         // Check if anyone is waiting and if copy is available
         if (!waitlist.isEmpty() && returnedCopy.isAvailable()) {
             Member nextMember = waitlist.poll();
-
             boolean borrowed = nextMember.borrowMedia(this);
 
             // If member couldn't borrow (e.g., has constraints), try next person
