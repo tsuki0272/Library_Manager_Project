@@ -187,9 +187,8 @@ public class Map {
         return added;
     }
 
-    public void findMedia(Media media) {
+    public ArrayList<int[]> findMedia(Media media) {
         checkMap();
-        // Check if media coordinates are in the map
         int[] targetCoordinates = media.getCoordinates();
         boolean mediaInMap = false;
 
@@ -201,17 +200,16 @@ public class Map {
         }
 
         if (!mediaInMap) {
-            System.out.println("This media is not in the map!");
-            return;
+            return null; // Return null instead of printing
         }
 
-        findPath(targetCoordinates, false);
+        ArrayList<int[]> path = findPath(targetCoordinates, false);
         checkMap();
+        return path;
     }
 
-    public void findResource(Resource resource) {
+    public ArrayList<int[]> findResource(Resource resource) {
         checkMap();
-        // Check if resource coordinates are in the map
         ArrayList<int[]> targetCoordinates = resource.getCoordinates();
         boolean resourceInMap = false;
 
@@ -223,13 +221,14 @@ public class Map {
         }
 
         if (!resourceInMap) {
-            System.out.println("This resource is not in the map!");
-            return;
+            return null; // Return null instead of printing
         }
 
-        findPath(targetCoordinates, true);
+        ArrayList<int[]> path = findPath(targetCoordinates, true);
         checkMap();
+        return path;
     }
+
 
     // Helper method to check if two coordinate lists match
     private boolean coordinateListsMatch(ArrayList<int[]> list1, ArrayList<int[]> list2) {
@@ -250,49 +249,48 @@ public class Map {
     }
 
     // pathfinding method using DFS
-    private void findPath(Object targetCoordinates, boolean isResource) {
+    private ArrayList<int[]> findPath(Object targetCoordinates, boolean isResource) {
         int rows = grid.length;
         int columns = grid[0].length;
         boolean[][] visited = new boolean[rows][columns];
         boolean[][] pushed = new boolean[rows][columns];
         LinkedListStack<int[]> toVisit = new LinkedListStack<>();
-        int[] curr = kioskCoordinates;
+        ArrayList<int[]> path = new ArrayList<>();
+        int[] curr = kioskCoordinates.clone(); // Clone to avoid modifying original
         boolean stuck = false;
         boolean found = false;
-        char[][] gridCopy = deepCopy(grid);
 
         updatePushed(curr, pushed);
         updateVisited(curr, visited);
+        path.add(curr.clone()); // Add starting position
 
         while(!found && !stuck) {
             if(isResource ? foundTarget(curr, (ArrayList<int[]>) targetCoordinates) :
                     foundTarget(curr, (int[]) targetCoordinates)) {
                 found = true;
-                System.out.println(gridPath(gridCopy, curr));
             } else {
-                updateGrid(curr, gridCopy);
-                if(directionIsAvailable("UP", curr, visited, pushed, gridCopy, targetCoordinates, isResource)) {
+                if(directionIsAvailable("UP", curr, visited, pushed, grid, targetCoordinates, isResource)) {
                     int[] next = new int[COORDINATE_DIMENSIONS];
                     next[0] = curr[0] - 1;
                     next[1] = curr[1];
                     toVisit.push(next);
                     updatePushed(next, pushed);
                 }
-                if(directionIsAvailable("DOWN", curr, visited, pushed, gridCopy, targetCoordinates, isResource)) {
+                if(directionIsAvailable("DOWN", curr, visited, pushed, grid, targetCoordinates, isResource)) {
                     int[] next = new int[COORDINATE_DIMENSIONS];
                     next[0] = curr[0] + 1;
                     next[1] = curr[1];
                     toVisit.push(next);
                     updatePushed(next, pushed);
                 }
-                if(directionIsAvailable("LEFT", curr, visited, pushed, gridCopy, targetCoordinates, isResource)) {
+                if(directionIsAvailable("LEFT", curr, visited, pushed, grid, targetCoordinates, isResource)) {
                     int[] next = new int[COORDINATE_DIMENSIONS];
                     next[0] = curr[0];
                     next[1] = curr[1] - 1;
                     toVisit.push(next);
                     updatePushed(next, pushed);
                 }
-                if(directionIsAvailable("RIGHT", curr, visited, pushed, gridCopy, targetCoordinates, isResource)) {
+                if(directionIsAvailable("RIGHT", curr, visited, pushed, grid, targetCoordinates, isResource)) {
                     int[] next = new int[COORDINATE_DIMENSIONS];
                     next[0] = curr[0];
                     next[1] = curr[1] + 1;
@@ -302,14 +300,15 @@ public class Map {
                 if(!toVisit.isEmpty()) {
                     curr = toVisit.pop();
                     updateVisited(curr, visited);
+                    path.add(curr.clone()); // Track the path
                 } else {
                     stuck = true;
-                    System.out.println(isResource ?
-                            "There's no way to get to this resource!" :
-                            "There's no way to get to this media!");
+                    path = new ArrayList<>();
                 }
             }
         }
+
+        return path;
     }
 
     // Overloaded foundTarget for media (single coordinate)
@@ -431,5 +430,9 @@ public class Map {
     public String[] getLegend() {
         checkMap();
         return legend;
+    }
+
+    public int[] getKioskCoordinates() {
+        return kioskCoordinates;
     }
 }

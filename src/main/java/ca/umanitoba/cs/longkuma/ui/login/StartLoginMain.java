@@ -1,4 +1,4 @@
-package ca.umanitoba.cs.longkuma;
+package ca.umanitoba.cs.longkuma.ui.login;
 
 import ca.umanitoba.cs.longkuma.logic.library.Library;
 import ca.umanitoba.cs.longkuma.logic.library.LibrarySystem;
@@ -6,7 +6,6 @@ import ca.umanitoba.cs.longkuma.logic.library.Map;
 import ca.umanitoba.cs.longkuma.logic.media.Media;
 import ca.umanitoba.cs.longkuma.logic.media.MediaCopy;
 import ca.umanitoba.cs.longkuma.logic.resource.Resource;
-import ca.umanitoba.cs.longkuma.ui.LoginDisplay;
 
 import java.util.ArrayList;
 

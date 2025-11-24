@@ -1,4 +1,4 @@
-package ca.umanitoba.cs.longkuma.ui;
+package ca.umanitoba.cs.longkuma.ui.resource;
 
 import ca.umanitoba.cs.longkuma.logic.resource.Booking;
 import ca.umanitoba.cs.longkuma.logic.resource.Resource;

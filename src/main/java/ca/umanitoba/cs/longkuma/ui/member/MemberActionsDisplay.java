@@ -8,8 +8,9 @@ import ca.umanitoba.cs.longkuma.logic.media.MediaCopy;
 import ca.umanitoba.cs.longkuma.logic.media.Review;
 import ca.umanitoba.cs.longkuma.logic.member.Member;
 import ca.umanitoba.cs.longkuma.logic.resource.Resource;
-import ca.umanitoba.cs.longkuma.ui.MediaCopyDisplay;
-import ca.umanitoba.cs.longkuma.ui.ResourceDisplay;
+import ca.umanitoba.cs.longkuma.ui.library.MapDisplay;
+import ca.umanitoba.cs.longkuma.ui.media.MediaCopyDisplay;
+import ca.umanitoba.cs.longkuma.ui.resource.ResourceDisplay;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -177,6 +178,10 @@ public class MemberActionsDisplay {
         try {
             boolean booked = member.bookResource(selectedResource, bookingDate, bookingTime);
             if (booked) {
+                System.out.println("Path to selected resource: ");
+                MapDisplay mapDisplay = new MapDisplay(selectedLibrary.getMap());
+                mapDisplay.displayPathToResource(selectedResource);
+                mapDisplay.displayLegend();
                 System.out.println("Successfully booked: " + selectedResource.getResourceName());
                 System.out.println("Path to resource:");
                 selectedLibrary.getMap().findResource(selectedResource);
@@ -214,10 +219,13 @@ public class MemberActionsDisplay {
         boolean borrowed = this.member.borrowMedia(selectedMedia);
         if (borrowed) {
             System.out.println("Path to selected media: ");
-            selectedLibrary.getMap().findMedia(selectedMedia);
+            MapDisplay mapDisplay = new MapDisplay(selectedLibrary.getMap());
+            mapDisplay.displayPathToMedia(selectedMedia);
+            mapDisplay.displayLegend();
             System.out.println("Successfully borrowed: " + selectedMedia.getTitle());
         } else {
-            System.out.println("Failed to borrow: " + selectedMedia.getTitle() + ". No copies available or you are on the waitlist.");
+            System.out.println("Failed to borrow: " + selectedMedia.getTitle() +
+                    ". No copies available or you are on the waitlist.");
         }
     }
 

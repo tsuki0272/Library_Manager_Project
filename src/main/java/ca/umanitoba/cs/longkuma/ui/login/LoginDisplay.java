@@ -1,4 +1,4 @@
-package ca.umanitoba.cs.longkuma.ui;
+package ca.umanitoba.cs.longkuma.ui.login;
 
 import ca.umanitoba.cs.longkuma.logic.library.LibrarySystem;
 import ca.umanitoba.cs.longkuma.logic.member.Member;
