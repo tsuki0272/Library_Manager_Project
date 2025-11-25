@@ -21,12 +21,23 @@ public class MemberActionsDisplay {
     private final Scanner keyboard;
     private static final String[] memberOptions = {"1. BOOK RESOURCE", "2. BORROW MEDIA", "3. RETURN MEDIA", "4. SIGN OUT"};
 
+    /**
+     * Constructs a MemberActionsDisplay with the specified library system, member, and scanner
+     *
+     * @param libSystem The library system to interact with
+     * @param member The currently logged-in member
+     * @param keyboard The scanner for user input
+     */
     public MemberActionsDisplay(LibrarySystem libSystem, Member member, Scanner keyboard) {
         this.libSystem = libSystem;
         this.member = member;
         this.keyboard = keyboard;
     }
 
+    /**
+     * Displays the main menu options and handles member actions
+     * Continues until the member chooses to sign out
+     */
     public void showOptions() {
         String task;
         boolean signedOut = false;
@@ -68,6 +79,11 @@ public class MemberActionsDisplay {
         }
     }
 
+    /**
+     * Displays all resources available in a library
+     *
+     * @param library The library whose resources to display
+     */
     private void showResources(Library library) {
         ArrayList<Resource> resources = library.getResources();
         for(int i = 0; i < resources.size(); i++) {
@@ -75,6 +91,9 @@ public class MemberActionsDisplay {
         }
     }
 
+    /**
+     * Displays all libraries in the system
+     */
     private void showLibraries() {
         ArrayList<Library> libraries = this.libSystem.getLibraries();
         for(int i = 0; i < libraries.size(); i++) {
@@ -82,6 +101,11 @@ public class MemberActionsDisplay {
         }
     }
 
+    /**
+     * Prompts the user to select a library from available options
+     *
+     * @return The selected library
+     */
     private Library selectLibrary() {
         Library selectedLibrary = null;
         boolean valid = false;
@@ -107,6 +131,12 @@ public class MemberActionsDisplay {
         return selectedLibrary;
     }
 
+    /**
+     * Prompts the user to select a resource from a library
+     *
+     * @param library The library containing the resources
+     * @return The selected resource
+     */
     private Resource selectResource(Library library) {
         Resource selectedResource = null;
         boolean valid = false;
@@ -132,6 +162,12 @@ public class MemberActionsDisplay {
         return selectedResource;
     }
 
+    /**
+     * Prompts the user to select media from a library
+     *
+     * @param library The library containing the media
+     * @return The selected media item
+     */
     private Media selectMedia(Library library) {
         Media selectedMedia = null;
         boolean valid = false;
@@ -157,6 +193,13 @@ public class MemberActionsDisplay {
         return selectedMedia;
     }
 
+    /**
+     * Handles the resource booking process including:
+     * - Library and resource selection
+     * - Date and time input
+     * - Path display to the resource
+     * - Exception handling for booking errors
+     */
     private void bookResource() {
         Library selectedLibrary = selectLibrary();
         Resource selectedResource = selectResource(selectedLibrary);
@@ -205,6 +248,11 @@ public class MemberActionsDisplay {
         }
     }
 
+    /**
+     * Displays all media available in a library
+     *
+     * @param library The library whose media to display
+     */
     private void showMedia(Library library) {
         ArrayList<Media> media = library.getMedia();
         for(int i = 0; i < media.size(); i++) {
@@ -212,6 +260,12 @@ public class MemberActionsDisplay {
         }
     }
 
+    /**
+     * Handles the media borrowing process including:
+     * - Library and media selection
+     * - Path display to the media
+     * - Waitlist handling if no copies available
+     */
     private void borrowMedia() {
         Library selectedLibrary = selectLibrary();
         Media selectedMedia = selectMedia(selectedLibrary);
@@ -229,6 +283,13 @@ public class MemberActionsDisplay {
         }
     }
 
+    /**
+     * Handles the media return process including:
+     * - Display of borrowed media
+     * - Media selection for return
+     * - Review reading/writing options
+     * - Actual return of media copy
+     */
     private void returnMedia() {
         ArrayList<MediaCopy> borrowed = member.getBorrowedMedia();
 
@@ -302,6 +363,11 @@ public class MemberActionsDisplay {
         }
     }
 
+    /**
+     * Displays all reviews for a media item
+     *
+     * @param media The media item whose reviews to display
+     */
     private void readReviews(Media media) {
         ArrayList<Review> reviews = media.getReviews();
         if (reviews.isEmpty()) {
@@ -315,6 +381,11 @@ public class MemberActionsDisplay {
         }
     }
 
+    /**
+     * Handles writing a review for a media item
+     *
+     * @param media The media item to review
+     */
     private void writeReview(Media media) {
         System.out.println("Write your review for \"" + media.getTitle() + "\":");
         System.out.println("(Press Enter when done)");
@@ -333,6 +404,11 @@ public class MemberActionsDisplay {
         }
     }
 
+    /**
+     * Displays all media currently borrowed by the member
+     *
+     * @param member The member whose borrowed media to display
+     */
     private void showBorrowedMedia(Member member) {
         ArrayList<MediaCopy> borrowed = member.getBorrowedMedia();
         for(int i = 0; i < borrowed.size(); i++) {
@@ -342,12 +418,20 @@ public class MemberActionsDisplay {
         }
     }
 
+    /**
+     * Prints the available member options to the console
+     */
     private static void printOptions() {
         for (String memberOption : memberOptions) {
             System.out.println(memberOption);
         }
     }
 
+    /**
+     * Gets user input from the keyboard and converts to uppercase
+     *
+     * @return The user input in uppercase
+     */
     private String getInput() {
         return keyboard.nextLine().toUpperCase();
     }

@@ -26,8 +26,19 @@ public class MediaCopy {
         private int copyNumber;
         private Media media;
 
-        public MediaCopyBuilder() {}
+        /**
+         * Constructs a new MediaCopyBuilder instance
+         */
+        public MediaCopyBuilder() {
+        }
 
+        /**
+         * Sets the copy number for the media copy being built
+         *
+         * @param copyNumber The unique identifier number for this copy
+         * @return The MediaCopyBuilder instance for method chaining
+         * @throws Exception if copyNumber is less than 1
+         */
         public MediaCopyBuilder copyNumber(int copyNumber) throws Exception {
             if (copyNumber < 1) {
                 throw new Exception("Copy number should be at least 1.");
@@ -36,6 +47,13 @@ public class MediaCopy {
             return this;
         }
 
+        /**
+         * Sets the media reference for the media copy being built
+         *
+         * @param media The media object this copy belongs to
+         * @return The MediaCopyBuilder instance for method chaining
+         * @throws Exception if media is null
+         */
         public MediaCopyBuilder media(Media media) throws Exception {
             if (media == null) {
                 throw new Exception("Media should not be null.");
@@ -44,27 +62,58 @@ public class MediaCopy {
             return this;
         }
 
+        /**
+         * Builds and returns a new MediaCopy instance with the configured properties
+         *
+         * @return A new MediaCopy instance
+         */
         public MediaCopy build() {
             return new MediaCopy(copyNumber, media);
         }
     }
 
+    /**
+     * Validates the state of the MediaCopy object
+     */
     private void checkMediaCopy() {
         Preconditions.checkState(copyNumber >= 1, "Copy number should be at least 1.");
         Preconditions.checkState(media != null, "Media should not be null.");
 
-        if(!isAvailable) {
+        if (!isAvailable) {
             Preconditions.checkState(currentBorrower != null, "Borrowed copy must have a current borrower.");
             Preconditions.checkState(dueDate != null, "Borrowed copy must have a due date.");
             Preconditions.checkState(isValidDueDate(dueDate), "Due date must be in format '24:00,dd/mm/yy'");
         }
     }
 
+    // Getters:
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    public String getDueTime() {
+        return dueTime;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public Media getMedia() {
+        return media;
+    }
+
+    /**
+     * Validates the due date format
+     *
+     * @param date The date string to validate in "dd/mm/yy" format
+     * @return true if date is in valid format and has valid day/month values, false otherwise
+     */
     private boolean isValidDueDate(String date) {
         boolean isValid = false;
-        if(date != null) {
+        if (date != null) {
             Scanner scanner = new Scanner(date);
-            if(scanner.hasNextLine()) {
+            if (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] tokens = line.split("/");
                 if (tokens.length == 3) {
@@ -87,6 +136,12 @@ public class MediaCopy {
         return isValid;
     }
 
+    /**
+     * Validates the due time format
+     *
+     * @param time The time string to validate in "24:00" format
+     * @return true if time is in valid 24-hour format, false otherwise
+     */
     private boolean isValidDueTime(String time) {
         boolean isValid = false;
 
@@ -120,8 +175,15 @@ public class MediaCopy {
         return isValid;
     }
 
+    /**
+     * Borrows this media copy to a member with specified due date and time
+     *
+     * @param member  The member borrowing the copy
+     * @param dueTime The due time in "24:00" format
+     * @param dueDate The due date in "dd/mm/yy" format
+     */
     public void borrowCopy(Member member, String dueTime, String dueDate) {
-        if(isAvailable && isValidDueTime(dueTime) && isValidDueDate(dueDate)) {
+        if (isAvailable && isValidDueTime(dueTime) && isValidDueDate(dueDate)) {
             this.currentBorrower = member;
             this.dueTime = dueTime;
             this.dueDate = dueDate;
@@ -129,6 +191,10 @@ public class MediaCopy {
         }
     }
 
+    /**
+     * Returns this media copy and makes it available for other members
+     * Also processes the waitlist if there are members waiting
+     */
     public void returnCopy() {
         checkMediaCopy();
         if (!isAvailable) {
@@ -140,26 +206,5 @@ public class MediaCopy {
             media.processWaitlist(this);
         }
         checkMediaCopy();
-    }
-
-    public int getCopyNumber() {
-        checkMediaCopy();
-        return copyNumber;
-    }
-
-    public String getDueDate() {
-        return dueDate;
-    }
-
-    public String getDueTime() {
-        return dueTime;
-    }
-
-    public boolean isAvailable() {
-        return isAvailable;
-    }
-
-    public Media getMedia() {
-        return media;
     }
 }

@@ -30,6 +30,13 @@ public class Member {
         private String password;
         public MemberBuilder() {}
 
+        /**
+         * Sets the name for the member being built
+         *
+         * @param name The name of the member
+         * @return The MemberBuilder instance for method chaining
+         * @throws InvalidMemberException if name is null or empty
+         */
         public MemberBuilder name(String name) throws InvalidMemberException {
             if(name == null || name.isEmpty()) {
                 throw new InvalidMemberException("Name should not be null or empty.");
@@ -38,6 +45,13 @@ public class Member {
             return this;
         }
 
+        /**
+         * Sets the password for the member being built
+         *
+         * @param password The password for the member
+         * @return The MemberBuilder instance for method chaining
+         * @throws InvalidMemberException if password is null or empty
+         */
         public MemberBuilder password(String password) throws InvalidMemberException {
             if(password == null || password.isEmpty()) {
                 throw new InvalidMemberException("Name should not be null or empty.");
@@ -46,11 +60,19 @@ public class Member {
             return this;
         }
 
+        /**
+         * Builds and returns a new Member instance with the configured properties
+         *
+         * @return A new Member instance
+         */
         public Member build() {
             return new Member(name, password);
         }
     }
 
+    /**
+     * Validates the state of the Member object and its components
+     */
     private void checkMember() {
         Preconditions.checkState(name != null, "Member name should not be null.");
         Preconditions.checkState(name.length() >= 1, "Member name should have at least one symbol.");
@@ -77,6 +99,16 @@ public class Member {
 
     public String getPassword() {return password;}
 
+    public ArrayList<MediaCopy> getBorrowedMedia() {
+        return borrowedMedia;
+    }
+
+    /**
+     * Borrows a media item for this member
+     *
+     * @param media The media to borrow
+     * @return true if media was successfully borrowed, false otherwise
+     */
     public boolean borrowMedia(Media media) {
         checkMember();
         Preconditions.checkNotNull(media, "Media cannot be null");
@@ -96,6 +128,12 @@ public class Member {
         return borrowed;
     }
 
+    /**
+     * Returns a borrowed media copy
+     *
+     * @param copy The media copy to return
+     * @return true if media was successfully returned, false otherwise
+     */
     public boolean returnMedia(MediaCopy copy) {
         checkMember();
         Preconditions.checkNotNull(copy, "Media copy cannot be null");
@@ -111,9 +149,25 @@ public class Member {
         return removed;
     }
 
+    /**
+     * Books a resource for this member with specified date and time
+     *
+     * @param resource The resource to book
+     * @param dateString The date string in valid format
+     * @param timeString The time string in valid format
+     * @return true if resource was successfully booked, false otherwise
+     * @throws InvalidDateException if date format is invalid
+     * @throws InvalidTimeFormatException if time format is invalid
+     * @throws InvalidBookingFormatException if booking format is invalid
+     * @throws InvalidBookingDurationException if booking duration is invalid
+     * @throws BookingLimitExceededException if booking limit is exceeded
+     * @throws TimeSlotUnavailableException if time slot is not available
+     * @throws InvalidMemberException if member is invalid
+     */
     public boolean bookResource(Resource resource, String dateString, String timeString)
             throws InvalidDateException, InvalidTimeFormatException, InvalidBookingFormatException,
-            InvalidBookingDurationException, BookingLimitExceededException, TimeSlotUnavailableException, InvalidMemberException {
+            InvalidBookingDurationException, BookingLimitExceededException, TimeSlotUnavailableException,
+            InvalidMemberException {
         checkMember();
         Preconditions.checkNotNull(resource, "Resource cannot be null");
         Preconditions.checkNotNull(dateString, "Date string cannot be null");
@@ -149,10 +203,12 @@ public class Member {
         return added;
     }
 
-    public ArrayList<MediaCopy> getBorrowedMedia() {
-        return borrowedMedia;
-    }
-
+    /**
+     * Adds a constraint to this member
+     *
+     * @param constraint The constraint to add
+     * @return true if constraint was successfully added, false otherwise
+     */
     public boolean addConstraint(Constraint constraint) {
         checkMember();
         Preconditions.checkNotNull(constraint, "Constraint cannot be null");
@@ -161,6 +217,11 @@ public class Member {
         return added;
     }
 
+    /**
+     * Checks if this member has any constraints
+     *
+     * @return true if member has at least one constraint, false otherwise
+     */
     public boolean hasConstraints() {
         return constraints.size() > 0;
     }

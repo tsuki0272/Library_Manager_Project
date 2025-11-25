@@ -33,6 +33,13 @@ public class Booking {
 
         public BookingBuilder() {}
 
+        /**
+         * Sets the member for the booking being built
+         *
+         * @param member The member making the booking
+         * @return The BookingBuilder instance for method chaining
+         * @throws InvalidMemberException if member is null
+         */
         public BookingBuilder member(Member member) throws InvalidMemberException {
             if (member == null) {
                 throw new InvalidMemberException("Member should not be null.");
@@ -41,6 +48,13 @@ public class Booking {
             return this;
         }
 
+        /**
+         * Sets the start time for the booking being built
+         *
+         * @param startTime The start time in "HH:MM" format
+         * @return The BookingBuilder instance for method chaining
+         * @throws InvalidTimeFormatException if startTime is null or not 5 characters
+         */
         public BookingBuilder startTime(String startTime) throws InvalidTimeFormatException {
             if (startTime == null) {
                 throw new InvalidTimeFormatException("Start time should not be null.");
@@ -52,6 +66,13 @@ public class Booking {
             return this;
         }
 
+        /**
+         * Sets the end time for the booking being built
+         *
+         * @param endTime The end time in "HH:MM" format
+         * @return The BookingBuilder instance for method chaining
+         * @throws InvalidTimeFormatException if endTime is null or not 5 characters
+         */
         public BookingBuilder endTime(String endTime) throws InvalidTimeFormatException {
             if (endTime == null) {
                 throw new InvalidTimeFormatException("End time should not be null.");
@@ -63,6 +84,13 @@ public class Booking {
             return this;
         }
 
+        /**
+         * Sets the day for the booking being built
+         *
+         * @param day The day of the month (1-31)
+         * @return The BookingBuilder instance for method chaining
+         * @throws InvalidDateException if day is not between 1 and 31
+         */
         public BookingBuilder day(int day) throws InvalidDateException {
             if (day < 1 || day > 31) {
                 throw new InvalidDateException("Day should be between 1 and 31.");
@@ -71,6 +99,13 @@ public class Booking {
             return this;
         }
 
+        /**
+         * Sets the month for the booking being built
+         *
+         * @param month The month of the year (1-12)
+         * @return The BookingBuilder instance for method chaining
+         * @throws InvalidDateException if month is not between 1 and 12
+         */
         public BookingBuilder month(int month) throws InvalidDateException {
             if (month < 1 || month > 12) {
                 throw new InvalidDateException("Month should be between 1 and 12.");
@@ -79,6 +114,13 @@ public class Booking {
             return this;
         }
 
+        /**
+         * Sets the year for the booking being built
+         *
+         * @param year The year (must be 2025 or later)
+         * @return The BookingBuilder instance for method chaining
+         * @throws InvalidDateException if year is 2024 or earlier
+         */
         public BookingBuilder year(int year) throws InvalidDateException {
             if (year <= 2024) {
                 throw new InvalidDateException("Year should be 2025 or later.");
@@ -87,11 +129,19 @@ public class Booking {
             return this;
         }
 
+        /**
+         * Builds and returns a new Booking instance with the configured properties
+         *
+         * @return A new Booking instance
+         */
         public Booking build() {
             return new Booking(member, startTime, endTime, day, month, year);
         }
     }
 
+    /**
+     * Validates the state of the Booking object
+     */
     private void checkBooking() {
         Preconditions.checkState(member != null, "Member should not be null.");
         Preconditions.checkState(startTime != null, "Start time should not be null.");
@@ -106,6 +156,37 @@ public class Booking {
         Preconditions.checkState(isValidTimeFormat(endTime), "End time must be valid HH:MM format.");
     }
 
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public Member getMember() {
+        checkBooking();
+        return member;
+    }
+
+    /**
+     * Validates the time format string
+     *
+     * @param time The time string to validate in "HH:MM" format
+     * @return true if time is in valid 24-hour format, false otherwise
+     */
     private boolean isValidTimeFormat(String time) {
         if (time == null || time.length() != 5) {
             return false;
@@ -121,6 +202,13 @@ public class Booking {
         }
     }
 
+    /**
+     * Parses and validates a date string
+     *
+     * @param dateString The date string in "DD/MM/YY" format
+     * @return An array containing [day, month, year] as integers
+     * @throws InvalidDateException if date format is invalid or values are out of range
+     */
     public static int[] parseAndValidateDate(String dateString) throws InvalidDateException {
         if (dateString == null || dateString.length() != 8) {
             throw new InvalidDateException("Date must be in DD/MM/YY format");
@@ -151,6 +239,13 @@ public class Booking {
         }
     }
 
+    /**
+     * Parses and validates a time range string
+     *
+     * @param timeString The time string in "HH:MM-HH:MM" format
+     * @return An array containing [startTime, endTime] as strings
+     * @throws InvalidTimeFormatException if time format is invalid
+     */
     public static String[] parseAndValidateTime(String timeString) throws InvalidTimeFormatException {
         if (timeString == null || timeString.length() != 11) {
             throw new InvalidTimeFormatException("Time must be in HH:MM-HH:MM format");
@@ -164,30 +259,5 @@ public class Booking {
         String endTime = timeString.substring(6, 11);
 
         return new String[]{startTime, endTime};
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public Member getMember() {
-        checkBooking();
-        return member;
     }
 }

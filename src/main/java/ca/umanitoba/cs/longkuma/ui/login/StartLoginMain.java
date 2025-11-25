@@ -13,6 +13,10 @@ public class StartLoginMain {
 
     private static LibrarySystem libSystem;
 
+    /**
+     * Main entry point for the library system application
+     * Sets up the library system and starts the login display
+     */
     public static void main(String[] args) {
         SetUpLibrarySystem();
 
@@ -20,6 +24,13 @@ public class StartLoginMain {
         display.startLogin(libSystem);
     }
 
+    /**
+     * Initializes the library system with sample data including:
+     * - Two libraries with maps
+     * - Media items with copies
+     * - Study room resources
+     * - Coordinates for all items on the maps
+     */
     private static void SetUpLibrarySystem() {
         try {
             libSystem = new LibrarySystem.LibrarySystemBuilder().build();

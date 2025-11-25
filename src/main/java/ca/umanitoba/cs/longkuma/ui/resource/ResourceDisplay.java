@@ -8,11 +8,21 @@ import java.util.ArrayList;
 public class ResourceDisplay {
     final private Resource resource;
 
+    /**
+     * Constructs a ResourceDisplay for the specified resource
+     *
+     * @param resource The resource to display information for
+     */
     public ResourceDisplay(Resource resource) {
         this.resource = resource;
     }
 
-    // takes in a String in format "DD/MM/YY" and prints all current bookings for that date
+    /**
+     * Prints all current bookings for the resource on a specific date
+     * Takes in a String in format "DD/MM/YY" and prints all current bookings for that date
+     *
+     * @param bookingDate The date to display bookings for in "DD/MM/YY" format
+     */
     public void printBookings(String bookingDate) {
         if (bookingDate == null || bookingDate.length() != 8) {
             System.out.println("Invalid date format. Use DD/MM/YY");

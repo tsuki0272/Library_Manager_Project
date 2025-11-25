@@ -9,10 +9,20 @@ import java.util.ArrayList;
 public class MapDisplay {
     private final Map map;
 
+    /**
+     * Constructs a MapDisplay with the specified map
+     *
+     * @param map The map to display
+     */
     public MapDisplay(Map map) {
         this.map = map;
     }
 
+    /**
+     * Displays the path to the specified media item
+     *
+     * @param media The media item to find a path to
+     */
     public void displayPathToMedia(Media media) {
         ArrayList<int[]> path = map.findMedia(media);
 
@@ -26,6 +36,11 @@ public class MapDisplay {
         }
     }
 
+    /**
+     * Displays the path to the specified resource
+     *
+     * @param resource The resource to find a path to
+     */
     public void displayPathToResource(Resource resource) {
         ArrayList<int[]> path = map.findResource(resource);
 
@@ -39,6 +54,11 @@ public class MapDisplay {
         }
     }
 
+    /**
+     * Displays a path on the map grid
+     *
+     * @param path The list of coordinates representing the path
+     */
     private void displayPath(ArrayList<int[]> path) {
         if (path != null && !path.isEmpty()) {
             char[][] grid = map.getGrid();
@@ -58,6 +78,15 @@ public class MapDisplay {
         }
     }
 
+    /**
+     * Formats the grid with path markings for display
+     * Marks kiosk with 'U' and destination with 'X'
+     *
+     * @param grid The 2D character array representing the map
+     * @param kioskCoords The kiosk coordinates [row, column]
+     * @param destination The destination coordinates [row, column]
+     * @return String representation of the grid with markings
+     */
     private String formatGrid(char[][] grid, int[] kioskCoords, int[] destination) {
         StringBuilder output = new StringBuilder();
 
@@ -77,6 +106,9 @@ public class MapDisplay {
         return output.toString();
     }
 
+    /**
+     * Displays the map legend with symbol explanations
+     */
     public void displayLegend() {
         String[] legend = map.getLegend();
         System.out.println("=== Map Legend ===");
@@ -89,6 +121,9 @@ public class MapDisplay {
         System.out.println("==================");
     }
 
+    /**
+     * Displays the complete library map with kiosk location
+     */
     public void displayMap() {
         char[][] grid = map.getGrid();
         int[] kioskCoords = map.getKioskCoordinates();
@@ -107,6 +142,12 @@ public class MapDisplay {
         System.out.println("===================");
     }
 
+    /**
+     * Creates a deep copy of a 2D character array
+     *
+     * @param original Original 2D character array
+     * @return Deep copy of the original array
+     */
     private char[][] deepCopy(char[][] original) {
         char[][] copy = new char[original.length][];
         for (int i = 0; i < original.length; i++) {

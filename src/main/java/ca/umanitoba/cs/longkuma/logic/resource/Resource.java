@@ -1,13 +1,9 @@
 package ca.umanitoba.cs.longkuma.logic.resource;
 
-import ca.umanitoba.cs.longkuma.logic.exceptions.BookingLimitExceededException;
-import ca.umanitoba.cs.longkuma.logic.exceptions.InvalidBookingDurationException;
-import ca.umanitoba.cs.longkuma.logic.exceptions.InvalidBookingFormatException;
-import ca.umanitoba.cs.longkuma.logic.exceptions.TimeSlotUnavailableException;
+import ca.umanitoba.cs.longkuma.logic.exceptions.*;
 import ca.umanitoba.cs.longkuma.logic.member.Member;
 import com.google.common.base.Preconditions;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Resource {
@@ -37,59 +33,102 @@ public class Resource {
 
         public ResourceBuilder() {}
 
-        public ResourceBuilder resourceName(String resourceName) throws Exception {
+        /**
+         * Sets the resource name for the resource being built
+         *
+         * @param resourceName The name of the resource
+         * @return The ResourceBuilder instance for method chaining
+         * @throws InvalidResourceException if resourceName is null or empty
+         */
+        public ResourceBuilder resourceName(String resourceName) throws InvalidResourceException {
             if (resourceName == null || resourceName.isEmpty()) {
-                throw new Exception("Resource name should not be null or empty.");
+                throw new InvalidResourceException("Resource name should not be null or empty.");
             }
             this.resourceName = resourceName;
             return this;
         }
 
-        public ResourceBuilder openingTime(String openingTime) throws Exception {
+        /**
+         * Sets the opening time for the resource being built
+         *
+         * @param openingTime The opening time in "HH:MM" format
+         * @return The ResourceBuilder instance for method chaining
+         * @throws InvalidResourceException if openingTime is null or not 5 characters
+         */
+        public ResourceBuilder openingTime(String openingTime) throws InvalidResourceException {
             if (openingTime == null || openingTime.length() != 5) {
-                throw new Exception("Opening time should be in HH:MM format.");
+                throw new InvalidResourceException("Opening time should be in HH:MM format.");
             }
             this.openingTime = openingTime;
             return this;
         }
 
-        public ResourceBuilder closingTime(String closingTime) throws Exception {
+        /**
+         * Sets the closing time for the resource being built
+         *
+         * @param closingTime The closing time in "HH:MM" format
+         * @return The ResourceBuilder instance for method chaining
+         * @throws InvalidResourceException if closingTime is null or not 5 characters
+         */
+        public ResourceBuilder closingTime(String closingTime) throws InvalidResourceException {
             if (closingTime == null || closingTime.length() != 5) {
-                throw new Exception("Closing time should be in HH:MM format.");
+                throw new InvalidResourceException("Closing time should be in HH:MM format.");
             }
             this.closingTime = closingTime;
             return this;
         }
 
-        public ResourceBuilder timeslotLength(int timeslotLength) throws Exception {
+        /**
+         * Sets the timeslot length for the resource being built
+         *
+         * @param timeslotLength The length of each timeslot in minutes
+         * @return The ResourceBuilder instance for method chaining
+         * @throws InvalidResourceException if timeslotLength is not between 1 and 1440 minutes
+         */
+        public ResourceBuilder timeslotLength(int timeslotLength) throws InvalidResourceException {
             if (timeslotLength <= 0 || timeslotLength > 1440) {
-                throw new Exception("Timeslot length should be between 1 and 1440 minutes.");
+                throw new InvalidResourceException("Timeslot length should be between 1 and 1440 minutes.");
             }
             this.timeslotLength = timeslotLength;
             return this;
         }
 
-        public ResourceBuilder coordinates(ArrayList<int[]> coordinates) throws Exception {
+        /**
+         * Sets the coordinates for the resource being built
+         *
+         * @param coordinates The list of coordinate pairs where the resource is located
+         * @return The ResourceBuilder instance for method chaining
+         * @throws InvalidResourceException if coordinates is null or contains invalid coordinate pairs
+         */
+        public ResourceBuilder coordinates(ArrayList<int[]> coordinates) throws InvalidResourceException {
             if (coordinates == null) {
-                throw new Exception("Coordinates should not be null.");
+                throw new InvalidResourceException("Coordinates should not be null.");
             }
             for(int[] coordinate : coordinates) {
                 if (coordinate == null) {
-                    throw new Exception("Individual coordinates should not be null.");
+                    throw new InvalidResourceException("Individual coordinates should not be null.");
                 }
                 if (coordinate.length != 2) {
-                    throw new Exception("Each coordinate should have exactly 2 values (row, column).");
+                    throw new InvalidResourceException("Each coordinate should have exactly 2 values (row, column).");
                 }
             }
             this.coordinates = coordinates;
             return this;
         }
 
+        /**
+         * Builds and returns a new Resource instance with the configured properties
+         *
+         * @return A new Resource instance
+         */
         public Resource build() {
             return new Resource(resourceName, openingTime, closingTime, timeslotLength, coordinates);
         }
     }
 
+    /**
+     * Validates the state of the Resource object and its components
+     */
     private void checkResource() {
         Preconditions.checkState(bookings != null, "Bookings list should not be null.");
         Preconditions.checkState(resourceName != null, "Resource name should not be null.");
@@ -133,6 +172,13 @@ public class Resource {
         return bookings;
     }
 
+    /**
+     * Gets the booking time for a specific member on a specific date
+     *
+     * @param member The member to search bookings for
+     * @param bookingDate The date in "DD/MM/YY" format to search for
+     * @return The booking time as "HH:MM - HH:MM" string, or null if no booking found
+     */
     public String getBooking(Member member, String bookingDate) {
         checkResource();
         Preconditions.checkNotNull(member, "Member cannot be null");
@@ -163,6 +209,16 @@ public class Resource {
         return bookingTime;
     }
 
+    /**
+     * Adds a booking to the resource after validating all constraints
+     *
+     * @param booking The booking to add
+     * @return true if booking was successfully added, false otherwise
+     * @throws InvalidBookingFormatException if booking format doesn't align with timeslots or operating hours
+     * @throws InvalidBookingDurationException if booking duration exceeds 2 hours
+     * @throws BookingLimitExceededException if member already has a booking for the same day
+     * @throws TimeSlotUnavailableException if the time slot is already booked
+     */
     public boolean addBooking(Booking booking) throws InvalidBookingFormatException,
             InvalidBookingDurationException,
             BookingLimitExceededException,
@@ -189,6 +245,12 @@ public class Resource {
         return added;
     }
 
+    /**
+     * Deletes a booking from the resource
+     *
+     * @param booking The booking to delete
+     * @return true if booking was successfully removed, false otherwise
+     */
     public boolean deleteBooking(Booking booking) {
         checkResource();
         Preconditions.checkNotNull(booking, "Booking cannot be null");
@@ -199,6 +261,12 @@ public class Resource {
         return removed;
     }
 
+    /**
+     * Checks if a time aligns with the resource's timeslot boundaries
+     *
+     * @param time The time string to check in "HH:MM" format
+     * @return true if time aligns with timeslot boundaries, false otherwise
+     */
     private boolean isValidTimeslotBoundary(String time) {
         int hour = Integer.parseInt(time.substring(0, 2));
         int minute = Integer.parseInt(time.substring(3, 5));
@@ -214,6 +282,12 @@ public class Resource {
         return minutesSinceOpening >= 0 && minutesSinceOpening % timeslotLength == 0;
     }
 
+    /**
+     * Validates the booking format against timeslot boundaries and operating hours
+     *
+     * @param booking The booking to validate
+     * @return true if booking format is valid, false otherwise
+     */
     public boolean validBookingFormat(Booking booking) {
         boolean isValid = true;
         String startTime = booking.getStartTime();
@@ -255,6 +329,12 @@ public class Resource {
         return isValid;
     }
 
+    /**
+     * Validates the booking duration does not exceed 2 hours
+     *
+     * @param booking The booking to validate
+     * @return true if booking duration is 2 hours or less, false otherwise
+     */
     public boolean validBookingTime(Booking booking) {
         String startTime = booking.getStartTime();
         String endTime = booking.getEndTime();
@@ -272,6 +352,12 @@ public class Resource {
         return durationInMinutes <= 120;
     }
 
+    /**
+     * Validates that a member doesn't exceed the daily booking limit
+     *
+     * @param newBooking The new booking to validate
+     * @return true if member doesn't have another booking on the same day, false otherwise
+     */
     public boolean validBookingLimit(Booking newBooking) {
         boolean validBookingLimit = true;
         int index = 0;
@@ -295,6 +381,12 @@ public class Resource {
         return validBookingLimit;
     }
 
+    /**
+     * Checks if the time slot for a booking is available
+     *
+     * @param newBooking The new booking to check availability for
+     * @return true if time slot is available, false if already booked
+     */
     public boolean availableTimeSlot(Booking newBooking) {
         boolean available = true;
         int index = 0;

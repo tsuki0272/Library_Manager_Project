@@ -12,11 +12,19 @@ public class LoginDisplay {
     private static final String[] loginOptions = {"EXISTING ACCOUNT", "NEW ACCOUNT"};
     private boolean downForMaintenance;
 
+    /**
+     * Constructs a LoginDisplay with a new Scanner for user input
+     */
     public LoginDisplay() {
         this.keyboard = new Scanner(System.in);
         this.downForMaintenance = false;
     }
 
+    /**
+     * Starts the login process and displays the main login menu
+     *
+     * @param libSystem The library system to interact with
+     */
     public void startLogin(LibrarySystem libSystem) {
         String task;
         System.out.print("WELCOME TO THE SD CITY LIBRARY SYSTEM. ");
@@ -44,11 +52,22 @@ public class LoginDisplay {
         }
     }
 
+    /**
+     * Transfers control to member actions after successful login
+     *
+     * @param libSystem The library system to interact with
+     * @param currMember The currently logged-in member
+     */
     private void getMemberActions(LibrarySystem libSystem, Member currMember) {
         MemberActionsDisplay memberActions = new MemberActionsDisplay(libSystem, currMember, keyboard);
         memberActions.showOptions();
     }
 
+    /**
+     * Handles the creation of a new member account
+     *
+     * @param libSystem The library system to add the new member to
+     */
     private void createNewAccount(LibrarySystem libSystem) {
         boolean validCredentials = false;
         while(!validCredentials) {
@@ -89,6 +108,12 @@ public class LoginDisplay {
         }
     }
 
+    /**
+     * Handles the login process for existing members
+     *
+     * @param libSystem The library system to validate credentials against
+     * @return The logged-in member if credentials are valid, null otherwise
+     */
     private Member login(LibrarySystem libSystem) {
         boolean validCredentials = false;
         Member currMember = null;
@@ -112,12 +137,20 @@ public class LoginDisplay {
         return currMember;
     }
 
+    /**
+     * Gets user input from the keyboard and converts to uppercase
+     *
+     * @return The user input in uppercase
+     */
     private String getInput() {
         String loginInput;
         loginInput = keyboard.nextLine().toUpperCase();
         return loginInput;
     }
 
+    /**
+     * Prints the available login options to the console
+     */
     private static void printOptions() {
         for(int i = 0; i < loginOptions.length; i++) {
             System.out.printf("%s \n", loginOptions[i]);

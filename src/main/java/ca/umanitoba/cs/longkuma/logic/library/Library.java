@@ -1,5 +1,7 @@
 package ca.umanitoba.cs.longkuma.logic.library;
 
+import ca.umanitoba.cs.longkuma.logic.exceptions.InvalidMapException;
+import ca.umanitoba.cs.longkuma.logic.exceptions.InvalidNameException;
 import ca.umanitoba.cs.longkuma.logic.media.Media;
 import ca.umanitoba.cs.longkuma.logic.resource.Resource;
 import com.google.common.base.Preconditions;
@@ -12,6 +14,13 @@ public class Library {
     final private ArrayList<Resource> resources;
     final private Map map;
 
+    /*
+     * Private constructor for Library
+     * Initializes library with name and map, creates empty media and resource lists
+     *
+     * @param name The name of the library
+     * @param map The map layout of the library
+     */
     private Library(String name, Map map) {
         this.name = name;
         this.media = new ArrayList<>();
@@ -26,27 +35,51 @@ public class Library {
         public LibraryBuilder() {
         }
 
-        public LibraryBuilder name(String name) throws Exception {
+        /*
+         * Sets the name for the library being built
+         *
+         * @param name The name of the library
+         * @return LibraryBuilder instance for method chaining
+         * @throws Exception if name is null or empty
+         */
+        public LibraryBuilder name(String name) throws InvalidNameException {
             if(name == null || name.isEmpty()) {
-                throw new Exception("Name should not be null or empty.");
+                throw new InvalidNameException("Name should not be null or empty.");
             }
             this.name = name;
             return this;
         }
 
-        public LibraryBuilder map(Map map) throws Exception {
+        /*
+         * Sets the map for the library being built
+         *
+         * @param map The map layout of the library
+         * @return LibraryBuilder instance for method chaining
+         * @throws Exception if map is null
+         */
+        public LibraryBuilder map(Map map) throws InvalidMapException {
             if(map == null) {
-                throw new Exception("Map should not be null.");
+                throw new InvalidMapException("Map should not be null.");
             }
             this.map = map;
             return this;
         }
 
+        /*
+         * Builds and returns a new Library instance with configured parameters
+         *
+         * @return A new Library object
+         */
         public Library build() {
             return new Library(name, map);
         }
     }
 
+    /*
+     * Validates the internal state of the Library object
+     * Ensures all required fields are non-null and meet minimum requirements
+     * Checks that all media and resources in collections are non-null
+     */
     private void checkLibrary() {
         Preconditions.checkState(name != null, "Library name should not be null.");
         Preconditions.checkState(name.length() >= 1, "Library name should have at least one symbol.");
@@ -63,6 +96,7 @@ public class Library {
         }
     }
 
+    // Getters:
     public String getName() {
         return name;
     }
@@ -71,6 +105,21 @@ public class Library {
         return media;
     }
 
+    public ArrayList<Resource> getResources() {
+        return resources;
+    }
+
+    public Map getMap() {
+        return map;
+    }
+
+    /*
+     * Adds a new media item to the library's collection
+     * Validates library state before and after adding
+     *
+     * @param media The media item to add
+     * @return true if media was successfully added, false otherwise
+     */
     public boolean addMedia(Media media) {
         checkLibrary();
         Preconditions.checkNotNull(media, "Media cannot be null");
@@ -81,6 +130,12 @@ public class Library {
         return added;
     }
 
+    /*
+     * Searches for a specific media item in the library's collection
+     *
+     * @param media The media item to search for
+     * @return The matching media item if found, null otherwise
+     */
     public Media showMedia(Media media) {
         checkLibrary();
         Preconditions.checkNotNull(media, "Media cannot be null");
@@ -97,6 +152,13 @@ public class Library {
         return foundMedia;
     }
 
+    /*
+     * Removes a media item from the library's collection
+     * Validates library state before and after removal
+     *
+     * @param media The media item to remove
+     * @return true if media was successfully removed, false otherwise
+     */
     public boolean removeMedia(Media media) {
         checkLibrary();
         Preconditions.checkNotNull(media, "Media cannot be null");
@@ -107,10 +169,13 @@ public class Library {
         return removed;
     }
 
-    public ArrayList<Resource> getResources() {
-        return resources;
-    }
-
+    /*
+     * Adds a new resource to the library's collection
+     * Validates library state before and after adding
+     *
+     * @param resource The resource to add
+     * @return true if resource was successfully added, false otherwise
+     */
     public boolean addResource(Resource resource) {
         checkLibrary();
         Preconditions.checkNotNull(resource, "Resource cannot be null");
@@ -121,6 +186,12 @@ public class Library {
         return added;
     }
 
+    /*
+     * Searches for a specific resource in the library's collection
+     *
+     * @param resource The resource to search for
+     * @return The matching resource if found, null otherwise
+     */
     public Resource showResource(Resource resource) {
         checkLibrary();
         Preconditions.checkNotNull(resource, "Resource cannot be null");
@@ -134,9 +205,5 @@ public class Library {
         }
         checkLibrary();
         return foundResource;
-    }
-
-    public Map getMap() {
-        return map;
     }
 }

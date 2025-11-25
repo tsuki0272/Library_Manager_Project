@@ -1,7 +1,6 @@
 package ca.umanitoba.cs.longkuma.logic.library;
 
 import ca.umanitoba.cs.longkuma.logic.media.Media;
-import ca.umanitoba.cs.longkuma.logic.media.MediaCopy;
 import ca.umanitoba.cs.longkuma.logic.resource.Resource;
 import ca.umanitoba.cs.longkuma.logic.stack.LinkedListStack;
 import com.google.common.base.Preconditions;
@@ -17,6 +16,15 @@ public class Map {
     private final int[] kioskCoordinates;
     private static final int COORDINATE_DIMENSIONS = 2;
 
+    /*
+     * Private constructor for Map
+     * Initializes map with grid, legend, and kiosk location
+     * Creates empty lists for media and resource coordinates
+     *
+     * @param grid 2D character array representing the library layout
+     * @param legend Array of strings describing grid symbols
+     * @param kioskCoordinates Coordinates of the starting point/kiosk [row, column]
+     */
     private Map(char[][] grid, String[] legend, int[] kioskCoordinates) {
         this.grid = grid;
         this.legend = legend;
@@ -33,6 +41,13 @@ public class Map {
 
         public MapBuilder() {}
 
+        /*
+         * Sets the grid for the map being built
+         *
+         * @param grid 2D character array representing the library layout
+         * @return MapBuilder instance for method chaining
+         * @throws Exception if grid is null
+         */
         public MapBuilder grid(char[][] grid) throws Exception {
             if (grid == null) {
                 throw new Exception("Grid should not be null.");
@@ -41,6 +56,15 @@ public class Map {
             return this;
         }
 
+        /*
+         * Parses a string representation of map data into a 2D grid
+         * Expected format: First line contains "rows columns", followed by grid data
+         * Grid cells are space-separated characters
+         *
+         * @param mapData String containing map dimensions and grid data
+         * @return 2D character array representing the parsed grid
+         * @throws Exception if mapData is null, empty, or has invalid format
+         */
         public static char[][] gridFromString(String mapData) throws Exception {
             if(mapData == null || mapData.isEmpty()) {
                 throw new Exception("Map Data should not be null or empty.");
@@ -83,6 +107,14 @@ public class Map {
             }
         }
 
+        /*
+         * Sets the legend for the map being built
+         * Legend entries should be in "Symbol,Description" format
+         *
+         * @param legend Array of strings describing grid symbols
+         * @return MapBuilder instance for method chaining
+         * @throws Exception if legend is null
+         */
         public MapBuilder legend(String[] legend) throws Exception {
             if(legend == null) {
                 throw new Exception("Legend should not be null.");
@@ -91,6 +123,14 @@ public class Map {
             return this;
         }
 
+        /*
+         * Sets the kiosk coordinates for the map being built
+         * Kiosk represents the starting point for pathfinding
+         *
+         * @param kioskCoordinates Coordinates [row, column] of the kiosk location
+         * @return MapBuilder instance for method chaining
+         * @throws Exception if kioskCoordinates is null
+         */
         public MapBuilder kioskCoordinates(int[] kioskCoordinates) throws Exception {
             if(kioskCoordinates == null) {
                 throw new Exception("Kiosk coordinates should not be null.");
@@ -99,11 +139,22 @@ public class Map {
             return this;
         }
 
+        /*
+         * Builds and returns a new Map instance with configured parameters
+         *
+         * @return A new Map object
+         */
         public Map build() {
             return new Map(grid, legend, kioskCoordinates);
         }
     }
 
+    /*
+     * Validates the internal state of the Map object
+     * Ensures all required fields are non-null and meet requirements
+     * Validates grid structure, legend format, and coordinate dimensions
+     * Checks that all coordinates in collections are valid
+     */
     private void checkMap() {
         Preconditions.checkState(grid != null, "Grid should not be null.");
         Preconditions.checkState(legend != null, "Legend should not be null.");
@@ -138,6 +189,25 @@ public class Map {
         }
     }
 
+    // Getters:
+    public char[][] getGrid() {
+        checkMap();
+        return grid;
+    }
+
+    public String[] getLegend() {
+        checkMap();
+        return legend;
+    }
+
+    /*
+     * Adds media coordinates to the map
+     * Validates that coordinates are within grid bounds and not occupied by resources
+     * Multiple media can share the same coordinates
+     *
+     * @param coordinates Array of 2 integers [row, column] representing media location
+     * @return true if coordinates were added successfully, false if location already has a resource
+     */
     public boolean addMediaCoordinates(int[] coordinates) {
         checkMap();
         Preconditions.checkNotNull(coordinates, "Coordinates cannot be null");
@@ -164,6 +234,14 @@ public class Map {
         return added;
     }
 
+    /*
+     * Adds resource coordinates to the map
+     * Resources can span multiple grid cells
+     * Validates that all coordinates are within grid bounds
+     *
+     * @param coordinates ArrayList of coordinate arrays, each [row, column]
+     * @return true if coordinates were added successfully
+     */
     public boolean addResourceCoordinates(ArrayList<int[]> coordinates) {
         checkMap();
         Preconditions.checkNotNull(coordinates, "Coordinates cannot be null");
@@ -187,10 +265,18 @@ public class Map {
         return added;
     }
 
+    /*
+     * Finds a path from the kiosk to the specified media location
+     * Uses depth-first search algorithm to find path through walkable spaces
+     *
+     * @param media The media object to find path to
+     * @return ArrayList of coordinates representing the path, null if media not in map, empty list if no path exists
+     */
     public ArrayList<int[]> findMedia(Media media) {
         checkMap();
         int[] targetCoordinates = media.getCoordinates();
         boolean mediaInMap = false;
+        ArrayList<int[]> path = null;
 
         for (int[] coord : mediaCoordinates) {
             if (coord[0] == targetCoordinates[0] && coord[1] == targetCoordinates[1]) {
@@ -200,18 +286,27 @@ public class Map {
         }
 
         if (!mediaInMap) {
-            return null; // Return null instead of printing
+            return path;
         }
 
-        ArrayList<int[]> path = findPath(targetCoordinates, false);
+        path = findPath(targetCoordinates, false);
         checkMap();
         return path;
     }
 
+    /*
+     * Finds a path from the kiosk to the specified resource location
+     * Uses depth-first search algorithm to find path through walkable spaces
+     * Resource can occupy multiple cells; path leads to any cell of the resource
+     *
+     * @param resource The resource object to find path to
+     * @return ArrayList of coordinates representing the path, null if resource not in map, empty list if no path exists
+     */
     public ArrayList<int[]> findResource(Resource resource) {
         checkMap();
         ArrayList<int[]> targetCoordinates = resource.getCoordinates();
         boolean resourceInMap = false;
+        ArrayList<int[]> path = null;
 
         for (ArrayList<int[]> resourceCoordList : resourceCoordinates) {
             if (coordinateListsMatch(resourceCoordList, targetCoordinates)) {
@@ -221,16 +316,22 @@ public class Map {
         }
 
         if (!resourceInMap) {
-            return null; // Return null instead of printing
+            return path;
         }
 
-        ArrayList<int[]> path = findPath(targetCoordinates, true);
+        path = findPath(targetCoordinates, true);
         checkMap();
         return path;
     }
 
-
-    // Helper method to check if two coordinate lists match
+    /*
+     * Checks if two coordinate lists match
+     * Lists match if they contain the same coordinates (order-independent)
+     *
+     * @param list1 First list of coordinates
+     * @param list2 Second list of coordinates
+     * @return true if all coordinates in list1 exist in list2 and vice versa, false otherwise
+     */
     private boolean coordinateListsMatch(ArrayList<int[]> list1, ArrayList<int[]> list2) {
         boolean found = false;
         if (list1.size() != list2.size()) {
@@ -248,7 +349,15 @@ public class Map {
         return found;
     }
 
-    // pathfinding method using DFS
+    /*
+     * Performs depth-first search pathfinding from kiosk to target location
+     * Only traverses walkable spaces (marked as '.' in grid)
+     * Tracks visited nodes to avoid cycles
+     *
+     * @param targetCoordinates Either int[] for media or ArrayList<int[]> for resources
+     * @param isResource true if finding path to resource, false if finding path to media
+     * @return ArrayList of coordinates representing the path from kiosk to target, empty list if no path exists
+     */
     private ArrayList<int[]> findPath(Object targetCoordinates, boolean isResource) {
         int rows = grid.length;
         int columns = grid[0].length;
@@ -256,13 +365,13 @@ public class Map {
         boolean[][] pushed = new boolean[rows][columns];
         LinkedListStack<int[]> toVisit = new LinkedListStack<>();
         ArrayList<int[]> path = new ArrayList<>();
-        int[] curr = kioskCoordinates.clone(); // Clone to avoid modifying original
+        int[] curr = kioskCoordinates.clone();
         boolean stuck = false;
         boolean found = false;
 
         updatePushed(curr, pushed);
         updateVisited(curr, visited);
-        path.add(curr.clone()); // Add starting position
+        path.add(curr.clone());
 
         while(!found && !stuck) {
             if(isResource ? foundTarget(curr, (ArrayList<int[]>) targetCoordinates) :
@@ -300,7 +409,7 @@ public class Map {
                 if(!toVisit.isEmpty()) {
                     curr = toVisit.pop();
                     updateVisited(curr, visited);
-                    path.add(curr.clone()); // Track the path
+                    path.add(curr.clone());
                 } else {
                     stuck = true;
                     path = new ArrayList<>();
@@ -311,12 +420,25 @@ public class Map {
         return path;
     }
 
-    // Overloaded foundTarget for media (single coordinate)
+    /*
+     * Checks if current position matches target coordinates for media
+     *
+     * @param curr Current position [row, column]
+     * @param targetCoordinates Target position [row, column]
+     * @return true if current position matches target, false otherwise
+     */
     public boolean foundTarget(int[] curr, int[] targetCoordinates) {
         return curr[0] == targetCoordinates[0] && curr[1] == targetCoordinates[1];
     }
 
-    // Overloaded foundTarget for resources (multiple coordinates)
+    /*
+     * Checks if current position matches any of the target coordinates for resources
+     * Resources can span multiple cells
+     *
+     * @param curr Current position [row, column]
+     * @param targetCoordinates List of resource positions
+     * @return true if current position matches any resource coordinate, false otherwise
+     */
     private boolean foundTarget(int[] curr, ArrayList<int[]> targetCoordinates) {
         boolean foundTarget = false;
         for (int[] coord : targetCoordinates) {
@@ -327,9 +449,23 @@ public class Map {
         return foundTarget;
     }
 
+    /*
+     * Checks if movement in specified direction is available
+     * Movement is available if target cell is walkable, not visited, not already pushed to stack
+     * or if target cell is the destination
+     *
+     * @param direction Direction to check ("UP", "DOWN", "LEFT", "RIGHT")
+     * @param curr Current position [row, column]
+     * @param visited 2D boolean array tracking visited cells
+     * @param pushed 2D boolean array tracking cells already added to stack
+     * @param grid 2D character array representing the map
+     * @param targetCoordinate Target location (int[] for media, ArrayList<int[]> for resources)
+     * @param isResource true if pathfinding to resource, false if pathfinding to media
+     * @return true if movement in specified direction is available, false otherwise
+     */
     private static boolean directionIsAvailable(String direction, int[] curr, boolean[][] visited,
-                                               boolean[][] pushed, char[][] grid, Object targetCoordinate,
-                                               boolean isResource) {
+                                                boolean[][] pushed, char[][] grid, Object targetCoordinate,
+                                                boolean isResource) {
         boolean available = false;
         int[] next = new int[COORDINATE_DIMENSIONS];
         switch (direction) {
@@ -367,71 +503,72 @@ public class Map {
         return available;
     }
 
-    // check if a position is at any resource location
+    /*
+     * Checks if a position is at any of the resource's coordinates
+     * Used to allow pathfinding to reach resource locations
+     *
+     * @param position Position to check [row, column]
+     * @param resourceCoords List of resource coordinates
+     * @return true if position matches any resource coordinate, false otherwise
+     */
     private static boolean isAtResourceLocation(int[] position, ArrayList<int[]> resourceCoords) {
+        boolean isAtResourceLocation = false;
         for (int[] coord : resourceCoords) {
             if (position[0] == coord[0] && position[1] == coord[1]) {
-                return true;
+                isAtResourceLocation = true;
+                break;
             }
         }
-        return false;
+        return isAtResourceLocation;
     }
 
+    /*
+     * Checks if a coordinate has been visited during pathfinding
+     *
+     * @param toVisit Coordinate to check [row, column]
+     * @param visited 2D boolean array tracking visited cells
+     * @return true if coordinate has been visited, false otherwise
+     */
     private static boolean visited(int[] toVisit, boolean[][] visited) {
         return visited[toVisit[0]][toVisit[1]];
     }
 
+    /*
+     * Checks if a coordinate has been pushed to the stack during pathfinding
+     *
+     * @param toVisit Coordinate to check [row, column]
+     * @param pushed 2D boolean array tracking pushed cells
+     * @return true if coordinate has been pushed, false otherwise
+     */
     private static boolean pushed(int[] toVisit, boolean[][] pushed) {
         return pushed[toVisit[0]][toVisit[1]];
     }
 
+    /*
+     * Marks a coordinate as pushed to the stack during pathfinding
+     *
+     * @param curr Coordinate to mark [row, column]
+     * @param pushed 2D boolean array tracking pushed cells
+     */
     private static void updatePushed(int[] curr, boolean[][] pushed) {
         pushed[curr[0]][curr[1]] = true;
     }
 
+    /*
+     * Marks a coordinate as visited during pathfinding
+     *
+     * @param curr Coordinate to mark [row, column]
+     * @param visited 2D boolean array tracking visited cells
+     */
     private static void updateVisited(int[] curr, boolean[][] visited) {
         visited[curr[0]][curr[1]] = true;
     }
 
-    private static void updateGrid(int[] curr, char[][] grid) {
-        grid[curr[0]][curr[1]] = '*';
-    }
-
-    private char[][] deepCopy(char[][] original) {
-        char[][] copy = new char[original.length][];
-        for (int i = 0; i < original.length; i++) {
-            copy[i] = original[i].clone();
-        }
-        return copy;
-    }
-
-    private String gridPath(char[][] grid, int[] curr) {
-        String mazePath = "";
-        for(int row = 0; row < grid.length; row++) {
-            for(int clmn = 0; clmn < grid[0].length; clmn++) {
-                if(row == kioskCoordinates[0] && clmn == kioskCoordinates[1]) {
-                    mazePath += "U ";
-                }else if (row == curr[0] && clmn == curr[1]) {
-                    mazePath += "X ";
-                } else {
-                    mazePath += grid[row][clmn] + " ";
-                }
-            }
-            mazePath += "\n";
-        }
-        return mazePath;
-    }
-
-    public char[][] getGrid() {
-        checkMap();
-        return grid;
-    }
-
-    public String[] getLegend() {
-        checkMap();
-        return legend;
-    }
-
+    /*
+     * Gets the coordinates of the kiosk (starting point)
+     *
+     * @return Array of 2 integers [row, column] representing kiosk location
+     */
     public int[] getKioskCoordinates() {
         return kioskCoordinates;
     }
