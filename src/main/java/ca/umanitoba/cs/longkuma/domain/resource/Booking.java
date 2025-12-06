@@ -29,15 +29,13 @@ public class Booking {
      */
     private Booking(Member member, String startTime, String endTime,
                     int day, int month, int year) {
-
         this.member = member;
         this.startTime = startTime;
         this.endTime = endTime;
         this.day = day;
         this.month = month;
         this.year = year;
-
-        validateBooking();
+        checkBooking();
     }
 
     public static class BookingBuilder {
@@ -146,7 +144,7 @@ public class Booking {
      * Ensures all required fields are non-null and meet minimum requirements
      * Validates time format for both start and end times
      */
-    private void validateBooking() {
+    private void checkBooking() {
         Preconditions.checkState(member != null, "Member cannot be null.");
         Preconditions.checkState(startTime != null && startTime.length() == 5, "Start time invalid.");
         Preconditions.checkState(endTime != null && endTime.length() == 5, "End time invalid.");

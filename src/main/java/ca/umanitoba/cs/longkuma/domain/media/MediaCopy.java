@@ -1,6 +1,7 @@
 package ca.umanitoba.cs.longkuma.domain.media;
 
 import ca.umanitoba.cs.longkuma.domain.member.Member;
+import com.google.common.base.Preconditions;
 
 public class MediaCopy {
 
@@ -26,6 +27,7 @@ public class MediaCopy {
         this.borrowedBy = null;
         this.dueTime = null;
         this.dueDate = null;
+        checkMediaCopy();
     }
 
     public static class MediaCopyBuilder {
@@ -82,6 +84,7 @@ public class MediaCopy {
      * @param dueDate The date the copy is due to be returned
      */
     public void markBorrowed(Member member, String dueTime, String dueDate) {
+        checkMediaCopy();
         this.borrowed = true;
         this.borrowedBy = member;
         this.dueTime = dueTime;
@@ -93,6 +96,7 @@ public class MediaCopy {
      * Resets the borrowed status, borrowing member, and due date/time to initial state
      */
     public void markReturned() {
+        checkMediaCopy();
         this.borrowed = false;
         this.borrowedBy = null;
         this.dueTime = null;
@@ -111,4 +115,19 @@ public class MediaCopy {
     public String getDueDate() {
         return dueDate;
     }
+
+    private void checkMediaCopy() {
+        Preconditions.checkState(copyNumber > 0);
+        Preconditions.checkState(media != null);
+        Preconditions.checkState(!borrowed || borrowedBy != null);
+        Preconditions.checkState(!borrowed || (dueTime != null && !dueTime.isEmpty()));
+        Preconditions.checkState(!borrowed || (dueDate != null && !dueDate.isEmpty()));
+    }
+
+
+
+
+
+
+
 }

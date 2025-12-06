@@ -1,5 +1,7 @@
 package ca.umanitoba.cs.longkuma.domain.stack;
 
+import com.google.common.base.Preconditions;
+
 public class LinkedListStack<T> implements Stack<T> {
 
     private class Node {
@@ -97,32 +99,20 @@ public class LinkedListStack<T> implements Stack<T> {
      * Verifies the stack's invariants:
      * 1. Size consistency: size equals the number of nodes reachable from head
      * 2. Head consistency: head == null iff size == 0
-     * 3. Linked list integrity: no cycles, last node's next == null
-     * 4. Non-null nodes
-     * 5. Size >= 0
+     * 3. Size >= 0
      */
     private void checkLinkedListStack() {
-        assert size >= 0 : "Size cannot be negative";
-
-        if (size == 0) {
-            assert head == null : "Head must be null when stack is empty";
-        } else {
-            assert head != null : "Head cannot be null when stack has elements";
-        }
-
-        // Verify linked list integrity and node non-nullness
-        Node current = head;
+        // Basic structural invariants
+        Preconditions.checkState(size >= 0, "Size cannot be negative");
+        // Count actual nodes
         int countedSize = 0;
-        java.util.HashSet<Node> visited = new java.util.HashSet<>(); // detect cycles
+        Node current = head;
         while (current != null) {
-            assert !visited.contains(current) : "Cycle detected in stack";
-            visited.add(current);
-            assert current.data != null : "Node data cannot be null";
-            current = current.next;
             countedSize++;
+            current = current.next;
         }
-
-        // Size consistency check
-        assert countedSize == size : "Size mismatch: size=" + size + ", counted=" + countedSize;
+        // Size consistency
+        Preconditions.checkState(countedSize == size,
+                "Size mismatch: expected=" + size + ", counted=" + countedSize);
     }
 }

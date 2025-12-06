@@ -341,4 +341,137 @@ classDiagram
     MediaCopy --> Member
     
     LinkedListStack --* Node
+
+    note for LibrarySystem "Invariant properties:
+<ul>
+    <li>libraries != null
+    <li>loop: no Libraries are null in libraries.
+    
+    <li>members != null
+    <li>loop: no Members are null in members.
+</ul>"
+
+    note for Library "Invariant properties:
+<ul>
+    <li>name != null
+    <li>name.length() >= 1
+    
+    <li>media != null
+    <li>loop: no Media are null in media.
+    
+    <li>resources != null
+    <li>loop: no Resources are null in resources.
+    
+    <li>map != null
+</ul>"
+
+    note for Map "Invariant properties:
+<ul>
+    <li>grid != null
+    
+    <li>legend != null
+    <li>legend.length >= 1
+    
+    <li>kioskCoordinates != null
+    <li>kioskCoordinates.length == 2
+    
+    <li>mediaCoordinates != null
+    
+    <li>resourceCoordinates != null
+</ul>"
+
+    note for Member "Invariant properties:
+<ul>
+    <li>name != null
+    <li>name.length() >= 1
+    
+    <li>borrowedMedia != null
+    
+    <li>bookedResources != null
+    
+    <li>constraints != null
+</ul>"
+
+    note for Media "Invariant properties:
+<ul>
+    <li>title != null
+    <li>title.length() >= 1
+    
+    <li>author != null
+    <li>author.length() >= 1
+    
+    <li>coordinates != null
+    
+    <li>copies != null
+    
+    <li>reviews != null
+</ul>"
+
+    note for MediaCopy "Invariant properties:
+<ul>
+    <li>copyNumber > 0
+    
+    <li>media != null
+    
+    <li>if borrowed == true, then borrowedBy != null
+    <li>if borrowed == true, then dueTime != null && dueTime.length() >= 1
+    <li>if borrowed == true, then dueDate != null && dueDate.length() >= 1
+</ul>"
+
+    note for Review "Invariant properties:
+<ul>
+    <li>review != null
+    <li>review.length() >= 1
+</ul>"
+
+    note for Constraint "Invariant properties:
+<ul>
+    <li>constraint != null
+    <li>constraint.length() >= 1
+</ul>"
+
+    note for Resource "Invariant properties:
+<ul>
+    <li>resourceName != null
+    <li>resourceName.length() >= 1
+    
+    <li>openingTime != null
+    <li>openingTime.length() >= 1
+    
+    <li>closingTime != null
+    <li>closingTime.length() >= 1
+    
+    <li>timeslotLength > 0
+    
+    <li>coordinates != null
+    
+    <li>bookings != null
+</ul>"
+
+    note for Booking "Invariant properties:
+<ul>
+    <li>member != null
+    
+    <li>startTime != null
+    <li>startTime.length() == 5
+    <li>validTime(startTime) == true
+    
+    <li>endTime != null
+    <li>endTime.length() == 5
+    <li>validTime(endTime) == true
+    
+    <li>day >= 1 && day <= 31
+    
+    <li>month >= 1 && month <= 12
+    
+    <li>year > 2024
+</ul>"
+
+    note for LinkedListStack "Invariant properties:
+<ul>
+    <li>size >= 0
+    
+    <li>countedSize == size
+    <li>(where countedSize is the actual number of nodes from head to null)
+</ul>"
 ```

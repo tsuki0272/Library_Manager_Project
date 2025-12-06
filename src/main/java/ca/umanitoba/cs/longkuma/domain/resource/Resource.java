@@ -1,5 +1,7 @@
 package ca.umanitoba.cs.longkuma.domain.resource;
 
+import com.google.common.base.Preconditions;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +31,7 @@ public class Resource {
         this.timeslotLength = builder.timeslotLength;
         this.coordinates = builder.coordinates;
         this.bookings = new ArrayList<>();
+        checkResource();
     }
 
     public static class ResourceBuilder {
@@ -138,6 +141,7 @@ public class Resource {
      * @param booking The booking to add
      */
     public void addBooking(Booking booking) {
+        checkResource();
         bookings.add(booking);
     }
 
@@ -149,4 +153,20 @@ public class Resource {
     public boolean isBookable() {
         return bookings.isEmpty();
     }
+
+    private void checkResource() {
+        Preconditions.checkState(resourceName != null && !resourceName.isEmpty());
+        Preconditions.checkState(openingTime != null && !openingTime.isEmpty());
+        Preconditions.checkState(closingTime != null && !closingTime.isEmpty());
+        Preconditions.checkState(timeslotLength > 0);
+        Preconditions.checkState(coordinates != null);
+        Preconditions.checkState(bookings != null);
+    }
+
+
+
+
+
+
+
 }

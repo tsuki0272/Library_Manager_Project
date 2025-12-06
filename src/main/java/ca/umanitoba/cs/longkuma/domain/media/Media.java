@@ -1,5 +1,7 @@
 package ca.umanitoba.cs.longkuma.domain.media;
 
+import com.google.common.base.Preconditions;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +29,9 @@ public class Media {
         this.coordinates = coordinates;
         this.copies = new ArrayList<>();
         this.reviews = new ArrayList<>();
+        checkMedia();
     }
 
-    // ==== BUILDER ====
     public static class MediaBuilder {
         private String mediaId;
         private String title;
@@ -112,6 +114,7 @@ public class Media {
      * @param copy The media copy to add
      */
     public void addCopy(MediaCopy copy) {
+        checkMedia();
         copies.add(copy);
     }
 
@@ -143,6 +146,7 @@ public class Media {
      * @return true if review was successfully added, false if review is null
      */
     public boolean addReview(Review r) {
+        checkMedia();
         if (r == null) return false;
         return reviews.add(r);
     }
@@ -153,6 +157,7 @@ public class Media {
      * @return The first available MediaCopy, or null if no copies are available
      */
     public MediaCopy findAvailableCopy() {
+        checkMedia();
         for (MediaCopy copy : copies) {
             if (copy.isAvailable()) {
                 return copy;
@@ -160,4 +165,19 @@ public class Media {
         }
         return null;
     }
+
+    private void checkMedia() {
+        Preconditions.checkState(title != null && !title.isEmpty());
+        Preconditions.checkState(author != null && !author.isEmpty());
+        Preconditions.checkState(coordinates != null);
+        Preconditions.checkState(copies != null);
+        Preconditions.checkState(reviews != null);
+    }
+
+
+
+
+
+
+
 }
