@@ -5,28 +5,50 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="89d68854-59d2-4151-a3b9-ad00d9b3e8f1" name="Changes" comment="created README.md file">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidConstraintException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidMapException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidMediaException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidNameException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidResourceException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/exceptions/InvalidReviewException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/exceptions/MapDimensionMismatchException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/library/Map.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/media/Media.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/media/MediaCopy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/member/Member.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/resource/Resource.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/MediaBorrowingLogic.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/WaitlistLogic.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/BookingLogic.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/ResourceBookingLogic.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/stack/Pathfinding.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/ca/umanitoba/cs/longkuma/logic/TestLibrary.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/library/Library.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/library/Library.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/BookingLimitExceededException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/exceptions/BookingLimitExceededException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidBookingDurationException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/exceptions/InvalidBookingDurationException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidBookingFormatException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/exceptions/InvalidBookingFormatException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidConstraintException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/exceptions/InvalidConstraintException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidDateException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/exceptions/InvalidDateException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidMapException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/exceptions/InvalidMapException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidMediaException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/exceptions/InvalidMediaException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidMemberException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/exceptions/InvalidMemberException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidNameException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/exceptions/InvalidNameException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidResourceException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/exceptions/InvalidResourceException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/InvalidTimeFormatException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/exceptions/InvalidTimeFormatException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/exceptions/TimeSlotUnavailableException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/exceptions/TimeSlotUnavailableException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/library/Library.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/library/Library.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/library/LibrarySystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/library/LibrarySystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/library/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/library/Map.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/Media.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/Media.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/MediaCopy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/MediaCopy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/Review.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/Review.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/member/Constraint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/member/Constraint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/member/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/member/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/Booking.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/Resource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/Resource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/stack/LinkedListStack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/stack/LinkedListStack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/library/Map.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/Media.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/MediaCopy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/media/Review.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/media/Review.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/member/Constraint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/member/Constraint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/member/Member.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/resource/Booking.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/resource/Resource.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/stack/LinkedListStack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/stack/LinkedListStack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/logic/stack/Stack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/domain/stack/Stack.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/library/MapDisplay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/library/MapDisplay.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/login/LoginDisplay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/login/LoginDisplay.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/login/StartLoginMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/login/StartLoginMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/media/MediaCopyDisplay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/media/MediaCopyDisplay.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/member/CreateMemberDisplay.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/member/MemberActionsDisplay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/member/MemberActionsDisplay.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/resource/ResourceDisplay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ca/umanitoba/cs/longkuma/ui/resource/ResourceDisplay.java" afterDir="false" />
     </list>
@@ -39,12 +61,16 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
+        <option value="Kotlin Class" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -75,6 +101,9 @@
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="ca.umanitoba.cs.longkuma.ui" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="ca.umanitoba.cs.longkuma.logic" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

@@ -1,5 +1,6 @@
-package ca.umanitoba.cs.longkuma.logic.media;
+package ca.umanitoba.cs.longkuma.domain.media;
 
+import ca.umanitoba.cs.longkuma.domain.exceptions.InvalidReviewException;
 import com.google.common.base.Preconditions;
 
 public class Review {
@@ -25,9 +26,9 @@ public class Review {
          * @return The ReviewBuilder instance for method chaining
          * @throws Exception if review is null or empty
          */
-        public ReviewBuilder review(String review) throws Exception {
+        public ReviewBuilder review(String review) throws InvalidReviewException {
             if (review == null || review.isEmpty()) {
-                throw new Exception("Review should not be null or empty.");
+                throw new InvalidReviewException("Review should not be null or empty.");
             }
             this.review = review;
             return this;

@@ -1,16 +1,17 @@
-package ca.umanitoba.cs.longkuma.logic.library;
+package ca.umanitoba.cs.longkuma.domain.library;
 
-import ca.umanitoba.cs.longkuma.logic.exceptions.InvalidMapException;
-import ca.umanitoba.cs.longkuma.logic.exceptions.InvalidNameException;
-import ca.umanitoba.cs.longkuma.logic.media.Media;
-import ca.umanitoba.cs.longkuma.logic.resource.Resource;
+import ca.umanitoba.cs.longkuma.domain.media.Media;
+import ca.umanitoba.cs.longkuma.domain.exceptions.InvalidMapException;
+import ca.umanitoba.cs.longkuma.domain.exceptions.InvalidNameException;
+import ca.umanitoba.cs.longkuma.domain.resource.Resource;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Library {
     final private String name;
-    final private ArrayList<Media> media;
+    final private List<Media> media;
     final private ArrayList<Resource> resources;
     final private Map map;
 
@@ -82,9 +83,9 @@ public class Library {
      */
     private void checkLibrary() {
         Preconditions.checkState(name != null, "Library name should not be null.");
-        Preconditions.checkState(name.length() >= 1, "Library name should have at least one symbol.");
-        Preconditions.checkState(media != null, "Media list should not be null.");
-        Preconditions.checkState(resources != null, "Resources list should not be null.");
+        Preconditions.checkState(!name.isEmpty(), "Library name should have at least one symbol.");
+        Preconditions.checkState(true, "Media list should not be null.");
+        Preconditions.checkState(true, "Resources list should not be null.");
         Preconditions.checkState(map != null, "Map should not be null.");
 
         for (Media m : media) {
@@ -101,7 +102,7 @@ public class Library {
         return name;
     }
 
-    public ArrayList<Media> getMedia() {
+    public List<Media> getMedia() {
         return media;
     }
 
@@ -120,53 +121,13 @@ public class Library {
      * @param media The media item to add
      * @return true if media was successfully added, false otherwise
      */
-    public boolean addMedia(Media media) {
+    public void addMedia(Media media) {
         checkLibrary();
         Preconditions.checkNotNull(media, "Media cannot be null");
 
-        boolean added = this.media.add(media);
+        this.media.add(media);
 
         checkLibrary();
-        return added;
-    }
-
-    /*
-     * Searches for a specific media item in the library's collection
-     *
-     * @param media The media item to search for
-     * @return The matching media item if found, null otherwise
-     */
-    public Media showMedia(Media media) {
-        checkLibrary();
-        Preconditions.checkNotNull(media, "Media cannot be null");
-
-        Media foundMedia = null;
-        for (Media m : this.media) {
-            if (m.equals(media)) {
-                foundMedia = m;
-                break;
-            }
-        }
-
-        checkLibrary();
-        return foundMedia;
-    }
-
-    /*
-     * Removes a media item from the library's collection
-     * Validates library state before and after removal
-     *
-     * @param media The media item to remove
-     * @return true if media was successfully removed, false otherwise
-     */
-    public boolean removeMedia(Media media) {
-        checkLibrary();
-        Preconditions.checkNotNull(media, "Media cannot be null");
-
-        boolean removed = this.media.remove(media);
-
-        checkLibrary();
-        return removed;
     }
 
     /*
@@ -176,34 +137,12 @@ public class Library {
      * @param resource The resource to add
      * @return true if resource was successfully added, false otherwise
      */
-    public boolean addResource(Resource resource) {
+    public void addResource(Resource resource) {
         checkLibrary();
         Preconditions.checkNotNull(resource, "Resource cannot be null");
 
-        boolean added = resources.add(resource);
+        resources.add(resource);
 
         checkLibrary();
-        return added;
-    }
-
-    /*
-     * Searches for a specific resource in the library's collection
-     *
-     * @param resource The resource to search for
-     * @return The matching resource if found, null otherwise
-     */
-    public Resource showResource(Resource resource) {
-        checkLibrary();
-        Preconditions.checkNotNull(resource, "Resource cannot be null");
-
-        Resource foundResource = null;
-        for (Resource r : this.resources) {
-            if (r.equals(resource)) {
-                foundResource = r;
-                break;
-            }
-        }
-        checkLibrary();
-        return foundResource;
     }
 }

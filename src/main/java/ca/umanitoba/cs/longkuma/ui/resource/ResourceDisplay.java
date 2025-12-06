@@ -1,9 +1,10 @@
 package ca.umanitoba.cs.longkuma.ui.resource;
 
-import ca.umanitoba.cs.longkuma.logic.resource.Booking;
-import ca.umanitoba.cs.longkuma.logic.resource.Resource;
+import ca.umanitoba.cs.longkuma.domain.resource.Booking;
+import ca.umanitoba.cs.longkuma.domain.resource.Resource;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ResourceDisplay {
     final private Resource resource;
@@ -29,7 +30,7 @@ public class ResourceDisplay {
             return;
         }
 
-        ArrayList<Booking> bookings = resource.getBookings();
+        List<Booking> bookings = resource.getBookings();
         int day = Integer.parseInt(bookingDate.substring(0,2));
         int month = Integer.parseInt(bookingDate.substring(3,5));
         int year = Integer.parseInt(bookingDate.substring(6,8)) + 2000;

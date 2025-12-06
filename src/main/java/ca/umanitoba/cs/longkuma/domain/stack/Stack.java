@@ -1,4 +1,4 @@
-package ca.umanitoba.cs.longkuma.logic.stack;
+package ca.umanitoba.cs.longkuma.domain.stack;
 
 /**
  * This is a generic interface for a stack.

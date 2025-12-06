@@ -1,4 +1,4 @@
-package ca.umanitoba.cs.longkuma.logic.stack;
+package ca.umanitoba.cs.longkuma.domain.stack;
 
 public class LinkedListStack<T> implements Stack<T> {
 
@@ -21,6 +21,7 @@ public class LinkedListStack<T> implements Stack<T> {
     public LinkedListStack() {
         this.head = null;
         this.size = 0;
+        checkLinkedListStack();
     }
 
     /**
@@ -34,6 +35,7 @@ public class LinkedListStack<T> implements Stack<T> {
         newHead.next = head;
         head = newHead;
         size++;
+        checkLinkedListStack();
     }
 
     /**
@@ -44,12 +46,13 @@ public class LinkedListStack<T> implements Stack<T> {
      */
     @Override
     public T pop() throws EmptyStackException {
-        if(size == 0 && head == null) {
+        if (size == 0 && head == null) {
             throw new EmptyStackException("You cannot pop from an empty stack!");
         }
         Node returnNode = head;
         head = head.next;
         size--;
+        checkLinkedListStack();
         return returnNode.data;
     }
 
@@ -60,6 +63,7 @@ public class LinkedListStack<T> implements Stack<T> {
      */
     @Override
     public int size() {
+        checkLinkedListStack();
         return size;
     }
 
@@ -70,6 +74,7 @@ public class LinkedListStack<T> implements Stack<T> {
      */
     @Override
     public boolean isEmpty() {
+        checkLinkedListStack();
         return size == 0;
     }
 
@@ -81,10 +86,44 @@ public class LinkedListStack<T> implements Stack<T> {
      */
     @Override
     public T peek() throws EmptyStackException {
-        if(size == 0 && head == null) {
+        if (size == 0 && head == null) {
             throw new EmptyStackException("You cannot peek from an empty stack!");
         }
-        Node returnNode = head;
-        return returnNode.data;
+        checkLinkedListStack();
+        return head.data;
+    }
+
+    /** ------------------ Class Invariants ------------------ **/
+    /**
+     * Verifies the stack's invariants:
+     * 1. Size consistency: size equals the number of nodes reachable from head
+     * 2. Head consistency: head == null iff size == 0
+     * 3. Linked list integrity: no cycles, last node's next == null
+     * 4. Non-null nodes
+     * 5. Size >= 0
+     */
+    private void checkLinkedListStack() {
+        assert size >= 0 : "Size cannot be negative";
+
+        if (size == 0) {
+            assert head == null : "Head must be null when stack is empty";
+        } else {
+            assert head != null : "Head cannot be null when stack has elements";
+        }
+
+        // Verify linked list integrity and node non-nullness
+        Node current = head;
+        int countedSize = 0;
+        java.util.HashSet<Node> visited = new java.util.HashSet<>(); // detect cycles
+        while (current != null) {
+            assert !visited.contains(current) : "Cycle detected in stack";
+            visited.add(current);
+            assert current.data != null : "Node data cannot be null";
+            current = current.next;
+            countedSize++;
+        }
+
+        // Size consistency check
+        assert countedSize == size : "Size mismatch: size=" + size + ", counted=" + countedSize;
     }
 }

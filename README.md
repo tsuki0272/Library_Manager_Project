@@ -14,7 +14,6 @@ date: Fall 2025
 ## Diagrams
 
 ### Sign In
-
 ```mermaid
 flowchart
     subgraph LOGIN
@@ -44,30 +43,70 @@ flowchart
     end
 ```
 
+### Find Path
+```mermaid
+flowchart
+    subgraph FINDING PATH
+    start[[START]]
+
+    start --> chooseType{Search for MEDIA or RESOURCE?}
+
+    chooseType -- MEDIA --> mediaCoordinates{Does this media exist<br>in the map database?}
+
+    mediaCoordinates -- No --> mediaNotFound[MEDIA NOT FOUND] --> endMedia1[[END]]
+
+    mediaCoordinates -- Yes --> beginSearchMedia[BEGIN PATH SEARCH]
+
+    beginSearchMedia --> exploreMapMedia[Explore surrounding map<br>step-by-step]
+    exploreMapMedia --> reachableMedia{Can a path be found<br>from the start location<br>to this media?}
+
+    reachableMedia -. No .-> noPathMedia[NO PATH AVAILABLE] --> endMedia2[[END]]
+
+    reachableMedia -. Yes .-> buildPathMedia[Build movement path<br>from start to media]
+
+    buildPathMedia --> displayMediaPath[RETURN PATH TO MEDIA] --> finalMedia[[END]]
+
+    chooseType -- RESOURCE --> resourceCoordinates{Does this resource exist<br>in the map database?}
+
+    resourceCoordinates -- No --> resourceNotFound[RESOURCE NOT FOUND] --> endRes1[[END]]
+
+    resourceCoordinates -- Yes --> beginSearchRes[BEGIN PATH SEARCH]
+
+    beginSearchRes --> exploreMapRes[Explore surrounding map<br>step-by-step]
+    exploreMapRes --> reachableRes{Can a path be found<br>from the start location<br>to this resource?}
+
+    reachableRes -. No .-> noPathRes[NO PATH AVAILABLE] --> endRes2[[END]]
+
+    reachableRes -. YES .-> buildPathRes[Build movement path<br>from start to resource]
+
+    buildPathRes --> displayResPath[RETURN PATH TO RESOURCE] --> finalRes[[END]]
+    
+    end
+```
+
 ### Borrow Media
 ```mermaid
 flowchart
-    subgraph BORROWING MEDIA 
+    subgraph BORROWING MEDIA
         mainMenu[[MAIN MENU]]
         mainMenu == Open Media Borrowing List ==> constraintStatus
-        
+
         constraintStatus{Member has constraints?}
         constraintStatus -. Yes .-> unableToBorrow
         constraintStatus -. No .-> selectMedia
-        
+
         unableToBorrow[[UNABLE TO BORROW]]
         unableToBorrow -. Back to Main Menu .-> mainMenu
-        
+
         selectMedia[Media List]
         selectMedia -. Select Media .-> mediaOptions
-        
+
         mediaOptions{Media Available?}
         mediaOptions -. Yes .-> borrowMedia
         mediaOptions -. No .-> waitlistMedia
-        
+
         waitlistMedia[Waitlist]
-        
-        
+
         borrowMedia[[BORROWED SUCCESSFULLY]]
     end
 ```
@@ -78,16 +117,16 @@ flowchart
     subgraph RETURNING MEDIA
         selectMedia[[BORROWED MEDIA LIST]]
         selectMedia == Select Media to Return ==> returnDecisions
-        
+
         returnDecisions[Media Decisions]
         returnDecisions == Read Review ==> reviewReader
         returnDecisions == Return media ==> returnMedia
         returnDecisions == Write Review ==> reviewWriter
-        
+
         reviewReader[Read Reviews]
         reviewReader == Back to Media Selection ==> selectMedia
         reviewReader == Back to Media Decisions ==> returnDecisions
-        
+
         reviewWriter{Is review text empty?}
         reviewWriter -. Not Empty .-> successfulReviewWrite
         reviewWriter -. Empty .-> returnDecisions
@@ -95,7 +134,7 @@ flowchart
         successfulReviewWrite[Written]
         successfulReviewWrite == Back to Media Selection ==> selectMedia
         successfulReviewWrite == Back to Media Decisions ==> returnDecisions
-        
+
         returnMedia[[RETURNED SUCCESSFULLY]]
     end
 ```
@@ -106,11 +145,11 @@ flowchart
     subgraph BOOK RESOURCE
         bookResource[[BOOK RESOURCE]]
         bookResource== Select Day ==>dayAvailability
-        
+
         dayAvailability{Available for selected day?}
         dayAvailability -. Available spots .-> successfulBooking
         dayAvailability -. No available spots .-> bookResource
-        
+
         successfulBooking[[BOOKING SUCCESS]]
     end
 ```
@@ -123,14 +162,12 @@ classDiagram
     class LibrarySystem {
         -List~Library~ libraries
         -Set~Member~ members
-        
+
         +addLibrary(Library library) boolean
         +showLibrary(Library library) Library
-        
-        +showMap(Library library) Map
-        
-        +addMember(Member member, Library library) boolean
-        +showMember(Member member) Member
+        +addMember(Member member) boolean
+        +showMember(String name) Member
+        +getLibraries() List~Library~
     }
 
     class Library {
@@ -140,156 +177,168 @@ classDiagram
         -Map map
 
         +getName() String
-
+        +getMedia() List~Media~
+        +getResources() List~Resource~
+        +getMap() Map
         +addMedia(Media media) boolean
-        +showMedia(Media media) Media
-        +removeMedia(Media media) boolean
-        
         +addResource(Resource resource) boolean
-        +showResource(Resource resource) Resource
     }
 
     class Member {
+        -String name
+        -String password
         -List~MediaCopy~ borrowedMedia
-        -List~Resource~ resources
+        -List~Resource~ bookedResources
         -List~Constraint~ constraints
-        
-        +addMediaCopy(MediaCopy copy) boolean
-        +addResource(Resource resource) boolean
-        +addConstraint(Constraint constraint) boolean
+
+        +getName() String
+        +getPassword() String
+        +getBorrowedMedia() List~MediaCopy~
+        +getBookedResources() List~Resource~
+        +getconstraints() List~Constraint~
+        +hasConstraints() boolean
+        +addBorrowedCopy(MediaCopy copy) void
+        +removeBorrowedCopy(MediaCopy copy) void
+        +addConstraint(Constraint c) void
+        +addBookedResource(Resource r) void
+        +bookResource(Resource r, String dateString, String timeString) boolean
     }
-    
+
     class Constraint {
         -String constraint
+        +getConstraint() String
     }
 
     class Media {
-        -List~Review~ reviews
+        -String title
+        -String author
+        -int[] coordinates
         -List~MediaCopy~ copies
-        -Queue~Member~ waitlist
-        
-        +addReview(Review review) boolean
-        +deleteReview(Review review) boolean
-        +showReview(Review review) Review
-        
+        -List~Review~ reviews
+
         +addCopy(MediaCopy copy) boolean
-        +addToWaitlist(Member member) boolean
+        +getCoordinates() int[]
+        +getAuthor() String
+        +getTitle() String
+        +addReview(Review review) boolean
+        +getReviews() List~Review~
+        +getCopies() List~MediaCopy~
+        +findAvailableCopy() MediaCopy
     }
 
     class MediaCopy {
         -int copyNumber
+        -Media media
+        -boolean borrowed
+        -Member borrowedBy
+        -String dueTime
+        -String dueDate
+
+        +isAvailable() boolean
+        +markBorrowed(Member member, String dueTime, String dueDate) void
+        +markReturned() void
+        +getMedia() Media
+        +getDueTime() String
+        +getDueDate() String
     }
-    
+
     class Resource {
+        -String id
+        -String resourceName
+        -String openingTime
+        -String closingTime
+        -int timeslotLength
+        -List~int[]~ coordinates
         -List~Booking~ bookings
 
-        +addBooking(Booking booking, Member member) boolean
-        +deleteBooking(Booking booking, Member member) boolean
+        +getId() String
+        +getResourceName() String
+        +getOpeningTime() String
+        +getClosingTime() String
+        +getTimeslotLength() int
+        +getCoordinates() List~int[]~
+        +getBookings() List~Booking~
+        +addBooking(Booking booking) boolean
+        +isBookable() boolean
     }
-    
+
     class Review {
-        String review
+        -String review
+        +getReview() String
     }
-    
+
     class Booking {
         -Member member
-        
         -String startTime
-        -int startDay
-        -int startMonth
-        -int startYear
-
         -String endTime
-        -int endDay
-        -int endMonth
-        -int endYear
+        -int day
+        -int month
+        -int year
+
+        +validTime(String time) boolean
+        +getMember() Member
+        +getStartTime() String
+        +getEndTime() String
+        +getDay() int
+        +getMonth() int
+        +getYear() int
     }
-    
+
     class Map {
         -char[][] grid
-        -List~String~ legend
+        -String[] legend
+        -int[] kioskCoordinates
+        -List~int[]~ mediaCoordinates
+        -List~List~int[]~~ resourceCoordinates
+
+        +gridFromString(Sting mapData) char[][]
+        +getGrid() char[][]
+        +getLegend() String[]
+        +getKioskCoordinates() int[]
+        +getMediaCoordinates() List~int[]~
+        +addMediaCoordinates(int[] coords) boolean
+        +addResourceCoordinates(List~int[]~ coords) boolean
     }
 
-    note for LibrarySystem "Invariant properties:
-    <ul>
-        <li>libraries != null
-        <li>loop: no Libraries are null in libraries.
+    class LinkedListStack~T~ {
+        -Node head
+        -int size
         
-        <li>members != null
-        <li>loop: no Members are null in members.
-    </ul>"
+        +push(T item) void
+        +pop() T
+        +size() int
+        +isEmpty() boolean
+        +peek() T
+    }
 
-    note for Library "Invariant properties:
-    <ul>
-        <li>media != null
-        <li>loop: no Media are null in media.
-        
-        <li>resources != null
-        <li>loop: no Resources are null in resources.
-        
-        <li>map != null
-    </ul>"
+    class Node {
+        -T data
+        -Node next
+    }
 
-    note for Member "Invariant properties:
-    <ul>
-        <li>borrowedMedia != null
-        <li>loop: no Media are null in borrowedMedia.
-        
-        <li>constraints != null
-        <li>loop: no Constraints are null in constraints.
-    </ul>"
-
-    note for Media "Invariant properties:
-    <ul>
-        <li>reviews != null
-        <li>loop: no Reviews are null in reviews.
-        
-        <li>copies != null
-        <li>loop: no MediaCopies are null in copies.
-        
-        <li>waitlist != null
-        <li>loop: no Members are null in waitlist.
-    </ul>"
-
-    note for Resource "Invariant properties:
-    <ul>
-        <li>reviews != null
-        <li>loop: no Reviews are null in reviews.
-        
-        <li>bookings != null
-        <li>loop: no Bookings are null in bookings.
-    </ul>"
-
-    note for Booking "Invariant properties:
-    <ul>
-        <li>member != null
-        
-        <li>startTime != null && startTime.length() > 0
-        <li>startDay != null && startDay.length() > 0
-        <li>startMonth != null && startMonth.length() > 0
-        <li>startYear != null && startYear.length() > 0
-        
-        <li>endTime != null && endTime.length() > 0
-        <li>endDay != null && endDay.length() > 0
-        <li>endMonth != null && endMonth.length() > 0
-        <li>endYear != null && endYear.length() > 0
-    </ul>"
+    
 
     LibrarySystem --* Library
     LibrarySystem --* Member
-    
+
     Library --* Map
     Library --* Media
     Library --* Resource
-    
+
     Member --* Constraint
-    Member --* Booking
-    Member ..> MediaCopy
-    Member ..> Resource
-    
+    Member --> MediaCopy
+    Member --> Resource
+
     Media --* MediaCopy
     Media --* Review
-    Media ..> Member
-    
+    Media --> Member
+    Media --> Member
+
     Resource --* Booking
+    Booking --> Member
+
+    MediaCopy --> Media
+    MediaCopy --> Member
+    
+    LinkedListStack --* Node
 ```

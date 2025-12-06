@@ -1,11 +1,14 @@
 package ca.umanitoba.cs.longkuma.ui.login;
 
-import ca.umanitoba.cs.longkuma.logic.library.Library;
+import ca.umanitoba.cs.longkuma.domain.exceptions.InvalidMapException;
+import ca.umanitoba.cs.longkuma.domain.exceptions.InvalidNameException;
+import ca.umanitoba.cs.longkuma.domain.exceptions.MapDimensionMismatchException;
+import ca.umanitoba.cs.longkuma.domain.library.Library;
+import ca.umanitoba.cs.longkuma.domain.media.Media;
+import ca.umanitoba.cs.longkuma.domain.media.MediaCopy;
+import ca.umanitoba.cs.longkuma.domain.resource.Resource;
 import ca.umanitoba.cs.longkuma.logic.library.LibrarySystem;
-import ca.umanitoba.cs.longkuma.logic.library.Map;
-import ca.umanitoba.cs.longkuma.logic.media.Media;
-import ca.umanitoba.cs.longkuma.logic.media.MediaCopy;
-import ca.umanitoba.cs.longkuma.logic.resource.Resource;
+import ca.umanitoba.cs.longkuma.domain.library.Map;
 
 import java.util.ArrayList;
 
@@ -56,7 +59,7 @@ public class StartLoginMain {
                     "U,You are here"
             };
             int[] kiosk1 = new int[]{5,5};
-            char[][] mapGrid1 = Map.MapBuilder.gridFromString(mapString1);
+            char[][] mapGrid1 = Map.gridFromString(mapString1);
             Map map1 = new Map.MapBuilder().grid(mapGrid1).legend(legend1).kioskCoordinates(kiosk1).build();
             Library lib1 = new Library.LibraryBuilder().name("Elizabeth Dafoe Library").map(map1).build();
 
@@ -119,7 +122,7 @@ public class StartLoginMain {
                     "U,You are here"
             };
             int[] kiosk2 = new int[]{4,7};
-            char[][] mapGrid2 = Map.MapBuilder.gridFromString(mapString2);
+            char[][] mapGrid2 = Map.gridFromString(mapString2);
             Map map2 = new Map.MapBuilder().grid(mapGrid2).legend(legend2).kioskCoordinates(kiosk2).build();
             Library lib2 = new Library.LibraryBuilder().name("E. K. Williams Law Library").map(map2).build();
 
@@ -153,8 +156,12 @@ public class StartLoginMain {
 
             libSystem.addLibrary(lib1);
             libSystem.addLibrary(lib2);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (InvalidNameException e) {
+            System.out.println("Invalid name. " + e.getMessage());
+        } catch (InvalidMapException e) {
+            System.out.println("Invalid map. " + e.getMessage());
+        } catch (MapDimensionMismatchException e) {
+            System.out.println("Invalid map String. " + e.getMessage());
         }
     }
 }

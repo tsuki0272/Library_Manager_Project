@@ -1,6 +1,7 @@
 package ca.umanitoba.cs.longkuma.ui.media;
 
-import ca.umanitoba.cs.longkuma.logic.media.MediaCopy;
+import ca.umanitoba.cs.longkuma.domain.media.MediaCopy;
+
 public class MediaCopyDisplay {
 
     MediaCopy copy;

@@ -1,6 +1,6 @@
-package ca.umanitoba.cs.longkuma.logic.member;
+package ca.umanitoba.cs.longkuma.domain.member;
 
-import ca.umanitoba.cs.longkuma.logic.exceptions.InvalidConstraintException;
+import ca.umanitoba.cs.longkuma.domain.exceptions.InvalidConstraintException;
 import com.google.common.base.Preconditions;
 
 public class Constraint {

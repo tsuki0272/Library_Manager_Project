@@ -1,6 +1,7 @@
 package ca.umanitoba.cs.longkuma.logic.library;
 
-import ca.umanitoba.cs.longkuma.logic.member.Member;
+import ca.umanitoba.cs.longkuma.domain.library.Library;
+import ca.umanitoba.cs.longkuma.domain.member.Member;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;

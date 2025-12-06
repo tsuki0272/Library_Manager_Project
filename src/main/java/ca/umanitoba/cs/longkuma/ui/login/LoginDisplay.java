@@ -1,7 +1,7 @@
 package ca.umanitoba.cs.longkuma.ui.login;
 
+import ca.umanitoba.cs.longkuma.domain.member.Member;
 import ca.umanitoba.cs.longkuma.logic.library.LibrarySystem;
-import ca.umanitoba.cs.longkuma.logic.member.Member;
 import ca.umanitoba.cs.longkuma.ui.member.MemberActionsDisplay;
 
 import java.util.Scanner;
@@ -10,7 +10,7 @@ public class LoginDisplay {
 
     private final Scanner keyboard;
     private static final String[] loginOptions = {"EXISTING ACCOUNT", "NEW ACCOUNT"};
-    private boolean downForMaintenance;
+    private final boolean downForMaintenance;
 
     /**
      * Constructs a LoginDisplay with a new Scanner for user input
@@ -28,12 +28,12 @@ public class LoginDisplay {
     public void startLogin(LibrarySystem libSystem) {
         String task;
         System.out.print("WELCOME TO THE SD CITY LIBRARY SYSTEM. ");
-        while(!downForMaintenance) {
+        while (!downForMaintenance) {
             System.out.println("SELECT AN OPTION: ");
             printOptions();
             task = getInput();
 
-            switch(task) {
+            switch (task) {
                 case "1":
                 case "EXISTING ACCOUNT":
                     System.out.println("You chose: EXISTING ACCOUNT");
@@ -46,7 +46,7 @@ public class LoginDisplay {
                     createNewAccount(libSystem);
                     break;
                 default:
-                    System.out.println("I don't know what that means.");
+                    System.out.println("Invalid option. Please enter '1' for EXISTING ACCOUNT or '2' for NEW ACCOUNT.");
                     break;
             }
         }
@@ -55,7 +55,7 @@ public class LoginDisplay {
     /**
      * Transfers control to member actions after successful login
      *
-     * @param libSystem The library system to interact with
+     * @param libSystem  The library system to interact with
      * @param currMember The currently logged-in member
      */
     private void getMemberActions(LibrarySystem libSystem, Member currMember) {
@@ -70,7 +70,7 @@ public class LoginDisplay {
      */
     private void createNewAccount(LibrarySystem libSystem) {
         boolean validCredentials = false;
-        while(!validCredentials) {
+        while (!validCredentials) {
 
             System.out.print("Enter full name: ");
             String name = keyboard.nextLine();
@@ -87,8 +87,8 @@ public class LoginDisplay {
             } else if (password.isEmpty()) {
                 System.out.println("Error: Password cannot be empty. Please try again.\n");
                 continue;
-            } else if(password.equals(passwordValidator)) {
-                if(libSystem.showMember(name) == null) {
+            } else if (password.equals(passwordValidator)) {
+                if (libSystem.showMember(name) == null) {
                     System.out.println("Account created successfully! Returning to login...");
                     System.out.println();
                     try {
@@ -117,7 +117,7 @@ public class LoginDisplay {
     private Member login(LibrarySystem libSystem) {
         boolean validCredentials = false;
         Member currMember = null;
-        while(!validCredentials) {
+        while (!validCredentials) {
 
             System.out.print("Enter full name: ");
             String name = keyboard.nextLine();
@@ -126,7 +126,7 @@ public class LoginDisplay {
             String password = keyboard.nextLine();
 
             currMember = libSystem.showMember(name);
-            if(currMember != null && currMember.getPassword().equals(password)) {
+            if (currMember != null && currMember.getPassword().equals(password)) {
                 System.out.println("Signed in successfully!");
                 System.out.println();
                 validCredentials = true;
@@ -152,7 +152,7 @@ public class LoginDisplay {
      * Prints the available login options to the console
      */
     private static void printOptions() {
-        for(int i = 0; i < loginOptions.length; i++) {
+        for (int i = 0; i < loginOptions.length; i++) {
             System.out.printf("%s \n", loginOptions[i]);
         }
     }
