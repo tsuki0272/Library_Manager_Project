@@ -15,7 +15,7 @@ public class LinkedListStack<T> implements Stack<T> {
     private Node head;
     private int size;
 
-    /**
+    /*
      * Constructs an empty LinkedListStack
      */
     public LinkedListStack() {
@@ -24,7 +24,7 @@ public class LinkedListStack<T> implements Stack<T> {
         checkLinkedListStack();
     }
 
-    /**
+    /*
      * Pushes an item onto the top of the stack
      *
      * @param item The item to be pushed onto the stack
@@ -38,7 +38,7 @@ public class LinkedListStack<T> implements Stack<T> {
         checkLinkedListStack();
     }
 
-    /**
+    /*
      * Removes and returns the item at the top of the stack
      *
      * @return The item at the top of the stack
@@ -56,7 +56,7 @@ public class LinkedListStack<T> implements Stack<T> {
         return returnNode.data;
     }
 
-    /**
+    /*
      * Returns the number of items in the stack
      *
      * @return The number of items in the stack
@@ -67,7 +67,7 @@ public class LinkedListStack<T> implements Stack<T> {
         return size;
     }
 
-    /**
+    /*
      * Checks if the stack is empty
      *
      * @return true if the stack is empty, false otherwise
@@ -78,7 +78,7 @@ public class LinkedListStack<T> implements Stack<T> {
         return size == 0;
     }
 
-    /**
+    /*
      * Returns the item at the top of the stack without removing it
      *
      * @return The item at the top of the stack
@@ -93,8 +93,7 @@ public class LinkedListStack<T> implements Stack<T> {
         return head.data;
     }
 
-    /** ------------------ Class Invariants ------------------ **/
-    /**
+    /*
      * Verifies the stack's invariants:
      * 1. Size consistency: size equals the number of nodes reachable from head
      * 2. Head consistency: head == null iff size == 0

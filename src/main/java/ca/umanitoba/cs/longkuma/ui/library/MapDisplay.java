@@ -4,18 +4,26 @@ import ca.umanitoba.cs.longkuma.domain.library.Map;
 import ca.umanitoba.cs.longkuma.domain.media.Media;
 import ca.umanitoba.cs.longkuma.domain.resource.Resource;
 import ca.umanitoba.cs.longkuma.logic.stack.Pathfinding;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class MapDisplay {
     private final Map map;
 
+    /*
+     * Constructs a MapDisplay with the specified map
+     *
+     * @param map The library map to display
+     */
     public MapDisplay(Map map) {
         this.map = map;
     }
 
-    /** ---------------- Path Display ---------------- **/
+    /*
+     * Displays the path from kiosk to a media item on the map
+     * Shows error messages if media is not in map or no path exists
+     *
+     * @param media The media item to display the path to
+     */
     public void displayPathToMedia(Media media) {
         List<int[]> path = Pathfinding.findMediaPath(map, media);
 
@@ -29,6 +37,12 @@ public class MapDisplay {
         }
     }
 
+    /*
+     * Displays the path from kiosk to a resource on the map
+     * Shows error messages if resource is not in map or no path exists
+     *
+     * @param resource The resource to display the path to
+     */
     public void displayPathToResource(Resource resource) {
         List<int[]> path = Pathfinding.findResourcePath(map, resource);
 
@@ -42,7 +56,12 @@ public class MapDisplay {
         }
     }
 
-    /** ---------------- Map Rendering ---------------- **/
+    /*
+     * Displays a path on the map grid
+     * Marks intermediate path points with asterisks, preserves kiosk and destination markers
+     *
+     * @param path The list of coordinate arrays representing the path
+     */
     private void displayPath(List<int[]> path) {
         if (path != null && !path.isEmpty()) {
             char[][] grid = map.getGrid();
@@ -60,6 +79,15 @@ public class MapDisplay {
         }
     }
 
+    /*
+     * Formats the map grid as a string with special markers for kiosk and destination
+     * Converts the 2D grid to a readable string representation with spacing
+     *
+     * @param grid The map grid to format
+     * @param kioskCoords The coordinates of the kiosk (marked as 'U')
+     * @param destination The coordinates of the destination (marked as 'X')
+     * @return A formatted string representation of the grid
+     */
     private String formatGrid(char[][] grid, int[] kioskCoords, int[] destination) {
         StringBuilder output = new StringBuilder();
         for (int row = 0; row < grid.length; row++) {
@@ -73,6 +101,10 @@ public class MapDisplay {
         return output.toString();
     }
 
+    /*
+     * Displays the map legend showing symbol meanings
+     * Includes standard legend entries plus path markers
+     */
     public void displayLegend() {
         String[] legend = map.getLegend();
         System.out.println("=== Map Legend ===");
@@ -83,21 +115,13 @@ public class MapDisplay {
         System.out.println("==================");
     }
 
-    public void displayMap() {
-        char[][] grid = map.getGrid();
-        int[] kioskCoords = map.getKioskCoordinates();
-
-        System.out.println("=== Library Map ===");
-        for (int row = 0; row < grid.length; row++) {
-            for (int col = 0; col < grid[0].length; col++) {
-                if (row == kioskCoords[0] && col == kioskCoords[1]) System.out.print("U ");
-                else System.out.print(grid[row][col] + " ");
-            }
-            System.out.println();
-        }
-        System.out.println("===================");
-    }
-
+    /*
+     * Creates a deep copy of a 2D character array
+     * Each row is cloned independently to prevent shared references
+     *
+     * @param original The original 2D character array to copy
+     * @return A new 2D character array with copied values
+     */
     private char[][] deepCopy(char[][] original) {
         char[][] copy = new char[original.length][];
         for (int i = 0; i < original.length; i++) copy[i] = original[i].clone();

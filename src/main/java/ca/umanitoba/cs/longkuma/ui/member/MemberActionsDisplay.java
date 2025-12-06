@@ -23,7 +23,7 @@ public class MemberActionsDisplay {
     private final Scanner keyboard;
     private static final String[] memberOptions = {"1. BOOK RESOURCE", "2. BORROW MEDIA", "3. RETURN MEDIA", "4. SIGN OUT"};
 
-    /**
+    /*
      * Constructs a MemberActionsDisplay with the specified library system, member, and scanner
      *
      * @param libSystem The library system to interact with
@@ -36,7 +36,7 @@ public class MemberActionsDisplay {
         this.keyboard = keyboard;
     }
 
-    /**
+    /*
      * Displays the main menu options and handles member actions
      * Continues until the member chooses to sign out
      */
@@ -81,7 +81,7 @@ public class MemberActionsDisplay {
         }
     }
 
-    /**
+    /*
      * Displays all resources available in a library
      *
      * @param library The library whose resources to display
@@ -93,7 +93,7 @@ public class MemberActionsDisplay {
         }
     }
 
-    /**
+    /*
      * Displays all libraries in the system
      */
     private void showLibraries() {
@@ -103,7 +103,7 @@ public class MemberActionsDisplay {
         }
     }
 
-    /**
+    /*
      * Prompts the user to select a library from available options
      *
      * @return The selected library
@@ -133,7 +133,7 @@ public class MemberActionsDisplay {
         return selectedLibrary;
     }
 
-    /**
+    /*
      * Prompts the user to select a resource from a library
      *
      * @param library The library containing the resources
@@ -164,7 +164,7 @@ public class MemberActionsDisplay {
         return selectedResource;
     }
 
-    /**
+    /*
      * Prompts the user to select media from a library
      *
      * @param library The library containing the media
@@ -195,7 +195,7 @@ public class MemberActionsDisplay {
         return selectedMedia;
     }
 
-    /**
+    /*
      * Handles the resource booking process including:
      * - Library and resource selection
      * - Date and time input
@@ -263,7 +263,7 @@ public class MemberActionsDisplay {
         }
     }
 
-    /**
+    /*
      * Displays all media available in a library
      *
      * @param library The library whose media to display
@@ -275,7 +275,7 @@ public class MemberActionsDisplay {
         }
     }
 
-    /**
+    /*
      * Handles the media borrowing process including:
      * - Library and media selection
      * - Path display to the media
@@ -303,7 +303,7 @@ public class MemberActionsDisplay {
     }
 
 
-    /**
+    /*
      * Handles the media return process including:
      * - Display of borrowed media
      * - Media selection for return
@@ -386,7 +386,7 @@ public class MemberActionsDisplay {
         }
     }
 
-    /**
+    /*
      * Displays all reviews for a media item
      *
      * @param media The media item whose reviews to display
@@ -404,7 +404,7 @@ public class MemberActionsDisplay {
         }
     }
 
-    /**
+    /*
      * Handles writing a review for a media item
      *
      * @param media The media item to review
@@ -427,7 +427,7 @@ public class MemberActionsDisplay {
         }
     }
 
-    /**
+    /*
      * Displays all media currently borrowed by the member
      *
      * @param member The member whose borrowed media to display
@@ -441,7 +441,7 @@ public class MemberActionsDisplay {
         }
     }
 
-    /**
+    /*
      * Prints the available member options to the console
      */
     private static void printOptions() {
@@ -450,7 +450,7 @@ public class MemberActionsDisplay {
         }
     }
 
-    /**
+    /*
      * Gets user input from the keyboard and converts to uppercase
      *
      * @return The user input in uppercase

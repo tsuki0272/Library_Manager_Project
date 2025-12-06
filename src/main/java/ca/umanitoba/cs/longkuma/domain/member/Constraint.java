@@ -13,12 +13,12 @@ public class Constraint {
     public static class ConstraintBuilder {
         private String constraint;
 
-        /**
+        /*
          * Constructs a new ConstraintBuilder instance
          */
         public ConstraintBuilder() {}
 
-        /**
+        /*
          * Sets the constraint description for the constraint being built
          *
          * @param constraint The text description of the constraint
@@ -33,7 +33,7 @@ public class Constraint {
             return this;
         }
 
-        /**
+        /*
          * Builds and returns a new Constraint instance with the configured properties
          *
          * @return A new Constraint instance
@@ -43,7 +43,7 @@ public class Constraint {
         }
     }
 
-    /**
+    /*
      * Validates the state of the Constraint object
      */
     private void checkConstraint() {

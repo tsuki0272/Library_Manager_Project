@@ -11,6 +11,14 @@ public class MediaCopy {
     private String dueTime;
     private String dueDate;
 
+    /*
+     * Private constructor for MediaCopy
+     * Initializes media copy with copy number and media reference
+     * Sets initial state as not borrowed with null borrowing details
+     *
+     * @param copyNumber The unique copy number for this media copy
+     * @param media The media item this copy belongs to
+     */
     private MediaCopy(int copyNumber, Media media) {
         this.copyNumber = copyNumber;
         this.media = media;
@@ -24,25 +32,55 @@ public class MediaCopy {
         private int copyNumber;
         private Media media;
 
+        /*
+         * Sets the copy number for the media copy being built
+         *
+         * @param copyNumber The unique copy number for this media copy
+         * @return MediaCopyBuilder instance for method chaining
+         */
         public MediaCopyBuilder copyNumber(int copyNumber) {
             this.copyNumber = copyNumber;
             return this;
         }
 
+        /*
+         * Sets the media reference for the media copy being built
+         *
+         * @param media The media item this copy belongs to
+         * @return MediaCopyBuilder instance for method chaining
+         */
         public MediaCopyBuilder media(Media media) {
             this.media = media;
             return this;
         }
 
+        /*
+         * Builds and returns a new MediaCopy instance with configured parameters
+         *
+         * @return A new MediaCopy object
+         */
         public MediaCopy build() {
             return new MediaCopy(copyNumber, media);
         }
     }
 
+    /*
+     * Checks if this media copy is available for borrowing
+     *
+     * @return true if the copy is not borrowed, false otherwise
+     */
     public boolean isAvailable() {
         return !borrowed;
     }
 
+    /*
+     * Marks this media copy as borrowed by a member
+     * Sets the borrowed status, borrowing member, and due date/time
+     *
+     * @param member The member borrowing this copy
+     * @param dueTime The time the copy is due to be returned
+     * @param dueDate The date the copy is due to be returned
+     */
     public void markBorrowed(Member member, String dueTime, String dueDate) {
         this.borrowed = true;
         this.borrowedBy = member;
@@ -50,6 +88,10 @@ public class MediaCopy {
         this.dueDate = dueDate;
     }
 
+    /*
+     * Marks this media copy as returned
+     * Resets the borrowed status, borrowing member, and due date/time to initial state
+     */
     public void markReturned() {
         this.borrowed = false;
         this.borrowedBy = null;
@@ -57,6 +99,7 @@ public class MediaCopy {
         this.dueDate = null;
     }
 
+    // Getters:
     public Media getMedia() {
         return media;
     }

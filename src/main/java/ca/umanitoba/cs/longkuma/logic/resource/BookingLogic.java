@@ -9,9 +9,18 @@ import ca.umanitoba.cs.longkuma.domain.resource.Resource;
 
 public class BookingLogic {
 
-    /**
-     * Creates a booking from raw user input.
-     * This belongs in LOGIC, not domain.
+    /*
+     * Creates a booking for a member at a resource with specified date and time
+     * Parses and validates date and time strings, builds the booking, and adds it to both resource and member
+     *
+     * @param member The member making the booking
+     * @param resource The resource being booked
+     * @param dateString The date string in DD/MM/YY format
+     * @param timeString The time string in HH:MM-HH:MM format
+     * @return The created Booking object
+     * @throws InvalidDateException if the date format is invalid
+     * @throws InvalidTimeFormatException if the time format is invalid
+     * @throws InvalidMemberException if the member is invalid
      */
     public static Booking createBooking(Member member, Resource resource,
                                         String dateString, String timeString) throws InvalidDateException, InvalidTimeFormatException, InvalidMemberException {
@@ -35,10 +44,14 @@ public class BookingLogic {
 
     }
 
-    // ─────────────────────────────────────────────
-    // Parsing + Validation (moved from domain)
-    // ─────────────────────────────────────────────
-
+    /*
+     * Parses and validates a date string in DD/MM/YY format
+     * Checks format, separator positions, and value ranges for day, month, and year
+     *
+     * @param date The date string to parse in DD/MM/YY format
+     * @return An integer array containing [day, month, year] where year is converted to full four-digit format
+     * @throws InvalidDateException if date is null, wrong length, has invalid format, or contains out-of-range values
+     */
     public static int[] parseAndValidateDate(String date) throws InvalidDateException {
         if (date == null || date.length() != 8)
             throw new InvalidDateException("Date must be DD/MM/YY");
@@ -61,6 +74,14 @@ public class BookingLogic {
         }
     }
 
+    /*
+     * Parses and validates a time range string in HH:MM-HH:MM format
+     * Checks format and separator positions
+     *
+     * @param time The time string to parse in HH:MM-HH:MM format
+     * @return A string array containing [startTime, endTime] in HH:MM format
+     * @throws InvalidTimeFormatException if time is null, wrong length, or has invalid format
+     */
     public static String[] parseAndValidateTime(String time) throws InvalidTimeFormatException {
         if (time == null || time.length() != 11)
             throw new InvalidTimeFormatException("Time must be HH:MM-HH:MM");

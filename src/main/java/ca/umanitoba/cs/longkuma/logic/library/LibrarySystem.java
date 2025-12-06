@@ -70,7 +70,7 @@ public class LibrarySystem {
      * @param newLib The library to add
      * @return true if library was added successfully, false if library with same name already exists
      */
-    public boolean addLibrary(Library newLib) {
+    public void addLibrary(Library newLib) {
         checkLibrarySystem();
         boolean add = true;
         for(Library lib : libraries) {
@@ -83,7 +83,6 @@ public class LibrarySystem {
             libraries.add(newLib);
         }
         checkLibrarySystem();
-        return add;
     }
 
     /*
@@ -114,7 +113,7 @@ public class LibrarySystem {
      * @param newMember The member to add
      * @return true if member was added successfully, false if member with same name already exists
      */
-    public boolean addMember(Member newMember) {
+    public void addMember(Member newMember) {
         checkLibrarySystem();
         boolean add = true;
 
@@ -128,7 +127,6 @@ public class LibrarySystem {
             members.add(newMember);
         }
         checkLibrarySystem();
-        return add;
     }
 
     /*

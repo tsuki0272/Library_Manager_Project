@@ -15,8 +15,20 @@ public class Booking {
     private final int month;
     private final int year;
 
+    /*
+     * Private constructor for Booking
+     * Initializes booking with member, time range, and date information
+     * Validates the booking state after construction
+     *
+     * @param member The member making the booking
+     * @param startTime The start time of the booking in HH:MM format
+     * @param endTime The end time of the booking in HH:MM format
+     * @param day The day of the booking (1-31)
+     * @param month The month of the booking (1-12)
+     * @param year The year of the booking
+     */
     private Booking(Member member, String startTime, String endTime,
-            int day, int month, int year) {
+                    int day, int month, int year) {
 
         this.member = member;
         this.startTime = startTime;
@@ -36,12 +48,26 @@ public class Booking {
         private int month;
         private int year;
 
+        /*
+         * Sets the member for the booking being built
+         *
+         * @param member The member making the booking
+         * @return BookingBuilder instance for method chaining
+         * @throws InvalidMemberException if member is null
+         */
         public BookingBuilder member(Member member) throws InvalidMemberException {
             if (member == null) throw new InvalidMemberException("Member cannot be null");
             this.member = member;
             return this;
         }
 
+        /*
+         * Sets the start time for the booking being built
+         *
+         * @param startTime The start time in HH:MM format
+         * @return BookingBuilder instance for method chaining
+         * @throws InvalidTimeFormatException if startTime is null or not in HH:MM format
+         */
         public BookingBuilder startTime(String startTime) throws InvalidTimeFormatException {
             if (startTime == null || startTime.length() != 5)
                 throw new InvalidTimeFormatException("Start time must be HH:MM");
@@ -49,6 +75,13 @@ public class Booking {
             return this;
         }
 
+        /*
+         * Sets the end time for the booking being built
+         *
+         * @param endTime The end time in HH:MM format
+         * @return BookingBuilder instance for method chaining
+         * @throws InvalidTimeFormatException if endTime is null or not in HH:MM format
+         */
         public BookingBuilder endTime(String endTime) throws InvalidTimeFormatException {
             if (endTime == null || endTime.length() != 5)
                 throw new InvalidTimeFormatException("End time must be HH:MM");
@@ -56,6 +89,13 @@ public class Booking {
             return this;
         }
 
+        /*
+         * Sets the day for the booking being built
+         *
+         * @param day The day of the booking (1-31)
+         * @return BookingBuilder instance for method chaining
+         * @throws InvalidDateException if day is not between 1 and 31
+         */
         public BookingBuilder day(int day) throws InvalidDateException {
             if (day < 1 || day > 31)
                 throw new InvalidDateException("Day must be 1–31");
@@ -63,6 +103,13 @@ public class Booking {
             return this;
         }
 
+        /*
+         * Sets the month for the booking being built
+         *
+         * @param month The month of the booking (1-12)
+         * @return BookingBuilder instance for method chaining
+         * @throws InvalidDateException if month is not between 1 and 12
+         */
         public BookingBuilder month(int month) throws InvalidDateException {
             if (month < 1 || month > 12)
                 throw new InvalidDateException("Month must be 1–12");
@@ -70,6 +117,13 @@ public class Booking {
             return this;
         }
 
+        /*
+         * Sets the year for the booking being built
+         *
+         * @param year The year of the booking
+         * @return BookingBuilder instance for method chaining
+         * @throws InvalidDateException if year is 2024 or earlier
+         */
         public BookingBuilder year(int year) throws InvalidDateException {
             if (year <= 2024)
                 throw new InvalidDateException("Year must be 2025 or later");
@@ -77,11 +131,21 @@ public class Booking {
             return this;
         }
 
+        /*
+         * Builds and returns a new Booking instance with configured parameters
+         *
+         * @return A new Booking object
+         */
         public Booking build() {
             return new Booking(member, startTime, endTime, day, month, year);
         }
     }
 
+    /*
+     * Validates the internal state of the Booking object
+     * Ensures all required fields are non-null and meet minimum requirements
+     * Validates time format for both start and end times
+     */
     private void validateBooking() {
         Preconditions.checkState(member != null, "Member cannot be null.");
         Preconditions.checkState(startTime != null && startTime.length() == 5, "Start time invalid.");
@@ -93,6 +157,13 @@ public class Booking {
         Preconditions.checkState(validTime(endTime), "Invalid time format for end.");
     }
 
+    /*
+     * Validates that a time string is in correct format and within valid ranges
+     * Checks that hours are 0-23 and minutes are 0-59
+     *
+     * @param time The time string to validate in HH:MM format
+     * @return true if time is valid, false otherwise
+     */
     private boolean validTime(String time) {
         try {
             int hour = Integer.parseInt(time.substring(0, 2));
@@ -103,6 +174,7 @@ public class Booking {
         }
     }
 
+    // Getters:
     public Member getMember() { return member; }
     public String getStartTime() { return startTime; }
     public String getEndTime() { return endTime; }

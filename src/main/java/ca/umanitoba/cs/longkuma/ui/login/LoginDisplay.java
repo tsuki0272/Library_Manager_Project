@@ -12,7 +12,7 @@ public class LoginDisplay {
     private static final String[] loginOptions = {"EXISTING ACCOUNT", "NEW ACCOUNT"};
     private final boolean downForMaintenance;
 
-    /**
+    /*
      * Constructs a LoginDisplay with a new Scanner for user input
      */
     public LoginDisplay() {
@@ -20,7 +20,7 @@ public class LoginDisplay {
         this.downForMaintenance = false;
     }
 
-    /**
+    /*
      * Starts the login process and displays the main login menu
      *
      * @param libSystem The library system to interact with
@@ -52,7 +52,7 @@ public class LoginDisplay {
         }
     }
 
-    /**
+    /*
      * Transfers control to member actions after successful login
      *
      * @param libSystem  The library system to interact with
@@ -63,7 +63,7 @@ public class LoginDisplay {
         memberActions.showOptions();
     }
 
-    /**
+    /*
      * Handles the creation of a new member account
      *
      * @param libSystem The library system to add the new member to
@@ -108,7 +108,7 @@ public class LoginDisplay {
         }
     }
 
-    /**
+    /*
      * Handles the login process for existing members
      *
      * @param libSystem The library system to validate credentials against
@@ -137,7 +137,7 @@ public class LoginDisplay {
         return currMember;
     }
 
-    /**
+    /*
      * Gets user input from the keyboard and converts to uppercase
      *
      * @return The user input in uppercase
@@ -148,7 +148,7 @@ public class LoginDisplay {
         return loginInput;
     }
 
-    /**
+    /*
      * Prints the available login options to the console
      */
     private static void printOptions() {

@@ -14,12 +14,12 @@ public class Review {
     public static class ReviewBuilder {
         private String review;
 
-        /**
+        /*
          * Constructs a new ReviewBuilder instance
          */
         public ReviewBuilder() {}
 
-        /**
+        /*
          * Sets the review text for the review being built
          *
          * @param review The text content of the review
@@ -34,7 +34,7 @@ public class Review {
             return this;
         }
 
-        /**
+        /*
          * Builds and returns a new Review instance with the configured properties
          *
          * @return A new Review instance
@@ -44,7 +44,7 @@ public class Review {
         }
     }
 
-    /**
+    /*
      * Validates the state of the Review object
      */
     private void checkReview() {
