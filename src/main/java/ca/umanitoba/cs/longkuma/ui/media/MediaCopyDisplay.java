@@ -6,7 +6,7 @@ public class MediaCopyDisplay {
 
     MediaCopy copy;
 
-    /**
+    /*
      * Constructs a MediaCopyDisplay for the specified media copy
      *
      * @param copy The media copy to display
@@ -15,7 +15,7 @@ public class MediaCopyDisplay {
         this.copy = copy;
     }
 
-    /**
+    /*
      * Prints formatted information about the media copy including:
      * - Title and author
      * - Availability status

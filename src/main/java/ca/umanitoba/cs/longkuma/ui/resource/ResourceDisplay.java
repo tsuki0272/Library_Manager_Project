@@ -2,14 +2,12 @@ package ca.umanitoba.cs.longkuma.ui.resource;
 
 import ca.umanitoba.cs.longkuma.domain.resource.Booking;
 import ca.umanitoba.cs.longkuma.domain.resource.Resource;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class ResourceDisplay {
     final private Resource resource;
 
-    /**
+    /*
      * Constructs a ResourceDisplay for the specified resource
      *
      * @param resource The resource to display information for
@@ -18,7 +16,7 @@ public class ResourceDisplay {
         this.resource = resource;
     }
 
-    /**
+    /*
      * Prints all current bookings for the resource on a specific date
      * Takes in a String in format "DD/MM/YY" and prints all current bookings for that date
      *
